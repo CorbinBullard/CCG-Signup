@@ -13,6 +13,7 @@ const app_service_1 = require("./app.service");
 const event_module_1 = require("./event/event.module");
 const form_module_1 = require("./form/form.module");
 const typeorm_1 = require("@nestjs/typeorm");
+const field_service_1 = require("./field/field.service");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -29,7 +30,7 @@ exports.AppModule = AppModule = __decorate([
             form_module_1.FormModule,
         ],
         controllers: [app_controller_1.AppController],
-        providers: [app_service_1.AppService],
+        providers: [app_service_1.AppService, field_service_1.FieldService],
     })
 ], AppModule);
 //# sourceMappingURL=app.module.js.map

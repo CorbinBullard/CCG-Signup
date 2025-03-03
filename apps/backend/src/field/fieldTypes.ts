@@ -1,6 +1,7 @@
-export enum fieldTypes {
+export enum FieldType {
   string = 'string',
-  integer = 'integer',
+  number = 'number',
   boolean = 'boolean',
   date = 'date',
+  select = 'select',
 }

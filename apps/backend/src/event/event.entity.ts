@@ -1,4 +1,4 @@
-import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Form } from 'src/form/form.entity';
 
 @Entity()
@@ -6,18 +6,21 @@ export class Event {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column('string')
+  @Column({ unique: true })
   title: string;
 
-  @Column('string')
+  @Column()
   description: string;
 
   @Column('date')
   date: Date;
 
-  @Column('string')
+  @Column()
   image: string;
 
-  @OneToOne(() => Form, (form) => form.event)
+  @Column()
+  cost: number;
+
+  @ManyToOne(() => Form, (form) => form.event, { cascade: true })
   form: Form;
 }

@@ -1,10 +1,4 @@
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  OneToMany,
-  OneToOne,
-} from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import { Field } from '../field/field.entity';
 import { Event } from '../event/event.entity';
 
@@ -16,9 +10,12 @@ export class Form {
   @Column()
   name: string;
 
-  @OneToMany(() => Field, (field) => field.form)
+  @Column({ default: false })
+  isSaved: boolean;
+
+  @OneToMany(() => Field, (field) => field.form, { cascade: true })
   fields: Field[];
 
-  @OneToOne(() => Event, (event) => event.form)
-  event: Event;
+  @OneToMany(() => Event, (event) => event.form)
+  event: Event[];
 }
