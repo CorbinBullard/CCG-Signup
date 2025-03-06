@@ -1,5 +1,13 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  OneToMany,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { Form } from 'src/form/form.entity';
+import { Signup } from 'src/signup/signup.entity';
 
 @Entity()
 export class Event {
@@ -18,9 +26,15 @@ export class Event {
   @Column()
   image: string;
 
-  @Column()
+  @Column({ type: 'decimal', precision: 10, scale: 2 })
   cost: number;
 
-  @ManyToOne(() => Form, (form) => form.event, { cascade: true })
+  @OneToOne(() => Form, (form) => form.event, {
+    cascade: ['insert', 'update'],
+  })
+  @JoinColumn()
   form: Form;
+
+  @OneToMany(() => Signup, (signup) => signup.event)
+  signups: Signup[];
 }

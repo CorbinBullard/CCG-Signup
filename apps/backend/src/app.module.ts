@@ -5,6 +5,8 @@ import { EventModule } from './event/event.module';
 import { FormModule } from './form/form.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { FieldService } from './field/field.service';
+import { SignupModule } from './signup/signup.module';
+import { ResponseService } from './response/response.service';
 
 @Module({
   imports: [
@@ -16,8 +18,9 @@ import { FieldService } from './field/field.service';
     }),
     EventModule,
     FormModule,
+    SignupModule,
   ],
   controllers: [AppController],
-  providers: [AppService, FieldService],
+  providers: [AppService, FieldService, ResponseService],
 })
 export class AppModule {}

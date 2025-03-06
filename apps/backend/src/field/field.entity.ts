@@ -5,11 +5,13 @@ import {
   ManyToOne,
   BeforeInsert,
   BeforeUpdate,
+  OneToMany,
 } from 'typeorm';
 import { Form } from '../form/form.entity';
 import { FieldType } from './fieldTypes';
 import { BadRequestException } from '@nestjs/common';
 import { Options } from './Options';
+import { Response } from 'src/response/response.entity';
 
 @Entity()
 export class Field {
@@ -33,6 +35,9 @@ export class Field {
 
   @ManyToOne(() => Form, (form) => form.fields)
   form: Form;
+
+  @OneToMany(() => Response, (response) => response.field)
+  responses: Response[];
 
   @BeforeInsert()
   @BeforeUpdate()

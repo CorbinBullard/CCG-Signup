@@ -4,4 +4,5 @@ export enum FieldType {
   boolean = 'boolean',
   date = 'date',
   select = 'select',
+  item = 'item',
 }
