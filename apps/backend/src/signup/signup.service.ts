@@ -5,7 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Signup } from './signup.entity';
 import { Repository } from 'typeorm';
 import { EventService } from 'src/event/event.service';
-import { SignupValidation } from 'src/classes/SignupValidation';
+import { SignupValidation } from 'src/classes/validations/SignupValidation';
 
 @Injectable()
 export class SignupService {
@@ -19,12 +19,8 @@ export class SignupService {
     if (!event) {
       throw new NotFoundException('Event not found');
     }
-    const form = event.form;
-    const validation = new SignupValidation(
-      form.fields,
-      createSignupDto.responses,
-    );
-    validation.validate();
+    const signup = new SignupValidation(createSignupDto, event);
+    signup.validate();
   }
 
   findAll() {

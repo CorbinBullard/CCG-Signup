@@ -7,7 +7,7 @@ import {
   IsString,
   ValidateNested,
 } from 'class-validator';
-import { CreateFieldDto } from 'src/field/dto/create-field.dto';
+import { CreateFieldDto } from 'src/fields/dto/create-field.dto';
 
 export class CreateFormDto {
   @IsOptional()

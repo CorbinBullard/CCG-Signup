@@ -5,7 +5,7 @@ import {
   OneToMany,
   OneToOne,
 } from 'typeorm';
-import { Field } from '../field/field.entity';
+import { Field } from 'src/fields/entities/field.entity';
 import { Event } from '../event/event.entity';
 
 @Entity()
@@ -19,7 +19,10 @@ export class Form {
   @Column({ default: false })
   isSaved: boolean;
 
-  @OneToMany(() => Field, (field) => field.form, { cascade: true, eager: true })
+  @OneToMany(() => Field, (field) => field.form, {
+    cascade: true,
+    eager: true,
+  })
   fields: Field[];
 
   @OneToOne(() => Event, (event) => event.form)

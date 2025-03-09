@@ -3,10 +3,9 @@ import { FormService } from './form.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { FormController } from './form.controller';
 import { Form } from './form.entity';
-import { Field } from 'src/field/field.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Form, Field])],
+  imports: [TypeOrmModule.forFeature([Form])],
   controllers: [FormController],
   providers: [FormService],
 })

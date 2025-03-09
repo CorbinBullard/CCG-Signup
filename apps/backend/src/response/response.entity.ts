@@ -1,6 +1,13 @@
-import { Field } from 'src/field/field.entity';
+import { Field } from 'src/fields/entities/field.entity';
 import { Signup } from 'src/signup/signup.entity';
-import { Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  BeforeInsert,
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity()
 export class Response {
@@ -11,5 +18,9 @@ export class Response {
   signup: Signup;
 
   @ManyToOne(() => Field, (field) => field.responses)
+  @JoinColumn()
   field: Field;
+
+  @Column('json')
+  value: any;
 }

@@ -10,9 +10,9 @@ import {
   ValidateIf,
   ValidateNested,
 } from 'class-validator';
-import { FieldType } from '../fieldTypes';
+import { FieldType } from '../../fields/fieldTypes';
 import { Type } from 'class-transformer';
-import { Options } from '../Options';
+import { Options } from '../../fields/Options';
 
 export class CreateFieldDto {
   @IsString()

@@ -7,10 +7,10 @@ import {
   BeforeUpdate,
   OneToMany,
 } from 'typeorm';
-import { Form } from '../form/form.entity';
-import { FieldType } from './fieldTypes';
+import { Form } from 'src/form/form.entity';
+import { FieldType } from '../fieldTypes';
 import { BadRequestException } from '@nestjs/common';
-import { Options } from './Options';
+import { Options } from '../Options';
 import { Response } from 'src/response/response.entity';
 
 @Entity()
