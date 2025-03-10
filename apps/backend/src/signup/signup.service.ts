@@ -21,6 +21,7 @@ export class SignupService {
     }
     const signup = new SignupValidation(createSignupDto, event);
     signup.validate();
+    return this.signupRepository.save(createSignupDto);
   }
 
   findAll() {

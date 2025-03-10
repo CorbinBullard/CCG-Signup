@@ -1,7 +1,7 @@
+import { IsOptional } from 'class-validator';
 import { Field } from 'src/fields/entities/field.entity';
 import { Signup } from 'src/signup/signup.entity';
 import {
-  BeforeInsert,
   Column,
   Entity,
   JoinColumn,
@@ -14,13 +14,13 @@ export class Response {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => Signup, (signup) => signup.response)
+  @ManyToOne(() => Signup, (signup) => signup.responses)
   signup: Signup;
 
   @ManyToOne(() => Field, (field) => field.responses)
   @JoinColumn()
   field: Field;
 
-  @Column('json')
+  @Column('json', { nullable: true })
   value: any;
 }

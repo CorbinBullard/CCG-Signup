@@ -1,15 +1,17 @@
 import { Field } from 'src/fields/entities/field.entity';
 import { FieldType } from 'src/fields/fieldTypes';
 import { CreateResponseDto } from 'src/response/dto/create-response.dto';
-import { ResponseValidator } from '../fieldTypeValidators/response.validator';
-import { NumberValidator } from '../fieldTypeValidators/response.numberValidator';
-import { StringValidator } from '../fieldTypeValidators/response.stringValidator';
-import { BooleanValidator } from '../fieldTypeValidators/response.booleanValidator';
-import { selectValidator } from '../fieldTypeValidators/response.selectorValidator';
+import { ResponseValidator } from './fieldTypeValidators/response.validator';
+import { NumberValidator } from './fieldTypeValidators/response.numberValidator';
+import { StringValidator } from './fieldTypeValidators/response.stringValidator';
+import { BooleanValidator } from './fieldTypeValidators/response.booleanValidator';
+import { SelectValidator } from './fieldTypeValidators/response.selectorValidator';
 import { BadRequestException } from '@nestjs/common';
+import { DateValidator } from './fieldTypeValidators/response.dateValidator';
 
 export class ResponseValidation {
   validator: ResponseValidator;
+  errors: string[];
   constructor(response: CreateResponseDto, field: Field) {
     switch (field.type) {
       case FieldType.number: {
@@ -25,14 +27,23 @@ export class ResponseValidation {
         break;
       }
       case FieldType.select: {
-        this.validator = new selectValidator(response, field);
+        this.validator = new SelectValidator(response, field);
+        break;
+      }
+      case FieldType.date: {
+        this.validator = new DateValidator(response, field);
         break;
       }
       default: {
         throw new BadRequestException('Unsupported Field Type');
       }
     }
-    this.validator.validate();
+
+    // (return array of errors)
+    this.errors = this.validator.validate();
+  }
+  getErrors(): string[] {
+    return this.errors;
   }
 }
 /* 

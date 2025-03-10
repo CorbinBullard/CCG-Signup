@@ -42,7 +42,6 @@ export class Field {
   @BeforeInsert()
   @BeforeUpdate()
   validateOptions() {
-    console.log(this);
     if (
       this.type === FieldType.select &&
       (!this.options || this.options.length === 0)

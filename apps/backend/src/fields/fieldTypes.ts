@@ -3,6 +3,7 @@ export enum FieldType {
   number = 'number',
   boolean = 'boolean',
   date = 'date',
+  email = 'email',
   select = 'select',
   item = 'item',
 }

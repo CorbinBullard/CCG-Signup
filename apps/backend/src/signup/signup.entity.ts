@@ -19,6 +19,9 @@ export class Signup {
   @ManyToOne(() => Event, (event) => event.signups)
   event: Event;
 
-  @OneToMany(() => Response, (response) => response.signup)
-  response: Response[];
+  @OneToMany(() => Response, (response) => response.signup, {
+    cascade: true,
+    eager: true,
+  })
+  responses: Response[];
 }

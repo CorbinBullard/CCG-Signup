@@ -6,7 +6,6 @@ export class CreateResponseDto {
   @IsNotEmpty()
   fieldId: number;
 
-  @IsNotEmpty()
   @Validate(IsValidResponse, {
     message: 'Invalid Response',
   })
