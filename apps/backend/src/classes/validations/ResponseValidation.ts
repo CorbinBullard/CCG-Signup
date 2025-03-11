@@ -34,6 +34,9 @@ export class ResponseValidation {
         this.validator = new DateValidator(response, field);
         break;
       }
+      case FieldType.email: {
+        break;
+      }
       default: {
         throw new BadRequestException('Unsupported Field Type');
       }
