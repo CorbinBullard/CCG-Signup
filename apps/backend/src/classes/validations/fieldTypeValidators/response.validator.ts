@@ -1,11 +1,13 @@
 import { Field } from 'src/fields/entities/field.entity';
 import { CreateResponseDto } from 'src/response/dto/create-response.dto';
+import { FieldType } from 'src/Types/FieldType';
+import { ResponseType } from 'src/Types/ResponseType';
 
 export abstract class ResponseValidator {
-  response: CreateResponseDto;
-  field: Field;
+  response: ResponseType;
+  field: FieldType;
   errors: string[];
-  constructor(response: CreateResponseDto, field: Field) {
+  constructor(response: ResponseType, field: FieldType) {
     this.response = response;
     this.field = field;
     this.errors = [];

@@ -1,5 +1,5 @@
 import { Field } from 'src/fields/entities/field.entity';
-import { FieldType } from 'src/fields/fieldTypes';
+import { FieldTypeEnum } from 'src/fields/fieldTypes';
 import { CreateResponseDto } from 'src/response/dto/create-response.dto';
 import { ResponseValidator } from './fieldTypeValidators/response.validator';
 import { NumberValidator } from './fieldTypeValidators/response.numberValidator';
@@ -10,37 +10,39 @@ import { BadRequestException } from '@nestjs/common';
 import { DateValidator } from './fieldTypeValidators/response.dateValidator';
 import { EmailValidator } from './fieldTypeValidators/response.emailValidator';
 import { CompositeValidator } from './fieldTypeValidators/response.compositeValidator';
+import { FieldType } from 'src/Types/FieldType';
+import { ResponseType } from 'src/Types/ResponseType';
 
 export class ResponseValidation {
   validator: ResponseValidator;
   errors: string[];
-  constructor(response: CreateResponseDto, field: Field) {
+  constructor(response: ResponseType, field: FieldType) {
     switch (field.type) {
-      case FieldType.number: {
+      case FieldTypeEnum.number: {
         this.validator = new NumberValidator(response, field);
         break;
       }
-      case FieldType.string: {
+      case FieldTypeEnum.string: {
         this.validator = new StringValidator(response, field);
         break;
       }
-      case FieldType.boolean: {
+      case FieldTypeEnum.boolean: {
         this.validator = new BooleanValidator(response, field);
         break;
       }
-      case FieldType.select: {
+      case FieldTypeEnum.select: {
         this.validator = new SelectValidator(response, field);
         break;
       }
-      case FieldType.date: {
+      case FieldTypeEnum.date: {
         this.validator = new DateValidator(response, field);
         break;
       }
-      case FieldType.email: {
+      case FieldTypeEnum.email: {
         this.validator = new EmailValidator(response, field);
         break;
       }
-      case FieldType.composite: {
+      case FieldTypeEnum.composite: {
         this.validator = new CompositeValidator(response, field);
         break;
       }

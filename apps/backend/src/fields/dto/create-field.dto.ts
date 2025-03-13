@@ -12,7 +12,7 @@ import {
   ValidateIf,
   ValidateNested,
 } from 'class-validator';
-import { FieldType } from '../../fields/fieldTypes';
+import { FieldTypeEnum } from '../../fields/fieldTypes';
 import { Type } from 'class-transformer';
 import { Options } from '../../fields/Options';
 import { Subfield } from '../Subfield';
@@ -21,26 +21,27 @@ export class CreateFieldDto {
   @IsString()
   label: string;
 
-  @IsEnum(FieldType)
-  type: FieldType;
+  @IsEnum(FieldTypeEnum)
+  type: FieldTypeEnum;
 
   @IsBoolean()
   required: boolean;
 
   @IsOptional()
   @IsNumber()
-  @ValidateIf((field) => field.type === FieldType.composite)
+  @ValidateIf((field) => field.type === FieldTypeEnum.composite)
   cost?: number;
 
-  // Make options a class to include validation
-  @ValidateIf((field) => field.type === FieldType.select)
+  @ValidateIf((field) => field.type === FieldTypeEnum.select)
   @IsArray()
   @ArrayMinSize(2)
   @ValidateNested({ each: true })
   @Type(() => Options)
   options?: Options[];
 
-  @ValidateIf((field) => field.type === FieldType.composite)
+  @ValidateIf((field) => field.type === FieldTypeEnum.composite)
+  @IsArray()
+  @ArrayMinSize(2)
   @Type(() => Subfield)
   subfields: Subfield[];
 }

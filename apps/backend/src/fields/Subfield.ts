@@ -2,12 +2,13 @@
 import {
   ArrayMinSize,
   IsArray,
+  IsBoolean,
   IsEnum,
   IsString,
   ValidateIf,
   ValidateNested,
 } from 'class-validator';
-import { SubFieldType } from './fieldTypes';
+import { SubFieldTypeEnum } from './fieldTypes';
 import { Options } from './Options';
 import { Type } from 'class-transformer';
 
@@ -15,10 +16,13 @@ export class Subfield {
   @IsString()
   label: string;
 
-  @IsEnum(SubFieldType)
-  type: SubFieldType;
+  @IsEnum(SubFieldTypeEnum)
+  type: SubFieldTypeEnum;
 
-  @ValidateIf((subField) => subField.type === SubFieldType.select)
+  @IsBoolean()
+  required: boolean;
+
+  @ValidateIf((subField) => subField.type === SubFieldTypeEnum.select)
   @IsArray()
   @ArrayMinSize(2)
   @ValidateNested({ each: true })

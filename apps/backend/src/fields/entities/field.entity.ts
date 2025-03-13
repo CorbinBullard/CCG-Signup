@@ -8,7 +8,7 @@ import {
   OneToMany,
 } from 'typeorm';
 import { Form } from 'src/form/form.entity';
-import { FieldType } from '../fieldTypes';
+import { FieldTypeEnum } from '../fieldTypes';
 import { BadRequestException } from '@nestjs/common';
 import { Options } from '../Options';
 import { Response } from 'src/response/response.entity';
@@ -23,9 +23,9 @@ export class Field {
   label: string;
 
   @Column()
-  type: FieldType;
+  type: FieldTypeEnum;
 
-  @Column()
+  @Column({ default: true })
   required: boolean;
 
   @Column({ nullable: true })
@@ -50,7 +50,7 @@ export class Field {
   @BeforeUpdate()
   validateOptions() {
     if (
-      this.type === FieldType.select &&
+      this.type === FieldTypeEnum.select &&
       (!this.options || this.options.length === 0)
     ) {
       throw new BadRequestException('Select fields must have options');

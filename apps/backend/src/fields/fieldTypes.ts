@@ -1,4 +1,4 @@
-export enum FieldType {
+export enum FieldTypeEnum {
   string = 'string',
   number = 'number',
   boolean = 'boolean',
@@ -8,7 +8,7 @@ export enum FieldType {
   composite = 'composite',
 }
 
-export enum SubFieldType {
+export enum SubFieldTypeEnum {
   string = 'string',
   number = 'number',
   boolean = 'boolean',
