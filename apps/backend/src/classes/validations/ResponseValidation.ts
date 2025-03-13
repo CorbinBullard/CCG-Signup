@@ -8,6 +8,8 @@ import { BooleanValidator } from './fieldTypeValidators/response.booleanValidato
 import { SelectValidator } from './fieldTypeValidators/response.selectorValidator';
 import { BadRequestException } from '@nestjs/common';
 import { DateValidator } from './fieldTypeValidators/response.dateValidator';
+import { EmailValidator } from './fieldTypeValidators/response.emailValidator';
+import { CompositeValidator } from './fieldTypeValidators/response.compositeValidator';
 
 export class ResponseValidation {
   validator: ResponseValidator;
@@ -35,6 +37,11 @@ export class ResponseValidation {
         break;
       }
       case FieldType.email: {
+        this.validator = new EmailValidator(response, field);
+        break;
+      }
+      case FieldType.composite: {
+        this.validator = new CompositeValidator(response, field);
         break;
       }
       default: {

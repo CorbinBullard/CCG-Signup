@@ -1,4 +1,3 @@
-import { IsOptional } from 'class-validator';
 import { Field } from 'src/fields/entities/field.entity';
 import { Signup } from 'src/signup/signup.entity';
 import {

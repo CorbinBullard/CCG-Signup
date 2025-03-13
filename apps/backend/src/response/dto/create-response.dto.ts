@@ -1,13 +1,10 @@
-import { IsNotEmpty, IsNumber, Validate } from 'class-validator';
-import { IsValidResponse } from '../validation/isValidResponse';
+import { IsNotEmpty, IsNumber, IsOptional } from 'class-validator';
 
 export class CreateResponseDto {
   @IsNumber()
   @IsNotEmpty()
   fieldId: number;
 
-  @Validate(IsValidResponse, {
-    message: 'Invalid Response',
-  })
+  @IsOptional()
   value: any;
 }

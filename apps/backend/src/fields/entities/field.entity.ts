@@ -12,6 +12,7 @@ import { FieldType } from '../fieldTypes';
 import { BadRequestException } from '@nestjs/common';
 import { Options } from '../Options';
 import { Response } from 'src/response/response.entity';
+import { Subfield } from '../Subfield';
 
 @Entity()
 export class Field {
@@ -32,6 +33,12 @@ export class Field {
 
   @Column('json', { nullable: true })
   options?: Options[];
+
+  @Column('json', { nullable: true })
+  subfields?: Subfield[];
+
+  @Column({ nullable: true })
+  cost?: number;
 
   @ManyToOne(() => Form, (form) => form.fields)
   form: Form;

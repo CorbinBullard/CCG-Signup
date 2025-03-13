@@ -1,6 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { CreateFieldDto } from './dto/create-field.dto';
-import { UpdateFieldDto } from './dto/update-field.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Field } from './entities/field.entity';
 import { Repository } from 'typeorm';

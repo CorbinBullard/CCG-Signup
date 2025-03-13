@@ -6,6 +6,8 @@ import {
   IsArray,
   IsBoolean,
   IsEnum,
+  IsNumber,
+  IsOptional,
   IsString,
   ValidateIf,
   ValidateNested,
@@ -13,6 +15,7 @@ import {
 import { FieldType } from '../../fields/fieldTypes';
 import { Type } from 'class-transformer';
 import { Options } from '../../fields/Options';
+import { Subfield } from '../Subfield';
 
 export class CreateFieldDto {
   @IsString()
@@ -24,6 +27,11 @@ export class CreateFieldDto {
   @IsBoolean()
   required: boolean;
 
+  @IsOptional()
+  @IsNumber()
+  @ValidateIf((field) => field.type === FieldType.composite)
+  cost?: number;
+
   // Make options a class to include validation
   @ValidateIf((field) => field.type === FieldType.select)
   @IsArray()
@@ -31,4 +39,8 @@ export class CreateFieldDto {
   @ValidateNested({ each: true })
   @Type(() => Options)
   options?: Options[];
+
+  @ValidateIf((field) => field.type === FieldType.composite)
+  @Type(() => Subfield)
+  subfields: Subfield[];
 }

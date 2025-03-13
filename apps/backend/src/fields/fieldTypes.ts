@@ -5,5 +5,14 @@ export enum FieldType {
   date = 'date',
   email = 'email',
   select = 'select',
-  item = 'item',
+  composite = 'composite',
+}
+
+export enum SubFieldType {
+  string = 'string',
+  number = 'number',
+  boolean = 'boolean',
+  date = 'date',
+  email = 'email',
+  select = 'select',
 }

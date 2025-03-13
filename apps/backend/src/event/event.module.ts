@@ -7,14 +7,12 @@ import { FormModule } from '../form/form.module';
 import { Form } from 'src/form/form.entity';
 
 import { FormService } from 'src/form/form.service';
-
-import { IsValidResponse } from 'src/response/validation/isValidResponse';
 import { FieldsService } from 'src/fields/fields.service';
 import { Field } from 'src/fields/entities/field.entity';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Event, Form, Field]), FormModule],
-  providers: [EventService, FormService, IsValidResponse, FieldsService],
+  providers: [EventService, FormService, FieldsService],
   controllers: [EventController],
 })
 export class EventModule {}
