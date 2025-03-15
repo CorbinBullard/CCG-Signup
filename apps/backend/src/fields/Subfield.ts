@@ -8,7 +8,7 @@ import {
   ValidateIf,
   ValidateNested,
 } from 'class-validator';
-import { SubFieldTypeEnum } from './fieldTypes';
+import { SubFieldTypeEnum } from './fieldTypeEnums';
 import { Options } from './Options';
 import { Type } from 'class-transformer';
 

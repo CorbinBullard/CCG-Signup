@@ -1,16 +1,16 @@
 import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { Event } from 'src/event/event.entity';
 import { Field } from 'src/fields/entities/field.entity';
-import { CreateResponseDto } from 'src/response/dto/create-response.dto';
-import { CreateSignupDto } from 'src/signup/dto/create-signup.dto';
 import { ResponseValidation } from './ResponseValidation';
+import { SignupType } from 'src/Types/signup/SignupType';
+import { ResponseType } from 'src/Types/response/ResponseType';
 
 export class SignupValidation {
-  responses: CreateResponseDto[];
+  responses: ResponseType[];
   fields: Field[];
   fieldErrors: string[];
-  constructor(createSignupDto: CreateSignupDto, event: Event) {
-    this.responses = createSignupDto.responses;
+  constructor(signup: SignupType, event: Event) {
+    this.responses = signup.responses;
     this.fields = event.form.fields;
     this.fieldErrors = [];
   }

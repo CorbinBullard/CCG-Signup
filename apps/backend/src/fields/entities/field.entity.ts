@@ -8,10 +8,10 @@ import {
   OneToMany,
 } from 'typeorm';
 import { Form } from 'src/form/form.entity';
-import { FieldTypeEnum } from '../fieldTypes';
+import { FieldTypeEnum } from '../fieldTypeEnums';
 import { BadRequestException } from '@nestjs/common';
 import { Options } from '../Options';
-import { Response } from 'src/response/response.entity';
+import { Response } from 'src/response/entities/response.entity';
 import { Subfield } from '../Subfield';
 
 @Entity()

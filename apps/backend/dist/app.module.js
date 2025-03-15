@@ -14,7 +14,6 @@ const event_module_1 = require("./event/event.module");
 const form_module_1 = require("./form/form.module");
 const typeorm_1 = require("@nestjs/typeorm");
 const signup_module_1 = require("./signup/signup.module");
-const response_service_1 = require("./response/response.service");
 const fields_module_1 = require("./fields/fields.module");
 const response_module_1 = require("./response/response.module");
 let AppModule = class AppModule {
@@ -36,7 +35,7 @@ exports.AppModule = AppModule = __decorate([
             response_module_1.ResponseModule,
         ],
         controllers: [app_controller_1.AppController],
-        providers: [app_service_1.AppService, response_service_1.ResponseService],
+        providers: [app_service_1.AppService],
     })
 ], AppModule);
 //# sourceMappingURL=app.module.js.map

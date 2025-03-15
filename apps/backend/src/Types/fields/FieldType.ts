@@ -1,4 +1,4 @@
-import { FieldTypeEnum, SubFieldTypeEnum } from 'src/fields/fieldTypes';
+import { FieldTypeEnum, SubFieldTypeEnum } from 'src/fields/fieldTypeEnums';
 import { Options } from 'src/fields/Options';
 
 export type FieldType = {

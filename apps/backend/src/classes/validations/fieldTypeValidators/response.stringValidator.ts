@@ -1,8 +1,8 @@
 import { CreateResponseDto } from 'src/response/dto/create-response.dto';
 import { ResponseValidator } from './response.validator';
 import { Field } from 'src/fields/entities/field.entity';
-import { FieldType } from 'src/Types/FieldType';
-import { ResponseType } from 'src/Types/ResponseType';
+import { FieldType } from 'src/Types/fields/FieldType';
+import { ResponseType } from 'src/Types/response/ResponseType';
 
 export class StringValidator extends ResponseValidator {
   constructor(response: ResponseType, field: FieldType) {
@@ -10,7 +10,14 @@ export class StringValidator extends ResponseValidator {
   }
   override validate() {
     super.validate();
-
+    this.isString();
     return this.errors;
+  }
+
+  isString() {
+    if (typeof this.response.value !== 'string')
+      this.errors.push(
+        `Field with id ${this.field.id} response must be a string`,
+      );
   }
 }

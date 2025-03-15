@@ -13,10 +13,13 @@ export class Response {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @Column()
+  fieldId: number;
+
   @ManyToOne(() => Signup, (signup) => signup.responses)
   signup: Signup;
 
-  @ManyToOne(() => Field, (field) => field.responses)
+  @ManyToOne(() => Field, (field) => field.responses, { cascade: true })
   @JoinColumn()
   field: Field;
 

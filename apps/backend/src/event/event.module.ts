@@ -14,5 +14,6 @@ import { Field } from 'src/fields/entities/field.entity';
   imports: [TypeOrmModule.forFeature([Event, Form, Field]), FormModule],
   providers: [EventService, FormService, FieldsService],
   controllers: [EventController],
+  exports: [EventService],
 })
 export class EventModule {}

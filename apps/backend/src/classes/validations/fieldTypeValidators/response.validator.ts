@@ -1,7 +1,7 @@
 import { Field } from 'src/fields/entities/field.entity';
 import { CreateResponseDto } from 'src/response/dto/create-response.dto';
-import { FieldType } from 'src/Types/FieldType';
-import { ResponseType } from 'src/Types/ResponseType';
+import { FieldType } from 'src/Types/fields/FieldType';
+import { ResponseType } from 'src/Types/response/ResponseType';
 
 export abstract class ResponseValidator {
   response: ResponseType;

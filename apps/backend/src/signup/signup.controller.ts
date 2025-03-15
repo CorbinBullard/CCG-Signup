@@ -1,6 +1,7 @@
 import { Controller, Get, Body, Param, Delete, Put } from '@nestjs/common';
 import { SignupService } from './signup.service';
 import { UpdateSignupDto } from './dto/update-signup.dto';
+import { CreateSignupDto } from './dto/create-signup.dto';
 
 @Controller('signups')
 export class SignupController {

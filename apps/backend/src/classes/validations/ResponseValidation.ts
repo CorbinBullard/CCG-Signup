@@ -1,5 +1,5 @@
 import { Field } from 'src/fields/entities/field.entity';
-import { FieldTypeEnum } from 'src/fields/fieldTypes';
+import { FieldTypeEnum } from 'src/fields/fieldTypeEnums';
 import { CreateResponseDto } from 'src/response/dto/create-response.dto';
 import { ResponseValidator } from './fieldTypeValidators/response.validator';
 import { NumberValidator } from './fieldTypeValidators/response.numberValidator';
@@ -10,8 +10,9 @@ import { BadRequestException } from '@nestjs/common';
 import { DateValidator } from './fieldTypeValidators/response.dateValidator';
 import { EmailValidator } from './fieldTypeValidators/response.emailValidator';
 import { CompositeValidator } from './fieldTypeValidators/response.compositeValidator';
-import { FieldType } from 'src/Types/FieldType';
-import { ResponseType } from 'src/Types/ResponseType';
+import { FieldType } from 'src/Types/fields/FieldType';
+import { ResponseType } from 'src/Types/response/ResponseType';
+import { MultiResponseValidator } from './fieldTypeValidators/response.multiCompositeValidator';
 
 export class ResponseValidation {
   validator: ResponseValidator;
@@ -44,6 +45,10 @@ export class ResponseValidation {
       }
       case FieldTypeEnum.composite: {
         this.validator = new CompositeValidator(response, field);
+        break;
+      }
+      case FieldTypeEnum.multiResponse: {
+        this.validator = new MultiResponseValidator(response, field);
         break;
       }
       default: {

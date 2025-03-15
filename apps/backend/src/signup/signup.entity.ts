@@ -2,18 +2,20 @@ import { Event } from 'src/event/event.entity';
 import {
   Column,
   Entity,
+  JoinColumn,
+  JoinTable,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Response } from 'src/response/response.entity';
+import { Response } from 'src/response/entities/response.entity';
 
 @Entity()
 export class Signup {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ nullable: true })
   note: string;
 
   @ManyToOne(() => Event, (event) => event.signups)

@@ -6,6 +6,7 @@ export enum FieldTypeEnum {
   email = 'email',
   select = 'select',
   composite = 'composite',
+  multiResponse = 'multiResponse',
 }
 
 export enum SubFieldTypeEnum {

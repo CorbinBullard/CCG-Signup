@@ -25,6 +25,6 @@ import { ResponseModule } from './response/response.module';
     ResponseModule,
   ],
   controllers: [AppController],
-  providers: [AppService, ResponseService],
+  providers: [AppService],
 })
 export class AppModule {}

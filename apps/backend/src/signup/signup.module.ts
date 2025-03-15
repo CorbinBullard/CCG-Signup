@@ -4,15 +4,22 @@ import { SignupController } from './signup.controller';
 import { EventSignupController } from './event-signup.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Signup } from './signup.entity';
-import { Event } from 'src/event/event.entity';
-import { EventService } from 'src/event/event.service';
 import { Field } from 'src/fields/entities/field.entity';
 import { FieldsModule } from 'src/fields/fields.module';
-import { FieldsService } from 'src/fields/fields.service';
+
+import { ResponseModule } from 'src/response/response.module';
+import { EventModule } from 'src/event/event.module';
+import { Response } from 'src/response/entities/response.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Signup, Event, Field]), FieldsModule],
+  imports: [
+    TypeOrmModule.forFeature([Signup, Field, Response]),
+    FieldsModule,
+    ResponseModule,
+    EventModule,
+  ],
   controllers: [SignupController, EventSignupController],
-  providers: [SignupService, EventService, FieldsService],
+  providers: [SignupService],
+  exports: [SignupService],
 })
 export class SignupModule {}

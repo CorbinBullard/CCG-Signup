@@ -12,7 +12,7 @@ import {
   ValidateIf,
   ValidateNested,
 } from 'class-validator';
-import { FieldTypeEnum } from '../../fields/fieldTypes';
+import { FieldTypeEnum } from '../fieldTypeEnums';
 import { Type } from 'class-transformer';
 import { Options } from '../../fields/Options';
 import { Subfield } from '../Subfield';
@@ -39,7 +39,11 @@ export class CreateFieldDto {
   @Type(() => Options)
   options?: Options[];
 
-  @ValidateIf((field) => field.type === FieldTypeEnum.composite)
+  @ValidateIf(
+    (field) =>
+      field.type === FieldTypeEnum.composite ||
+      field.type === FieldTypeEnum.multiResponse,
+  )
   @IsArray()
   @ArrayMinSize(2)
   @Type(() => Subfield)
