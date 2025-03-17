@@ -1,6 +1,7 @@
 import {
   Column,
   Entity,
+  Index,
   JoinColumn,
   OneToMany,
   OneToOne,
@@ -10,11 +11,12 @@ import { Form } from 'src/form/form.entity';
 import { Signup } from 'src/signup/signup.entity';
 
 @Entity()
+@Index(['title', 'date'], { unique: true })
 export class Event {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ unique: true })
+  @Column()
   title: string;
 
   @Column()

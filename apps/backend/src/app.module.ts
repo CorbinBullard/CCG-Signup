@@ -5,9 +5,10 @@ import { EventModule } from './event/event.module';
 import { FormModule } from './form/form.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { SignupModule } from './signup/signup.module';
-import { ResponseService } from './response/response.service';
 import { FieldsModule } from './fields/fields.module';
 import { ResponseModule } from './response/response.module';
+import { AuthModule } from './auth/auth.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
@@ -17,12 +18,14 @@ import { ResponseModule } from './response/response.module';
       entities: [__dirname + '/**/*.entity{.ts,.js}'], // Auto-load entity files
       synchronize: true, // Auto-sync schema (disable in production)
     }),
-    // TypeOrmModule.forFeature([Field]), // ?????
+    ConfigModule.forRoot({ isGlobal: true }),
     EventModule,
     FormModule,
     SignupModule,
     FieldsModule,
     ResponseModule,
+    AuthModule,
+    ConfigModule,
   ],
   controllers: [AppController],
   providers: [AppService],

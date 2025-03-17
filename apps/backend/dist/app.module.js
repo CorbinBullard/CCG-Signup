@@ -16,6 +16,8 @@ const typeorm_1 = require("@nestjs/typeorm");
 const signup_module_1 = require("./signup/signup.module");
 const fields_module_1 = require("./fields/fields.module");
 const response_module_1 = require("./response/response.module");
+const auth_module_1 = require("./auth/auth.module");
+const config_1 = require("@nestjs/config");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -28,11 +30,14 @@ exports.AppModule = AppModule = __decorate([
                 entities: [__dirname + '/**/*.entity{.ts,.js}'],
                 synchronize: true,
             }),
+            config_1.ConfigModule.forRoot({ isGlobal: true }),
             event_module_1.EventModule,
             form_module_1.FormModule,
             signup_module_1.SignupModule,
             fields_module_1.FieldsModule,
             response_module_1.ResponseModule,
+            auth_module_1.AuthModule,
+            config_1.ConfigModule,
         ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],

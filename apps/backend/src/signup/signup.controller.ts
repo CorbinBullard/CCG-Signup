@@ -1,8 +1,18 @@
-import { Controller, Get, Body, Param, Delete, Put } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Body,
+  Param,
+  Delete,
+  Put,
+  UseGuards,
+} from '@nestjs/common';
 import { SignupService } from './signup.service';
 import { UpdateSignupDto } from './dto/update-signup.dto';
 import { CreateSignupDto } from './dto/create-signup.dto';
+import { IsAdminGuard } from 'src/guards/jwt-auth.guard';
 
+@UseGuards(IsAdminGuard)
 @Controller('signups')
 export class SignupController {
   constructor(private readonly signupService: SignupService) {}

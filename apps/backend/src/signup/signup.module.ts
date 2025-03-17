@@ -10,6 +10,7 @@ import { FieldsModule } from 'src/fields/fields.module';
 import { ResponseModule } from 'src/response/response.module';
 import { EventModule } from 'src/event/event.module';
 import { Response } from 'src/response/entities/response.entity';
+import { JwtService } from '@nestjs/jwt';
 
 @Module({
   imports: [
@@ -19,7 +20,7 @@ import { Response } from 'src/response/entities/response.entity';
     EventModule,
   ],
   controllers: [SignupController, EventSignupController],
-  providers: [SignupService],
+  providers: [SignupService, JwtService],
   exports: [SignupService],
 })
 export class SignupModule {}

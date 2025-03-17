@@ -10,6 +10,9 @@ async function bootstrap() {
         forbidNonWhitelisted: true,
         transform: true,
     }));
+    app.enableCors({
+        allowedHeaders: ['Authorization', 'Content-Type'],
+    });
     await app.listen(process.env.PORT ?? 8000);
 }
 bootstrap();

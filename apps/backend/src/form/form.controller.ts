@@ -1,6 +1,7 @@
-import { Body, Controller, Get, Param, Put } from '@nestjs/common';
+import { Body, Controller, Get, Param, Put, UseGuards } from '@nestjs/common';
 import { FormService } from './form.service';
 import { CreateFormDto } from './dto/create-form.dto';
+import { IsAdminGuard } from 'src/guards/jwt-auth.guard';
 
 @Controller('forms')
 export class FormController {
@@ -12,6 +13,7 @@ export class FormController {
   }
 
   @Put(':id')
+  @UseGuards(IsAdminGuard)
   updateForm(
     @Param('id') id: number,
     @Body() createFormDto: Partial<CreateFormDto>,

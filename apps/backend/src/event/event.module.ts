@@ -9,10 +9,11 @@ import { Form } from 'src/form/form.entity';
 import { FormService } from 'src/form/form.service';
 import { FieldsService } from 'src/fields/fields.service';
 import { Field } from 'src/fields/entities/field.entity';
+import { JwtService } from '@nestjs/jwt';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Event, Form, Field]), FormModule],
-  providers: [EventService, FormService, FieldsService],
+  providers: [EventService, FormService, FieldsService, JwtService],
   controllers: [EventController],
   exports: [EventService],
 })

@@ -11,6 +11,9 @@ async function bootstrap() {
       transform: true, // enables transformation using class-transformer
     }),
   );
+  app.enableCors({
+    allowedHeaders: ['Authorization', 'Content-Type'],
+  });
   await app.listen(process.env.PORT ?? 8000);
 }
 bootstrap();
