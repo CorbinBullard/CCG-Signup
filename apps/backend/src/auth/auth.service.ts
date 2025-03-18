@@ -12,6 +12,15 @@ export class AuthService {
 
   constructor(private jwtService: JwtService) {}
 
+  async getToken(token: string): Promise<boolean> {
+    try {
+      await this.jwtService.verifyAsync(token);
+      return true;
+    } catch (error) {
+      return false;
+    }
+  }
+
   async signIn({ email, password }: CreateAuthDto) {
     if (email !== this.adminEmail) {
       throw new UnauthorizedException('Invalid Credentials');
