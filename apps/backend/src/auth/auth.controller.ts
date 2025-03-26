@@ -17,7 +17,6 @@ export class AuthController {
 
   @Get()
   async getToken(@Headers('Authorization') authHeader: string) {
-    console.log(authHeader);
     if (!authHeader) {
       throw new UnauthorizedException('Unauthorized');
     }
