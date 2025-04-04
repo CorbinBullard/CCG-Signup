@@ -1,14 +1,9 @@
 import React, { useState } from "react";
-import {
-  DesktopOutlined,
-  FileOutlined,
-  PieChartOutlined,
-  TeamOutlined,
-  UserOutlined,
-} from "@ant-design/icons";
+import { CalendarOutlined } from "@ant-design/icons";
 import type { MenuProps } from "antd";
-import { Breadcrumb, Layout, Menu, theme } from "antd";
-import { Outlet } from "react-router-dom";
+import { Layout, Menu, theme } from "antd";
+import { Outlet, useLocation, useNavigate, useParams } from "react-router-dom";
+import PageLayout from "./PageLayout";
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -28,26 +23,20 @@ function getItem(
   } as MenuItem;
 }
 
-const items: MenuItem[] = [
-  getItem("Option 1", "1", <PieChartOutlined />),
-  getItem("Option 2", "2", <DesktopOutlined />),
-  getItem("User", "sub1", <UserOutlined />, [
-    getItem("Tom", "3"),
-    getItem("Bill", "4"),
-    getItem("Alex", "5"),
-  ]),
-  getItem("Team", "sub2", <TeamOutlined />, [
-    getItem("Team 1", "6"),
-    getItem("Team 2", "8"),
-  ]),
-  getItem("Files", "9", <FileOutlined />),
-];
+const items: MenuItem[] = [getItem("Events", "events", <CalendarOutlined />)];
 
-const App: React.FC = () => {
+const AppLayout: React.FC = () => {
   const [collapsed, setCollapsed] = useState(false);
+  const navigate = useNavigate();
+  const { pathname } = useLocation();
+
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
+
+  const handleMenuClick: MenuProps["onClick"] = (e) => {
+    navigate(`/${e.key}`);
+  };
 
   return (
     <Layout style={{ minHeight: "100vh", minWidth: "100vw" }}>
@@ -59,16 +48,17 @@ const App: React.FC = () => {
         <div className="demo-logo-vertical" />
         <Menu
           theme="dark"
-          defaultSelectedKeys={["1"]}
+          defaultSelectedKeys={[pathname.split("/")[1]]}
           mode="inline"
           items={items}
+          onClick={handleMenuClick}
         />
       </Sider>
       <Layout>
         <Header style={{ padding: 0, background: colorBgContainer }} />
         <Content
           style={{
-            margin: "0 16px",
+            padding: 24,
           }}
         >
           <Outlet />
@@ -81,4 +71,4 @@ const App: React.FC = () => {
   );
 };
 
-export default App;
+export default AppLayout;

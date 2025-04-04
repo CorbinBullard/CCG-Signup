@@ -1,16 +1,22 @@
 import "./App.css";
-import AppLayout from "./layouts/AppLayout";
+import AppLayout from "./components/layouts/AppLayout";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
 import ProtectedRoute from "./components/ProtectedRoute";
+import EventsPage from "./pages/events/EventsPage";
+import CreateEventPage from "./pages/events/CreateEventPage";
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/login" element={<LoginPage />} />
-        <Route path="/" element={<ProtectedRoute />}>
-          <Route index element={<AppLayout />} />
+
+        <Route element={<ProtectedRoute />}>
+          <Route path="" element={<AppLayout />}>
+            <Route path="/events" element={<EventsPage />} />
+            <Route path="/events/create" element={<CreateEventPage />} />
+          </Route>
         </Route>
       </Routes>
     </BrowserRouter>
