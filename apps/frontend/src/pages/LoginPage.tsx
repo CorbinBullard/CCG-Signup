@@ -8,7 +8,6 @@ export default function LoginLayout() {
   const navigate = useNavigate();
 
   const login = async (values) => {
-    console.log(values);
     try {
       const response = await axios.post("/api/auth/login", { ...values });
       const token = response.data.access_token;

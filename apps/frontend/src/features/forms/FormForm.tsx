@@ -5,7 +5,6 @@ import CreateFieldsList from "../fields/CreateFieldsList";
 
 function FormForm({ onSubmit, form, initalValues }) {
   const handleChange = (values) => {
-    console.log("Form values: ", form.getFieldsValue());
   };
   return (
     <Form
@@ -34,6 +33,7 @@ function FormForm({ onSubmit, form, initalValues }) {
           }
         </Form.Item>
       </Flex>
+
       <CreateFieldsList />
       
       <Form.Item noStyle shouldUpdate>

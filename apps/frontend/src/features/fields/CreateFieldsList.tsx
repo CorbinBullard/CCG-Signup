@@ -2,6 +2,7 @@ import { Button, Card, Checkbox, Form, Input, InputNumber, Select } from "antd";
 import React from "react";
 import FieldForm from "./FieldForm";
 import { FieldTypeEnum } from "./field.type";
+import ItemListItem from "../events/components/ItemListItem";
 
 export default function CreateFieldsList() {
   return (
@@ -9,7 +10,9 @@ export default function CreateFieldsList() {
       {(fields, { add, remove }) => (
         <>
           {fields.map((field) => (
-            <FieldForm {...field} />
+            <Card extra={<ItemListItem remove={() => remove(field.name)} />}>
+              <FieldForm {...field} />
+            </Card>
           ))}
           <Button onClick={() => add()}>ADD</Button>
         </>

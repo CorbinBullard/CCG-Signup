@@ -1,32 +1,13 @@
-import {
-  Card,
-  Checkbox,
-  Col,
-  Flex,
-  Form,
-  Input,
-  InputNumber,
-  Row,
-  Select,
-  Space,
-} from "antd";
-import React, { useReducer } from "react";
+import { Checkbox, Flex, Form, Input, Select } from "antd";
 import { FieldTypeEnum } from "./field.type";
-import CreateOptionsList from "./options/CreateOptionsList";
+import CostInput from "../../components/CostInput";
+import CreateList from "../../components/CreateList";
+import SubfieldForm from "./SubfieldForm";
+import OptionForm from "./options/OptionForm";
 
-{
-  // field = {
-  //   label: "",
-  //   type: "string",
-  //   required: true,
-  //   cost: null,
-  //   options: [],
-  //   subfields: [],
-  // },
-}
 export default function FieldForm(field) {
   return (
-    <Card>
+    <>
       <Flex gap={16}>
         <Form.Item name={[field.name, "label"]} label="Label" required>
           <Input placeholder="Field Label" />
@@ -58,21 +39,13 @@ export default function FieldForm(field) {
       <Form.Item dependencies={[["fields", field.name, "type"]]}>
         {({ getFieldValue }) => {
           const type = getFieldValue(["fields", field.name, "type"]);
-          console.log("type", type);
           if (
             type === FieldTypeEnum.CheckBox ||
             type === FieldTypeEnum.MultiResponse
           ) {
             return (
               <Form.Item name={[field.name, "cost"]} label="Cost">
-                <InputNumber
-                  min={0}
-                  formatter={(value) =>
-                    `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                  }
-                  parser={(value) => value?.replace(/\$\s?|(,*)/g, "")}
-                  precision={2}
-                />
+                <CostInput />
               </Form.Item>
             );
           } else return null;
@@ -83,11 +56,38 @@ export default function FieldForm(field) {
           const type = getFieldValue(["fields", field.name, "type"]);
           if (type === FieldTypeEnum.Select) {
             return (
-              <CreateOptionsList field={field} />
+              <Form.Item label="Options">
+                <CreateList
+                  name={[field.name, "options"]}
+                  buttonLabel={"Add Option"}
+                >
+                  <OptionForm />
+                </CreateList>
+              </Form.Item>
             );
           }
         }}
       </Form.Item>
-    </Card>
+      <Form.Item dependencies={[["fields", field.name, "type"]]}>
+        {({ getFieldValue }) => {
+          const type = getFieldValue(["fields", field.name, "type"]);
+          if (
+            type === FieldTypeEnum.Composite ||
+            type === FieldTypeEnum.MultiResponse
+          ) {
+            return (
+              <Form.Item label="Subfields">
+                <CreateList
+                  name={[field.name, "subfields"]}
+                  buttonLabel={"Add Subfield"}
+                >
+                  <SubfieldForm />
+                </CreateList>
+              </Form.Item>
+            );
+          }
+        }}
+      </Form.Item>
+    </>
   );
 }

@@ -9,6 +9,7 @@ import {
   TimePicker,
   Upload,
 } from "antd";
+import CostInput from "../../../components/CostInput";
 
 const EventForm = ({ onSubmit, initialValues = {}, form }) => {
   return (
@@ -16,7 +17,6 @@ const EventForm = ({ onSubmit, initialValues = {}, form }) => {
       form={form}
       layout="vertical"
       onFinish={(values) => {
-        console.log("Form values: ", values);
         onSubmit(values);
       }}
       initialValues={initialValues}
@@ -57,14 +57,7 @@ const EventForm = ({ onSubmit, initialValues = {}, form }) => {
             label="Event Cost"
             rules={[{ required: true, message: "Please enter the event cost" }]}
           >
-            <InputNumber
-              min={0}
-              formatter={(value) =>
-                `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-              }
-              parser={(value) => value?.replace(/\$\s?|(,*)/g, "")}
-              precision={2}
-            />
+            <CostInput />
           </Form.Item>
         </Flex>
         <Flex vertical flex={1} gap={16}>
