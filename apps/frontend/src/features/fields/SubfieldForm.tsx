@@ -1,9 +1,12 @@
-import React from "react";
-import { Checkbox, Flex, Form, Input, Select } from "antd";
+import { Card, Checkbox, Flex, Form, Input, Select } from "antd";
 import { FieldTypeEnum, SubFieldTypeEnum } from "./field.type";
-import CostInput from "../../components/CostInput";
+import CostInput from "../../components/formComponents/CostInput";
+import CreateList from "../../components/formComponents/CreateList";
+import OptionForm from "./options/OptionForm";
+import ConditionalFormItem from "../../components/formComponents/DependentItem";
 
 export default function SubfieldForm(subfield) {
+  const { parent } = subfield;
   return (
     <>
       <Flex gap={16}>
@@ -33,20 +36,30 @@ export default function SubfieldForm(subfield) {
           <Checkbox />
         </Form.Item>
       </Flex>
-      {/* NEEDS ACCESS TO PARENT FIELD */}
-      <Form.Item dependencies={[["fields", subfield.name, "type"]]}>
-        {({ getFieldValue }) => {
-          const type = getFieldValue(["fields", subfield.name, "type"]);
-          console.log("type", type);
-          if (type === FieldTypeEnum.CheckBox) {
-            return (
-              <Form.Item name={[subfield.name, "cost"]} label="Cost">
-                <CostInput />
-              </Form.Item>
-            );
-          } else return null;
-        }}
-      </Form.Item>
+
+      <ConditionalFormItem
+        dependency={["fields", parent.name, "subfields", subfield.name, "type"]}
+        shouldRender={(type) => type === SubFieldTypeEnum.CheckBox}
+      >
+        <Form.Item name={[subfield.name, "cost"]} label="Cost">
+          <CostInput />
+        </Form.Item>
+      </ConditionalFormItem>
+      
+      <ConditionalFormItem
+        dependency={["fields", parent.name, "subfields", subfield.name, "type"]}
+        shouldRender={(type) => type === SubFieldTypeEnum.Select}
+      >
+        <Card title="Options">
+          <CreateList
+            name={[subfield.name, "options"]}
+            buttonLabel={"Add Option"}
+            title={"Option"}
+          >
+            <OptionForm />
+          </CreateList>
+        </Card>
+      </ConditionalFormItem>
     </>
   );
 }

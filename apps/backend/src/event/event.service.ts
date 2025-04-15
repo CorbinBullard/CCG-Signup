@@ -4,15 +4,25 @@ import { Event } from './event.entity';
 import { Repository } from 'typeorm';
 import { CreateEventDto } from './dto/create-event.dto';
 import { UpdateEventDto } from './dto/update-event.dto';
+import { DropboxService } from 'src/dropbox/dropbox.service';
 
 @Injectable()
 export class EventService {
   constructor(
     @InjectRepository(Event) private eventRepository: Repository<Event>,
+    private readonly dropboxService: DropboxService,
   ) {}
 
-  async createEvent(createEventDto: CreateEventDto): Promise<Event> {
-    return this.eventRepository.save(createEventDto);
+  async createEvent(
+    createEventDto: CreateEventDto,
+    image: Express.Multer.File,
+  ): Promise<Event> {
+    const imageUrl = await this.dropboxService.uploadFile(image);
+    const newEvent = {
+      ...createEventDto,
+      image: imageUrl,
+    };
+    return this.eventRepository.save(newEvent);
   }
 
   async getEvents(): Promise<Event[]> {

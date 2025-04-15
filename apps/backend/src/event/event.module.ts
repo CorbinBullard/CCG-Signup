@@ -10,10 +10,17 @@ import { FormService } from 'src/form/form.service';
 import { FieldsService } from 'src/fields/fields.service';
 import { Field } from 'src/fields/entities/field.entity';
 import { JwtService } from '@nestjs/jwt';
+import { DropboxService } from 'src/dropbox/dropbox.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Event, Form, Field]), FormModule],
-  providers: [EventService, FormService, FieldsService, JwtService],
+  providers: [
+    EventService,
+    FormService,
+    FieldsService,
+    JwtService,
+    DropboxService,
+  ],
   controllers: [EventController],
   exports: [EventService],
 })

@@ -9,9 +9,10 @@ import {
   TimePicker,
   Upload,
 } from "antd";
-import CostInput from "../../../components/CostInput";
+import CostInput from "../../../components/formComponents/CostInput";
+import { UploadOutlined } from "@ant-design/icons";
 
-const EventForm = ({ onSubmit, initialValues = {}, form }) => {
+const EventForm = ({ onSubmit, initialValues = {}, form, ref }) => {
   return (
     <Form
       form={form}
@@ -68,8 +69,15 @@ const EventForm = ({ onSubmit, initialValues = {}, form }) => {
               { required: true, message: "Please enter the event image URL" },
             ]}
           >
-            <Upload>
-              <Button>Upload</Button>
+            <Upload
+              beforeUpload={(file) => {
+                ref.current = file;
+                return false;
+              }}
+              showUploadList={true}
+              maxCount={1}
+            >
+              <Button icon={<UploadOutlined />}>Select Image</Button>
             </Upload>
           </Form.Item>
           <Form.Item

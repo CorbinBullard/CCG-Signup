@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 import {
+  BadRequestException,
   Body,
   Controller,
   Delete,
@@ -8,13 +9,16 @@ import {
   Post,
   Put,
   Query,
+  UploadedFile,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { EventService } from './event.service';
 import { CreateEventDto } from './dto/create-event.dto';
 import { UpdateEventDto } from './dto/update-event.dto';
 import { GetSignupsQueryDto } from './dto/query-params.dto';
 import { IsAdminGuard } from 'src/guards/jwt-auth.guard';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('events')
 export class EventController {
@@ -32,8 +36,20 @@ export class EventController {
 
   @Post()
   @UseGuards(IsAdminGuard)
-  createEvent(@Body() createEventDto: CreateEventDto) {
-    return this.eventService.createEvent(createEventDto);
+  @UseInterceptors(FileInterceptor('image'))
+  createEvent(
+    @UploadedFile() image: Express.Multer.File,
+    @Body() createEventDto: any,
+  ) {
+    const parsedForm = JSON.parse(createEventDto.form);
+    const dto = {
+      ...createEventDto,
+      form: parsedForm,
+    };
+    if (!image) throw new BadRequestException('Image file is required');
+    console.log('Image file:', image);
+    console.log('CreateEventDto:', dto);
+    return this.eventService.createEvent(dto, image);
   }
 
   @Put(':id')

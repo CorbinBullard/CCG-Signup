@@ -4,28 +4,25 @@ import api from "../utils/axiosApi";
 
 export default function ProtectedRoute() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
 
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const token = await api.get("/api/auth");
-        if (token) {
-          setIsAuthenticated(true);
-        } else {
-          setIsAuthenticated(false);
-        }
+        await api.get("/api/auth");
+        setIsAuthenticated(true);
       } catch (error) {
         setIsAuthenticated(false);
+      } finally {
+        setIsLoading(false);
       }
-      setIsLoading(false);
     };
-    setIsLoading(true);
     checkAuth();
   }, []);
 
   if (isLoading) {
     return <div>Loading...</div>;
   }
+
   return isAuthenticated ? <Outlet /> : <Navigate to="/login" />;
 }

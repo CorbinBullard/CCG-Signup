@@ -1,6 +1,6 @@
 import { Form, Input, InputNumber, Space } from "antd";
 import React from "react";
-import CostInput from "../../../components/CostInput";
+import CostInput from "../../../components/formComponents/CostInput";
 
 export default function OptionForm(option) {
   return (

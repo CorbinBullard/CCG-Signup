@@ -2,6 +2,7 @@
 import { Type } from 'class-transformer';
 import {
   IsDateString,
+  IsMilitaryTime,
   IsNumber,
   IsObject,
   IsString,
@@ -19,8 +20,8 @@ export class CreateEventDto {
   @IsDateString()
   date: Date;
 
-  @IsString()
-  image: string;
+  @IsMilitaryTime()
+  time: string;
 
   @IsNumber()
   cost: number;

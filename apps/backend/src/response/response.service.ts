@@ -16,7 +16,6 @@ export class ResponseService {
   ) {}
 
   async create(createResponseDto: CreateResponseDto) {
-    console.log(createResponseDto);
     const field = await this.fieldsService.findOne(createResponseDto.fieldId);
   }
 }

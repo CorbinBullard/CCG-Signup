@@ -25,6 +25,9 @@ export class Event {
   @Column('date')
   date: Date;
 
+  @Column('time')
+  time: string;
+
   @Column()
   image: string;
 

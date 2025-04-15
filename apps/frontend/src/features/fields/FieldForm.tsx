@@ -1,9 +1,10 @@
-import { Checkbox, Flex, Form, Input, Select } from "antd";
+import { Card, Checkbox, Collapse, Flex, Form, Input, Select } from "antd";
 import { FieldTypeEnum } from "./field.type";
-import CostInput from "../../components/CostInput";
-import CreateList from "../../components/CreateList";
+import CostInput from "../../components/formComponents/CostInput";
+import CreateList from "../../components/formComponents/CreateList";
 import SubfieldForm from "./SubfieldForm";
 import OptionForm from "./options/OptionForm";
+import ConditionalFormItem from "../../components/formComponents/DependentItem";
 
 export default function FieldForm(field) {
   return (
@@ -36,58 +37,68 @@ export default function FieldForm(field) {
         </Form.Item>
       </Flex>
 
-      <Form.Item dependencies={[["fields", field.name, "type"]]}>
-        {({ getFieldValue }) => {
-          const type = getFieldValue(["fields", field.name, "type"]);
-          if (
-            type === FieldTypeEnum.CheckBox ||
-            type === FieldTypeEnum.MultiResponse
-          ) {
-            return (
-              <Form.Item name={[field.name, "cost"]} label="Cost">
-                <CostInput />
-              </Form.Item>
-            );
-          } else return null;
-        }}
-      </Form.Item>
-      <Form.Item dependencies={[["fields", field.name, "type"]]}>
-        {({ getFieldValue }) => {
-          const type = getFieldValue(["fields", field.name, "type"]);
-          if (type === FieldTypeEnum.Select) {
-            return (
-              <Form.Item label="Options">
+      <ConditionalFormItem
+        dependency={["fields", field.name, "type"]}
+        shouldRender={(type) =>
+          type === FieldTypeEnum.CheckBox ||
+          type === FieldTypeEnum.MultiResponse
+        }
+      >
+        <Form.Item name={[field.name, "cost"]} label="Cost">
+          <CostInput />
+        </Form.Item>
+      </ConditionalFormItem>
+
+      <ConditionalFormItem
+        dependency={["fields", field.name, "type"]}
+        shouldRender={(type) => type === FieldTypeEnum.Select}
+      >
+        <Collapse
+          items={[
+            {
+              key: "1",
+              label: "Options",
+              children: (
                 <CreateList
                   name={[field.name, "options"]}
                   buttonLabel={"Add Option"}
+                  title={"Option"}
+                  // initialValue={{ label: "", value: "" }}
                 >
                   <OptionForm />
                 </CreateList>
-              </Form.Item>
-            );
-          }
-        }}
-      </Form.Item>
-      <Form.Item dependencies={[["fields", field.name, "type"]]}>
-        {({ getFieldValue }) => {
-          const type = getFieldValue(["fields", field.name, "type"]);
-          if (
-            type === FieldTypeEnum.Composite ||
-            type === FieldTypeEnum.MultiResponse
-          ) {
-            return (
-              <Form.Item label="Subfields">
+              ),
+            },
+          ]}
+        />
+      </ConditionalFormItem>
+
+      <ConditionalFormItem
+        dependency={["fields", field.name, "type"]}
+        shouldRender={(type) =>
+          type === FieldTypeEnum.Composite ||
+          type === FieldTypeEnum.MultiResponse
+        }
+      >
+        <Collapse
+          items={[
+            {
+              key: "1",
+              label: "Subfields",
+              children: (
                 <CreateList
                   name={[field.name, "subfields"]}
                   buttonLabel={"Add Subfield"}
+                  title={"Subfield"}
+                  card={true}
                 >
-                  <SubfieldForm />
+                  <SubfieldForm parent={field} />
                 </CreateList>
-              </Form.Item>
-            );
-          }
-        }}
-      </Form.Item>
+              ),
+            },
+          ]}
+        />
+      </ConditionalFormItem>
     </>
   );
 }
