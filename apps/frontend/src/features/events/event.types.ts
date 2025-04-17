@@ -1,4 +1,5 @@
 import { Form } from "../forms/form.types";
+import { FundLocationEnum } from "./fund.type";
 
 export type Event = {
   title: string;
@@ -8,4 +9,6 @@ export type Event = {
   image: string;
   cost: number;
   form: Form;
-}
+  funds?: FundLocationEnum;
+  signups: [];
+};

@@ -10,13 +10,13 @@ export default function PreviewForm({ form }) {
         {fields?.map((field, index) => (
           <PreviewItem {...field} key={index} />
         ))}
-        <Form.Item noStyle shouldUpdate>
+        {/* <Form.Item noStyle shouldUpdate>
           {() => (
             <Typography>
               <pre>{JSON.stringify(form.getFieldsValue(), null, 2)}</pre>
             </Typography>
           )}
-        </Form.Item>
+        </Form.Item> */}
       </Form>
     </Card>
   );

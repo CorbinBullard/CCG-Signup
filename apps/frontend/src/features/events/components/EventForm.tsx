@@ -5,12 +5,15 @@ import {
   Form,
   Input,
   InputNumber,
+  Select,
   Space,
   TimePicker,
   Upload,
 } from "antd";
 import CostInput from "../../../components/formComponents/CostInput";
 import { UploadOutlined } from "@ant-design/icons";
+import { FundLocationEnum } from "../fund.type";
+import ConditionalFormItem from "../../../components/formComponents/DependentItem";
 
 const EventForm = ({ onSubmit, initialValues = {}, form, ref }) => {
   return (
@@ -53,13 +56,31 @@ const EventForm = ({ onSubmit, initialValues = {}, form, ref }) => {
               <TimePicker use12Hours format="h:mm a" minuteStep={15} />
             </Form.Item>
           </Space>
-          <Form.Item
-            name="cost"
-            label="Event Cost"
-            rules={[{ required: true, message: "Please enter the event cost" }]}
-          >
-            <CostInput />
-          </Form.Item>
+          <Space>
+            <Form.Item
+              name="cost"
+              label="Event Cost"
+              rules={[
+                { required: true, message: "Please enter the event cost" },
+              ]}
+              initialValue={0}
+            >
+              <CostInput />
+            </Form.Item>
+            <ConditionalFormItem
+              dependency="cost"
+              shouldRender={(cost) => cost > 0}
+            >
+              <Form.Item name="funds" label="Event Funds">
+                <Select
+                  options={Object.entries(FundLocationEnum).map((type) => {
+                    return { label: type[0], value: type[1] };
+                  })}
+                  placeholder="Select Fund Location"
+                />
+              </Form.Item>
+            </ConditionalFormItem>
+          </Space>
         </Flex>
         <Flex vertical flex={1} gap={16}>
           <Form.Item
@@ -76,6 +97,7 @@ const EventForm = ({ onSubmit, initialValues = {}, form, ref }) => {
               }}
               showUploadList={true}
               maxCount={1}
+              accept="image/*"
             >
               <Button icon={<UploadOutlined />}>Select Image</Button>
             </Upload>

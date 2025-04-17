@@ -9,6 +9,7 @@ import {
 } from 'typeorm';
 import { Form } from 'src/form/form.entity';
 import { Signup } from 'src/signup/signup.entity';
+import { FundLocationEnum } from './FundLocationEnum';
 
 @Entity()
 @Index(['title', 'date'], { unique: true })
@@ -30,6 +31,9 @@ export class Event {
 
   @Column()
   image: string;
+
+  @Column({ default: FundLocationEnum.General })
+  funds?: FundLocationEnum;
 
   @Column({ type: 'decimal', precision: 10, scale: 2 })
   cost: number;

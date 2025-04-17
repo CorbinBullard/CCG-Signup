@@ -1,10 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 import {
   IsDateString,
+  IsEnum,
   IsMilitaryTime,
   IsNumber,
   IsString,
 } from 'class-validator';
+import { FundLocationEnum } from '../FundLocationEnum';
 
 export class UpdateEventDto {
   @IsString()
@@ -24,4 +26,7 @@ export class UpdateEventDto {
 
   @IsNumber()
   cost: number;
+
+  @IsEnum(FundLocationEnum)
+  funds: FundLocationEnum;
 }

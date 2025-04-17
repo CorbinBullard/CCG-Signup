@@ -8,31 +8,32 @@ import { FieldTypeEnum } from "../fields/field.type";
 
 // FormForm.tsx
 function FormForm({
-  value = {
+  initialValues = {
     name: "",
     isSaved: false,
     fields: [{ label: "", type: FieldTypeEnum.Text, required: true }],
   },
   onChange,
   preview = true,
+  form = null,
 }) {
-  const [form] = Form.useForm();
+  const [newForm] = Form.useForm();
 
   // When any field changes, update the parent
   const handleChange = () => {
-    const allValues = form.getFieldsValue(true);
+    const allValues = newForm.getFieldsValue(true);
     onChange?.(allValues);
   };
 
   useEffect(() => {
-    form.setFieldsValue(value);
-  }, [value]);
+    newForm.setFieldsValue(initialValues);
+  }, [initialValues]);
 
   return (
     <Form
-      form={form}
+      form={form || newForm}
       layout="vertical"
-      initialValues={value}
+      initialValues={initialValues}
       onValuesChange={handleChange}
     >
       {/* Same body as before, just nesting under form removed now */}

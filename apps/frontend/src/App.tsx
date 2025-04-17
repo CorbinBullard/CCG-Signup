@@ -5,6 +5,7 @@ import LoginPage from "./pages/LoginPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 import EventsPage from "./pages/events/EventsPage";
 import CreateEventPage from "./pages/events/CreateEventPage";
+import SingleEventPage from "./pages/events/SingleEventPage";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
           <Route path="" element={<AppLayout />}>
             <Route path="/events" element={<EventsPage />} />
             <Route path="/events/create" element={<CreateEventPage />} />
+            <Route path="/events/:id" element={<SingleEventPage />} />
           </Route>
         </Route>
       </Routes>

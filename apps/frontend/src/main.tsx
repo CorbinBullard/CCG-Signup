@@ -7,15 +7,19 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import "@ant-design/v5-patch-for-react-19";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
+import NotificationProvider from "./context/Notifications.tsx";
+
 const queryClient = new QueryClient();
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
       <ReactQueryDevtools initialIsOpen={false} />
-      <DndProvider backend={HTML5Backend}>
-        <App />
-      </DndProvider>
+      <NotificationProvider>
+        <DndProvider backend={HTML5Backend}>
+          <App />
+        </DndProvider>
+      </NotificationProvider>
     </QueryClientProvider>
   </StrictMode>
 );

@@ -22,6 +22,7 @@ export class EventService {
       ...createEventDto,
       image: imageUrl,
     };
+    console.log('New event:', newEvent);
     return this.eventRepository.save(newEvent);
   }
 
@@ -32,7 +33,7 @@ export class EventService {
   async findOne(id: number): Promise<Event | null> {
     const event = await this.eventRepository.findOne({
       where: { id },
-      relations: { form: { fields: true } },
+      relations: { form: { fields: true }, signups: true },
     });
     if (!event) {
       throw new NotFoundException(`Event with id ${id} not found`);
@@ -40,8 +41,17 @@ export class EventService {
     return event;
   }
 
-  async updateEvent(id: number, updateEventDto: UpdateEventDto) {
+  async updateEvent(
+    id: number,
+    updateEventDto: UpdateEventDto,
+    image?: Express.Multer.File,
+  ): Promise<Event | null> {
     await this.findOne(id);
+
+    if (image) {
+      const imageUrl = await this.dropboxService.uploadFile(image);
+      updateEventDto.image = imageUrl;
+    }
     await this.eventRepository.update(id, updateEventDto);
     return await this.findOne(id);
   }

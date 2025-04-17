@@ -4,57 +4,22 @@ import { CaretRightOutlined, CaretLeftOutlined } from "@ant-design/icons";
 import PageLayout from "../../components/layouts/PageLayout";
 import EventForm from "../../features/events/components/EventForm";
 import FormForm from "../../features/forms/FormForm";
-import { useCreateEvent } from "../../features/events/useEvents";
+import { useEventSubmission } from "../../features/events/hooks/useEventSubmission";
+import { useStepper } from "../../components/useStepper";
+import { FieldTypeEnum } from "../../features/fields/field.type";
 
 function CreateEventPage() {
-  const [eventStep, setEventStep] = useState(0);
   const [form] = Form.useForm();
   const fileRef = useRef<File | null>(null);
+  const { current: eventStep, next, prev } = useStepper(2);
 
-  const createEvent = useCreateEvent();
-
-  // 👇 Controlled form schema state
   const [formSchema, setFormSchema] = useState({
     isSaved: false,
     name: "",
-    fields: [{ label: "", type: "text", required: true }],
+    fields: [{ label: "", type: FieldTypeEnum.Text, required: true }],
   });
 
-  const next = async () => {
-    const isValid = await form.validateFields();
-    if (eventStep < 1) setEventStep(eventStep + 1);
-  };
-
-  const prev = () => {
-    if (eventStep > 0) setEventStep(eventStep - 1);
-  };
-
-  const handleFormSchemaChange = (updatedSchema) => {
-    console.log("Updated Schema", updatedSchema);
-    setFormSchema(updatedSchema);
-  };
-
-  const submitForm = async () => {
-    const values = await form.validateFields();
-
-    const formData = new FormData();
-    formData.append("title", values.title);
-    formData.append("description", values.description);
-    formData.append("date", values.date.format("YYYY-MM-DD"));
-    formData.append("time", values.time.format("HH:mm"));
-    formData.append("cost", values.cost.toString());
-    formData.append("form", JSON.stringify(formSchema));
-
-    if (fileRef.current) {
-      formData.append("image", fileRef.current);
-    } else {
-      console.error("No file selected");
-    }
-    for (const pair of formData.entries()) {
-      console.log(`${pair[0]}:`, pair[1]);
-    }
-    createEvent.mutate(formData);
-  };
+  const { submit } = useEventSubmission(form, fileRef, formSchema);
 
   return (
     <PageLayout
@@ -72,7 +37,7 @@ function CreateEventPage() {
             <EventForm form={form} ref={fileRef} />
           </div>
           <div style={{ display: eventStep === 1 ? "block" : "none" }}>
-            <FormForm value={formSchema} onChange={handleFormSchemaChange} />
+            <FormForm initialValues={formSchema} onChange={setFormSchema} />
           </div>
 
           <Flex justify="end" style={{ marginTop: 16 }}>
@@ -86,12 +51,15 @@ function CreateEventPage() {
               </Button>
             )}
             {eventStep < 1 && (
-              <Button icon={<CaretRightOutlined />} onClick={next}>
+              <Button
+                icon={<CaretRightOutlined />}
+                onClick={() => next(() => form.validateFields())}
+              >
                 Next
               </Button>
             )}
             {eventStep === 1 && (
-              <Button type="primary" onClick={submitForm}>
+              <Button type="primary" onClick={submit}>
                 Submit
               </Button>
             )}

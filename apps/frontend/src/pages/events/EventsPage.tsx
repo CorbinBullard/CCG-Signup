@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import CardsContainer from "../../components/CardsContainer";
-import useEvents from "../../features/events/useEvents";
+import useEvents from "../../features/events/hooks/useEvents";
 import EventCard from "../../features/events/components/EventCard";
 import PageLayout from "../../components/layouts/PageLayout";
 import { useNavigate } from "react-router-dom";

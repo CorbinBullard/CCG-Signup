@@ -19,6 +19,7 @@ import { UpdateEventDto } from './dto/update-event.dto';
 import { GetSignupsQueryDto } from './dto/query-params.dto';
 import { IsAdminGuard } from 'src/guards/jwt-auth.guard';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { CreateFormDto } from 'src/form/dto/create-form.dto';
 
 @Controller('events')
 export class EventController {
@@ -41,21 +42,26 @@ export class EventController {
     @UploadedFile() image: Express.Multer.File,
     @Body() createEventDto: any,
   ) {
-    const parsedForm = JSON.parse(createEventDto.form);
-    const dto = {
+    const parsedForm: CreateFormDto = JSON.parse(createEventDto.form);
+
+    const dto: CreateEventDto = {
       ...createEventDto,
+      cost: +createEventDto.cost,
       form: parsedForm,
     };
     if (!image) throw new BadRequestException('Image file is required');
-    console.log('Image file:', image);
-    console.log('CreateEventDto:', dto);
     return this.eventService.createEvent(dto, image);
   }
 
   @Put(':id')
   @UseGuards(IsAdminGuard)
-  updateEvent(@Param('id') id: number, @Body() updateEventDto: UpdateEventDto) {
-    return this.eventService.updateEvent(id, updateEventDto);
+  @UseInterceptors(FileInterceptor('image'))
+  updateEvent(
+    @UploadedFile() image: Express.Multer.File,
+    @Param('id') id: number,
+    @Body() updateEventDto: any,
+  ) {
+    return this.eventService.updateEvent(id, updateEventDto, image);
   }
 
   @Delete()

@@ -1,15 +1,20 @@
 // PageLayout.jsx
 import React from "react";
-import { Layout, Typography, Button, Space, Flex } from "antd";
+import { Layout, Typography, Button, Space, Flex, Breadcrumb } from "antd";
+import { CaretLeftOutlined } from "@ant-design/icons";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const { Header, Content } = Layout;
 const { Title } = Typography;
 
 const PageLayout = ({ title, actions, children, Component }) => {
+  
   return (
     <Layout
       style={{ background: "#fff", padding: 24, marginTop: 12, height: "100%" }}
     >
+      {/* SET UP FUNCTIONING BREADCRUMB */}
+      {/* <Breadcrumb items={[location]} /> */}
       <Header
         style={{
           background: "#fff",
@@ -19,11 +24,16 @@ const PageLayout = ({ title, actions, children, Component }) => {
           alignItems: "center",
         }}
       >
-        <Flex justify="space-between" align="center" style={{ width: "100%" }} gap={100}>
+        <Flex
+          justify="space-between"
+          align="center"
+          style={{ width: "100%" }}
+          gap={100}
+        >
           <Title level={3} style={{ margin: 0 }}>
             {title}
           </Title>
-          {Component && <Component  />}
+          {Component && <Component />}
           <Space>
             {actions &&
               actions.map((action, index) => (
