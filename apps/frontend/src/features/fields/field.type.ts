@@ -12,6 +12,7 @@ export enum FieldTypeEnum {
 }
 
 export type Field = {
+  id?: number;
   label: string;
   type: FieldTypeEnum;
   required: boolean;

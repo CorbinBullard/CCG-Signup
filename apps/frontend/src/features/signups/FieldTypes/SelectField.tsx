@@ -33,7 +33,6 @@ export default function SelectField({
       <Select
         options={optionobj}
         optionRender={(option) => {
-          console.log("option", option);
           return option ? (
             <Flex gap={8}>
               <Typography.Text>{option.label}</Typography.Text>

@@ -1,7 +1,14 @@
 import React, { useState } from "react";
 import { Button, Modal } from "antd";
 
-const OpenModalButton: React.FC = ({ children }) => {
+const OpenModalButton: React.FC = ({
+  children,
+  btnType,
+  label,
+  icon,
+  modalTitle,
+  onOk,
+}) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const showModal = () => {
@@ -9,6 +16,7 @@ const OpenModalButton: React.FC = ({ children }) => {
   };
 
   const handleOk = () => {
+    onOk();
     setIsModalOpen(false);
   };
 
@@ -18,11 +26,11 @@ const OpenModalButton: React.FC = ({ children }) => {
 
   return (
     <>
-      <Button type="primary" onClick={showModal}>
-        Open Modal
+      <Button icon={icon} type={btnType} onClick={showModal}>
+        {label}
       </Button>
       <Modal
-        title="Example Modal"
+        title={modalTitle}
         open={isModalOpen}
         onOk={handleOk}
         onCancel={handleCancel}

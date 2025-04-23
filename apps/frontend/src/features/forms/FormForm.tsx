@@ -5,6 +5,7 @@ import CreateList from "../../components/formComponents/CreateList";
 import ConditionalFormItem from "../../components/formComponents/DependentItem";
 import PreviewForm from "./preview/PreviewForm";
 import { FieldTypeEnum } from "../fields/field.type";
+import CreateSignupForm from "../signups/CreateSignupForm";
 
 // FormForm.tsx
 function FormForm({
@@ -24,10 +25,6 @@ function FormForm({
     const allValues = newForm.getFieldsValue(true);
     onChange?.(allValues);
   };
-
-  useEffect(() => {
-    newForm.setFieldsValue(initialValues);
-  }, [initialValues]);
 
   return (
     <Form
@@ -57,14 +54,13 @@ function FormForm({
             buttonLabel="Add Field"
             title={"Field"}
             card={true}
-            initialValue={{ label: "", type: "text", required: true }}
           >
             <FieldForm />
           </CreateList>
         </Splitter.Panel>
         <Splitter.Panel collapsible>
           <Form.Item noStyle>
-            {preview && <PreviewForm form={form} />}
+            {preview && <PreviewForm form={form || newForm} />}
           </Form.Item>
         </Splitter.Panel>
       </Splitter>

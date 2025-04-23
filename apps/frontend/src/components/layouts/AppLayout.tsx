@@ -4,6 +4,7 @@ import type { MenuProps } from "antd";
 import { Layout, Menu, theme } from "antd";
 import { Outlet, useLocation, useNavigate, useParams } from "react-router-dom";
 import PageLayout from "./PageLayout";
+import BreadcrumbNav from "../BreadcrumbNav";
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -56,6 +57,7 @@ const AppLayout: React.FC = () => {
       </Sider>
       <Layout>
         <Header style={{ padding: 0, background: colorBgContainer }} />
+        <BreadcrumbNav />
         <Content
           style={{
             padding: 24,

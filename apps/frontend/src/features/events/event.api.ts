@@ -1,8 +1,11 @@
 import api from "../../utils/axiosApi";
 import { Event } from "./event.types";
+import qs from "query-string";
 
-export const fetchEvents = async () => {
-  const response = await api.get("/api/events");
+export const fetchEvents = async (query) => {
+  const queryString = qs.stringify(query);
+
+  const response = await api.get(`/api/events?${queryString}`);
   return response.data;
 };
 

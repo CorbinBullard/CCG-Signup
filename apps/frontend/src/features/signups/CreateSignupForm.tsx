@@ -1,5 +1,4 @@
 import { Form, Input, Typography } from "antd";
-import ResponseItemField from "./ResponseItemForm"; // handles rendering each dynamic field
 import ResponseItemForm from "./ResponseItemForm";
 
 export default function CreateSignupForm({
@@ -18,21 +17,22 @@ export default function CreateSignupForm({
       <Form.List name="responses">
         {(formListFields) => (
           <>
-            {fields.map((field, index) => (
-              <Form.Item
-                key={field.id}
-                noStyle
-                shouldUpdate={(prev, next) => prev !== next}
-              >
-                {() => (
-                  <ResponseItemForm
-                    {...field}
-                    name={[index, "value"]}
-                    index={index}
-                  />
-                )}
-              </Form.Item>
-            ))}
+            {fields &&
+              fields.map((field, index) => (
+                <Form.Item
+                  key={field?.id || index}
+                  noStyle
+                  shouldUpdate={(prev, next) => prev !== next}
+                >
+                  {() => (
+                    <ResponseItemForm
+                      {...field}
+                      name={[index, "value"]}
+                      index={index}
+                    />
+                  )}
+                </Form.Item>
+              ))}
           </>
         )}
       </Form.List>

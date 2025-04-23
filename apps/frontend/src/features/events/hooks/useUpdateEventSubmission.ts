@@ -4,7 +4,6 @@ export const useUpdateEventSubmission = (eventId, formRef, fileRef) => {
   const updateEvent = useUpdateEvent();
 
   const submit = async () => {
-    console.log("EventId", eventId);
     const values = await formRef.validateFields();
 
     const formData = new FormData();

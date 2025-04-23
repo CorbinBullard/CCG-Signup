@@ -21,7 +21,7 @@ export const useUpdateForm = () => {
   const openNotification = useNotifications();
   return useMutation({
     mutationFn: updateForm,
-    onSuccess: ({ id, eventId }) => {
+    onSuccess: ({ id }, { eventId }) => {
       queryClient.invalidateQueries({ queryKey: ["forms"] });
       queryClient.invalidateQueries({ queryKey: ["form", id] });
       queryClient.invalidateQueries({ queryKey: ["event", eventId] });

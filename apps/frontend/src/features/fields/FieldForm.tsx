@@ -14,12 +14,7 @@ export default function FieldForm(field) {
           <Input placeholder="Field Label" />
         </Form.Item>
 
-        <Form.Item
-          name={[field.name, "type"]}
-          label="Field Type"
-          required
-          initialValue={FieldTypeEnum.Text}
-        >
+        <Form.Item name={[field.name, "type"]} label="Field Type" required>
           <Select
             options={Object.entries(FieldTypeEnum).map((type) => {
               return { label: type[0], value: type[1] };
@@ -31,7 +26,6 @@ export default function FieldForm(field) {
           name={[field.name, "required"]}
           label="Required"
           valuePropName="checked"
-          initialValue={true}
         >
           <Checkbox />
         </Form.Item>

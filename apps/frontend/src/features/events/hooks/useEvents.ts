@@ -1,17 +1,26 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  useMutation,
+  useQuery,
+  useQueryClient,
+  useSuspenseQuery,
+} from "@tanstack/react-query";
 import { fetchEvents, postEvent, fetchEvent, updateEvent } from "../event.api";
 import { useNotifications } from "../../../context/Notifications";
 import { Event } from "../event.types";
 
-export const useEvents = () => {
-  return useQuery({
-    queryKey: ["events"],
-    queryFn: fetchEvents,
+export const useEvents = (query) => {
+  console.log("query useEvents:", query);
+  return useSuspenseQuery({
+    queryKey: ["events", query],
+    queryFn: () => fetchEvents(query),
   });
 };
 
 export const useEvent = (id: number) => {
-  return useQuery({ queryKey: ["event", id], queryFn: () => fetchEvent(id) });
+  return useSuspenseQuery({
+    queryKey: ["event", id],
+    queryFn: () => fetchEvent(id),
+  });
 };
 
 export const useCreateEvent = () => {

@@ -1,5 +1,5 @@
 // PageLayout.jsx
-import React from "react";
+import React, { Suspense } from "react";
 import { Layout, Typography, Button, Space, Flex, Breadcrumb } from "antd";
 import { CaretLeftOutlined } from "@ant-design/icons";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -7,8 +7,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 const { Header, Content } = Layout;
 const { Title } = Typography;
 
-const PageLayout = ({ title, actions, children, Component }) => {
-  
+const PageLayout = ({ title, actions, children, Component, isLoading }) => {
   return (
     <Layout
       style={{ background: "#fff", padding: 24, marginTop: 12, height: "100%" }}
@@ -30,10 +29,10 @@ const PageLayout = ({ title, actions, children, Component }) => {
           style={{ width: "100%" }}
           gap={100}
         >
-          <Title level={3} style={{ margin: 0 }}>
+          <Title level={3} style={{ margin: 0, minWidth: "fit-content" }}>
             {title}
           </Title>
-          {Component && <Component />}
+          {Component && Component}
           <Space>
             {actions &&
               actions.map((action, index) => (
@@ -48,7 +47,10 @@ const PageLayout = ({ title, actions, children, Component }) => {
           </Space>
         </Flex>
       </Header>
-      <Content>{children}</Content>
+      {/* MAKE BETTER LOADING */}
+      <Suspense fallback={<div>Loading...</div>}>
+        <Content>{children}</Content>
+      </Suspense>
     </Layout>
   );
 };

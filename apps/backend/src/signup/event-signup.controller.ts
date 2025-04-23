@@ -6,10 +6,8 @@ import { CreateSignupDto } from './dto/create-signup.dto';
 export class EventSignupController {
   constructor(private readonly signupService: SignupService) {}
   @Post(':eventId/signups')
-  create(
-    @Body() createSignupDto: CreateSignupDto,
-    @Param('eventId') eventId: number,
-  ) {
+  create(@Body() createSignupDto: any, @Param('eventId') eventId: number) {
+    console.log('createSignupDto', createSignupDto);
     return this.signupService.create(createSignupDto, eventId);
   }
 }

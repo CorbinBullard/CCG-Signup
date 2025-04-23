@@ -15,7 +15,12 @@ import { UploadOutlined } from "@ant-design/icons";
 import { FundLocationEnum } from "../fund.type";
 import ConditionalFormItem from "../../../components/formComponents/DependentItem";
 
-const EventForm = ({ onSubmit, initialValues = {}, form, ref }) => {
+const EventForm = ({ onSubmit, initialValues = {}, form, ref }: {
+  onSubmit?: (values: any) => void;
+  initialValues?: any;
+  form?: any;
+  ref?: React.RefObject<any>;
+}) => {
   return (
     <Form
       form={form}

@@ -9,6 +9,9 @@ import { FieldsModule } from './fields/fields.module';
 import { ResponseModule } from './response/response.module';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
+import { DropboxController } from './dropbox/dropbox.controller';
+import { DropboxService } from './dropbox/dropbox.service';
+import { DropboxModule } from './dropbox/dropbox.module';
 
 @Module({
   imports: [
@@ -26,6 +29,7 @@ import { ConfigModule } from '@nestjs/config';
     ResponseModule,
     AuthModule,
     ConfigModule,
+    DropboxModule,
   ],
   controllers: [AppController],
   providers: [AppService],

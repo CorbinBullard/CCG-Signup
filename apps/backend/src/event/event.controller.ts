@@ -20,14 +20,16 @@ import { GetSignupsQueryDto } from './dto/query-params.dto';
 import { IsAdminGuard } from 'src/guards/jwt-auth.guard';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { CreateFormDto } from 'src/form/dto/create-form.dto';
+import { EventQueryParamsDto } from './dto/event-queryParams';
 
 @Controller('events')
 export class EventController {
   constructor(private eventService: EventService) {}
 
   @Get()
-  getEvents() {
-    return this.eventService.getEvents();
+  getEvents(@Query() query: EventQueryParamsDto) {
+    console.log('Query params:', query);
+    return this.eventService.getEvents(query);
   }
 
   @Get(':id')

@@ -11,7 +11,6 @@ export const fetchForm = async (id: number) => {
 };
 
 export const updateForm = async ({ id, form }: { id: number; form: Form }) => {
-  console.log("updateForm", id, form);
   const response = await api.put(`/api/forms/${id}`, form);
   return response.data;
 };

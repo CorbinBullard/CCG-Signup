@@ -1,0 +1,38 @@
+import api from "../../utils/axiosApi";
+
+export const fetchSignups = async () => {
+  const response = await api.get("/api/signups");
+  return response.data;
+};
+export const fetchSignup = async (id: number) => {
+  const response = await api.get(`/api/signups/${id}`);
+  return response.data;
+};
+export const postSignup = async ({
+  eventId,
+  signup,
+}: {
+  eventId: number;
+  signup: any;
+}) => {
+  const response = await api.post(`/api/events/${eventId}/signups`, signup);
+  return response.data;
+};
+export const updateSignup = async ({
+  id,
+  signup,
+}: {
+  id: number;
+  signup: Partial<any>;
+}) => {
+  const response = await api.put(`/api/signups/${id}`, signup, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+  return response.data;
+};
+export const deleteSignup = async (id: number) => {
+  const response = await api.delete(`/api/signups/${id}`);
+  return response.data;
+};

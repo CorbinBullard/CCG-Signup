@@ -1,20 +1,39 @@
-import { Card, FormItemProps } from "antd";
+import { Card, Form, FormItemProps } from "antd";
 import { SubField } from "../../fields/field.type";
-import CreateList from "../../../components/formComponents/CreateList";
 import CompositeField from "./CompositeField";
 
 export default function MultiResponseField({
   subfields,
-  ...props
+  label,
+  name,
 }: {
   subfields: SubField[];
-  props: FormItemProps;
+  label: string;
+  name: FormItemProps["name"];
 }) {
   return (
-    <Card>
-      <CreateList buttonLabel={`Add ${props.label}`} title={props.label}>
-        <CompositeField subfields={subfields} {...props} />
-      </CreateList>
-    </Card>
+    <Form.List name={[...name]}>
+      {(fields, { add, remove }) => (
+        <Card
+          title={label}
+          extra={<a onClick={() => add()}>Add {label}</a>}
+          style={{ marginBottom: 16 }}
+        >
+          {fields.map((field, index) => (
+            <div key={field.key} style={{ marginBottom: 16 }}>
+              <CompositeField
+                subfields={subfields}
+                name={[field.name]} // passes name to CompositeField (becomes [responses, fieldIndex, 'value', index])
+                wrapWithValue={true} // wraps the value in a single object
+              />
+
+              <a onClick={() => remove(index)} style={{ color: "red" }}>
+                Remove
+              </a>
+            </div>
+          ))}
+        </Card>
+      )}
+    </Form.List>
   );
 }

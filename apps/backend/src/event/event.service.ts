@@ -1,10 +1,11 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Event } from './event.entity';
-import { Repository } from 'typeorm';
+import { FindOptionsWhere, ILike, Repository } from 'typeorm';
 import { CreateEventDto } from './dto/create-event.dto';
 import { UpdateEventDto } from './dto/update-event.dto';
 import { DropboxService } from 'src/dropbox/dropbox.service';
+import { EventQueryParamsDto } from './dto/event-queryParams';
 
 @Injectable()
 export class EventService {
@@ -12,6 +13,16 @@ export class EventService {
     @InjectRepository(Event) private eventRepository: Repository<Event>,
     private readonly dropboxService: DropboxService,
   ) {}
+
+  async getEvents(query: EventQueryParamsDto): Promise<Event[]> {
+    const where: FindOptionsWhere<Event> = {};
+
+    if (query?.title) {
+      where.title = ILike(`%${query.title}%`);
+    }
+    console.log('Where Object:', where);
+    return this.eventRepository.find({ where });
+  }
 
   async createEvent(
     createEventDto: CreateEventDto,
@@ -24,10 +35,6 @@ export class EventService {
     };
     console.log('New event:', newEvent);
     return this.eventRepository.save(newEvent);
-  }
-
-  async getEvents(): Promise<Event[]> {
-    return this.eventRepository.find();
   }
 
   async findOne(id: number): Promise<Event | null> {

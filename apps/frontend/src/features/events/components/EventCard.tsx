@@ -10,11 +10,7 @@ function EventCard(event: Event) {
       hoverable
       onClick={() => navigate(`/events/${id}`)}
       cover={
-        <img
-          src={image}
-          preview={false}
-          style={{ objectFit: "cover", height: "150px" }}
-        />
+        <img src={image} style={{ objectFit: "cover", height: "150px" }} />
       }
       style={{ width: 240 }}
     >
