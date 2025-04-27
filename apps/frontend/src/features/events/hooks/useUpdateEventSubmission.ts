@@ -12,6 +12,8 @@ export const useUpdateEventSubmission = (eventId, formRef, fileRef) => {
     formData.append("date", values.date.format("YYYY-MM-DD"));
     formData.append("time", values.time.format("HH:mm"));
     formData.append("cost", values.cost.toString());
+    formData.append("funds", values.funds);
+
 
     if (fileRef.current) {
       formData.append("image", fileRef.current);

@@ -3,6 +3,7 @@ import React, { Suspense } from "react";
 import { Layout, Typography, Button, Space, Flex, Breadcrumb } from "antd";
 import { CaretLeftOutlined } from "@ant-design/icons";
 import { useLocation, useNavigate } from "react-router-dom";
+import Loader from "../Loader";
 
 const { Header, Content } = Layout;
 const { Title } = Typography;
@@ -48,7 +49,7 @@ const PageLayout = ({ title, actions, children, Component, isLoading }) => {
         </Flex>
       </Header>
       {/* MAKE BETTER LOADING */}
-      <Suspense fallback={<div>Loading...</div>}>
+      <Suspense fallback={<Loader />}>
         <Content>{children}</Content>
       </Suspense>
     </Layout>

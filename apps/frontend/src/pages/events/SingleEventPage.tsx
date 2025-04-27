@@ -52,7 +52,11 @@ export default function SingleEventPage() {
     {
       key: "form",
       label: "Form",
-      children: <FormForm initialValues={event.form} form={formForm} />,
+      children: (
+        <Form form={formForm} initialValues={event.form}>
+          <FormForm mode="edit" />
+        </Form>
+      ),
     },
   ];
 

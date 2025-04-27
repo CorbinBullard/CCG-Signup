@@ -19,12 +19,14 @@ export class TableData {
   private form: Form;
   private fields: Field[];
   private signups: Signup[];
-  public fieldLookupObj: Record<string, Field>;
+  private expandedColumns: TableColumnsType<unknown>[] | null;
+  private expandedData: TableData[];
 
-  public columns: TableColumnsType<any>;
-  public expandedColumns: TableColumnsType<any>[] | null;
+  public fieldLookupObj: Record<string, Field>;
+  public columns: TableColumnsType<unknown>;
   public data: TableProps;
-  public expandedData: [];
+  public expandedTables: JSX.Element[];
+
   constructor(private event: Event) {
     this.form = event.form;
     this.fields = this.form.fields;
@@ -37,9 +39,8 @@ export class TableData {
     // Data
     this.data = this.buildData();
     this.expandedData = [];
-
-    // console.log("COLUMNS: ", this.columns, "\n", "DATA: ", this.data);
   }
+
   buildFieldObject(): Record<string, Field> {
     return this.fields.reduce((acc, field) => {
       acc[field.id] = field;
@@ -54,44 +55,59 @@ export class TableData {
         dataIndex: field.id,
         key: field.id,
         render: (value: any) => {
-          console.log(value);
           return value;
         },
       };
     });
   }
 
-  buildExpandedColumns(): TableColumnsType<any>[] | null {
+  buildExpandedColumns(): TableColumnsType<unknown>[] | null {
     const multiResponseFields: Field[] = this.fields.filter(
       (field) => field.type === FieldTypeEnum.MultiResponse
     );
     if (!multiResponseFields) return null;
 
-    return multiResponseFields.map((field) => {
+    const MRFields = multiResponseFields.map((field) => {
       if (!field) throw new Error("Multi Response Field has no subfields");
       const { subfields } = field;
       return subfields?.map((subfield, index) => {
         return { title: subfield.label, dataIndex: index, key: index };
       });
     });
+    return MRFields;
   }
 
-  buildData(): TableProps {
-    return this.signups.map((signup, index) => {
-      const row: Record<string, any> = { key: index };
-      const { responses } = signup;
+  buildData(): TableProps["dataSource"] {
+    return this.signups.map((signup, signupIndex) => {
+      const row: Record<string, any> = { key: signupIndex };
+      const multiResponses: {
+        label: string;
+        data: any[];
+        columns: TableColumnsType<any>;
+      }[] = [];
 
-      responses.forEach((response: Response) => {
+      signup.responses.forEach((response: Response) => {
         const field = this.fieldLookupObj[response.fieldId];
         if (!field) {
           console.warn("Field not found:", response);
           return;
         }
 
-        let value: any;
         switch (field.type) {
+          case FieldTypeEnum.MultiResponse: {
+            const multiResponseData =
+              this.buildMutliResponseFieldData(response);
+            if (typeof multiResponseData !== "string") {
+              multiResponses.push(multiResponseData);
+              row[field.id] = multiResponseData.label;
+            } else {
+              row[field.id] = multiResponseData; // Error message JSX
+            }
+            break;
+          }
+
           case FieldTypeEnum.CheckBox:
-            value = this.withValidation<boolean>(
+            row[field.id] = this.withValidation<boolean>(
               response,
               (val): val is boolean => typeof val === "boolean",
               (val) =>
@@ -102,34 +118,38 @@ export class TableData {
                 )
             );
             break;
+
           case FieldTypeEnum.Email:
-            value = this.buildEmailFieldData(response);
+            row[field.id] = this.buildEmailFieldData(response);
             break;
+
           case FieldTypeEnum.Date:
-            value = this.buildCheckboxFieldData(response);
+            row[field.id] = this.buildCheckboxFieldData(response);
             break;
 
           case FieldTypeEnum.Composite:
-            value = this.buildCompositeFieldData(response); // already has validation
+            row[field.id] = this.buildCompositeFieldData(response);
             break;
 
-          case FieldTypeEnum.MultiResponse:
-            value = this.buildMutliResponseFieldData(response); // already has validation
-            break;
           default:
-            value = this.withValidation<any>(
+            row[field.id] = this.withValidation<any>(
               response,
               (val): val is any => val !== undefined && val !== null,
               (val) => `${val}`
             );
             break;
         }
-        row[field.id] = value;
       });
+
+      // Only attach if multiResponses exist
+      if (multiResponses.length > 0) {
+        row._multiResponses = multiResponses;
+      }
 
       return row;
     });
   }
+
   private buildEmailFieldData(response: Response): JSX.Element {
     return this.withValidation<string>(
       response,
@@ -159,17 +179,29 @@ export class TableData {
   private buildMutliResponseFieldData(response: Response) {
     const { value: values } = response;
 
-    if (!Array.isArray(values))
+    if (!Array.isArray(values) || !Array.isArray(values[0]?.value))
       return this.renderError("Invalid Value", response.value);
-    if (!Array.isArray(values[0]?.value))
-      return this.renderError(
-        "Invalid Value",
-        values.map((val) => val.value).join(" ")
-      );
 
     const field = this.fieldLookupObj[response.fieldId];
 
-    return `${values.length} ${field.label}(s)`;
+    const data = values.map((valueArr, rowIndex) => {
+      const rowData: Record<string, any> = { key: rowIndex };
+      field.subfields.forEach((subfield, subfieldIndex) => {
+        rowData[`field_${subfieldIndex}`] = valueArr.value[subfieldIndex].value;
+      });
+      return rowData;
+    });
+
+    return {
+      label: `${values.length} ${field.label}(s)`,
+      fieldLabel: field.label,
+      data,
+      columns: field.subfields.map((subfield, index) => ({
+        title: subfield.label,
+        dataIndex: `field_${index}`,
+        key: `field_${index}`,
+      })),
+    };
   }
 
   private withValidation<T>(

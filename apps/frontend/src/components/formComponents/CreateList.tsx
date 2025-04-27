@@ -58,6 +58,8 @@ export default function CreateList({
   type = "dashed",
   initialValue,
   ...props
+}: {
+  type:  "default" | "dashed" | "link" | "text" | "primary", 
 }) {
   const form = Form.useFormInstance();
 

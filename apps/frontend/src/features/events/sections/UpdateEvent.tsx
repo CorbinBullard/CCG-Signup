@@ -2,7 +2,7 @@ import React, { useRef, useState } from "react";
 import { Event } from "../event.types";
 import { Flex, Form, Image, Modal } from "antd";
 import EventDetails from "../components/eventDetails";
-import EventForm from "../components/EventForm";
+import EventForm from "../components/_EventForm";
 import { useUpdateEventSubmission } from "../hooks/useUpdateEventSubmission";
 import Format from "../../../utils/Format";
 

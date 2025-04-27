@@ -13,48 +13,72 @@ import PreviewForm from "./preview/PreviewForm";
 import { FieldTypeEnum } from "../fields/field.type";
 
 // FormForm.tsx
-function FormForm({ form, preview = true, mode = "create", ...props }: { form: FormInstance; mode?: "create" | "edit" }) {
-  const getName = (fieldName: string | string[]) => {
-    return mode === "create" ? ["form", ...(Array.isArray(fieldName) ? fieldName : [fieldName])] : fieldName;
+function FormForm({
+  initialValues = {
+    name: "",
+    isSaved: false,
+    fields: [{ label: "", type: FieldTypeEnum.Text, required: true }],
+  },
+  onChange,
+  preview = true,
+  form = null,
+}: {
+  form: FormInstance;
+}) {
+  const [newForm] = Form.useForm();
+
+  // When any field changes, update the parent
+  const handleChange = async () => {
+    const allValues = newForm.getFieldsValue(true);
+    onChange?.(allValues);
+    console.log("VALIDATING?");
+    if (!form) {
+      const fields = await newForm.validateFields();
+      console.log(fields);
+    }
   };
 
   return (
-    <>
+    <Form
+      form={form || newForm}
+      layout="vertical"
+      initialValues={initialValues}
+      onValuesChange={handleChange}
+    >
       {/* Same body as before, just nesting under form removed now */}
-      <Form.Item
-        name={getName("isSaved")}
-        label="Save Form"
-        valuePropName="checked"
-      >
+      <Form.Item name="isSaved" label="Save Form" valuePropName="checked">
         <Checkbox />
       </Form.Item>
 
       <ConditionalFormItem
-        dependency={getName("isSaved")}
+        dependency="isSaved"
         shouldRender={(isSaved) => isSaved}
       >
-        <Form.Item name={getName("name")} label="Form Name" required>
+        <Form.Item name="name" label="Form Name" required>
           <Input placeholder="Form Name" />
         </Form.Item>
       </ConditionalFormItem>
+
       <Splitter>
         <Splitter.Panel min={500}>
+          {/* <Form.Item name={"fields"}> */}
           <CreateList
-            name={getName("fields")}
+            name={"fields"}
             buttonLabel="Add Field"
             title={"Field"}
             card={true}
           >
             <FieldForm />
           </CreateList>
+          {/* </Form.Item> */}
         </Splitter.Panel>
-        {/* <Splitter.Panel collapsible>
+        <Splitter.Panel collapsible>
           <Form.Item noStyle>
-            {preview && <PreviewForm form={ } />}
+            {preview && <PreviewForm form={form || newForm} />}
           </Form.Item>
-        </Splitter.Panel> */}
+        </Splitter.Panel>
       </Splitter>
-      {/* <Form.Item noStyle shouldUpdate>
+      <Form.Item noStyle shouldUpdate>
         {() => (
           <Typography>
             <pre>
@@ -66,8 +90,8 @@ function FormForm({ form, preview = true, mode = "create", ...props }: { form: F
             </pre>
           </Typography>
         )}
-      </Form.Item> */}
-    </>
+      </Form.Item>
+    </Form>
   );
 }
 

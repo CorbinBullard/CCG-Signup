@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Navigate, Outlet } from "react-router-dom";
 import api from "../utils/axiosApi";
+import Loader from "./Loader";
 
 export default function ProtectedRoute() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -21,7 +22,7 @@ export default function ProtectedRoute() {
   }, []);
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <Loader />;
   }
 
   return isAuthenticated ? <Outlet /> : <Navigate to="/login" />;

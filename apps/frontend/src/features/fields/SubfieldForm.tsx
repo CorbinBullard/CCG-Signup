@@ -1,4 +1,4 @@
-import { Card, Checkbox, Flex, Form, Input, Select } from "antd";
+import { Card, Checkbox, Collapse, Flex, Form, Input, Select } from "antd";
 import { FieldTypeEnum, SubFieldTypeEnum } from "./field.type";
 import CostInput from "../../components/formComponents/CostInput";
 import CreateList from "../../components/formComponents/CreateList";
@@ -45,20 +45,28 @@ export default function SubfieldForm(subfield) {
           <CostInput />
         </Form.Item>
       </ConditionalFormItem>
-      
+
       <ConditionalFormItem
         dependency={["fields", parent.name, "subfields", subfield.name, "type"]}
         shouldRender={(type) => type === SubFieldTypeEnum.Select}
       >
-        <Card title="Options">
-          <CreateList
-            name={[subfield.name, "options"]}
-            buttonLabel={"Add Option"}
-            title={"Option"}
-          >
-            <OptionForm />
-          </CreateList>
-        </Card>
+        <Collapse
+          items={[
+            {
+              key: "1",
+              label: "Options",
+              children: (
+                <CreateList
+                  name={[subfield.name, "options"]}
+                  buttonLabel={"Add Option"}
+                  title={"Option"}
+                >
+                  <OptionForm />
+                </CreateList>
+              ),
+            },
+          ]}
+        />
       </ConditionalFormItem>
     </>
   );

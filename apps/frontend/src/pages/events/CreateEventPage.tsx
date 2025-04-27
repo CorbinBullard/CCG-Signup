@@ -1,73 +1,55 @@
-import React, { useRef, useState } from "react";
-import { Form, Button, Card, Layout, Flex, Steps } from "antd";
-import { CaretRightOutlined, CaretLeftOutlined } from "@ant-design/icons";
+import React, { useRef, useMemo } from "react";
+import { Button, Card, Flex, Form, Layout, Steps, Typography } from "antd";
 import PageLayout from "../../components/layouts/PageLayout";
-import EventForm from "../../features/events/components/EventForm";
-import FormForm from "../../features/forms/FormForm";
 import { useEventSubmission } from "../../features/events/hooks/useEventSubmission";
-import { useStepper } from "../../components/useStepper";
-import { FieldTypeEnum } from "../../features/fields/field.type";
+import { createEventInitialValues } from "../../features/events/event.initialValues";
+import useFormStepper from "../../components/useFormStepper";
+import { createEventFormSteps } from "../../features/events/CreateEventFormSteps";
 
-function CreateEventPage() {
+export default function CreateEventPage() {
   const [form] = Form.useForm();
   const fileRef = useRef<File | null>(null);
-  const { current: eventStep, next, prev } = useStepper(2);
+  const { submit } = useEventSubmission(form, fileRef);
 
-  const [formSchema, setFormSchema] = useState({
-    isSaved: false,
-    name: "",
-    fields: [{ label: "", type: FieldTypeEnum.Text, required: true }],
-  });
+  const createEventSteps = useMemo(
+    () => createEventFormSteps(fileRef),
+    [fileRef]
+  );
 
-  const { submit } = useEventSubmission(form, fileRef, formSchema);
+  const {
+    PreviousFormButton,
+    NextFormButton,
+    SubmitFormButton,
+    Stepper,
+    StepperForm,
+  } = useFormStepper(form, createEventSteps, submit);
 
   return (
-    <PageLayout
-      title="Create Event"
-      Component={() => (
-        <Steps
-          current={eventStep}
-          items={[{ title: "Event Details" }, { title: "Build Form" }]}
-        />
-      )}
-    >
+    <PageLayout title="Create Event" Component={<Stepper />}>
       <Layout style={{ padding: "24px", width: "100%", height: "100%" }}>
         <Card>
-          <div style={{ display: eventStep === 0 ? "block" : "none" }}>
-            <EventForm form={form} ref={fileRef} />
-          </div>
-          <div style={{ display: eventStep === 1 ? "block" : "none" }}>
-            <FormForm initialValues={formSchema} onChange={setFormSchema} />
-          </div>
+          <Form
+            form={form}
+            initialValues={{ ...createEventInitialValues }}
+            preserve
+          >
+            <StepperForm />
 
+            <Form.Item noStyle shouldUpdate>
+              {() => (
+                <Typography>
+                  <pre>{JSON.stringify(form.getFieldsValue(), null, 2)}</pre>
+                </Typography>
+              )}
+            </Form.Item>
+          </Form>
           <Flex justify="end" style={{ marginTop: 16 }}>
-            {eventStep > 0 && (
-              <Button
-                icon={<CaretLeftOutlined />}
-                onClick={prev}
-                style={{ marginRight: 8 }}
-              >
-                Previous
-              </Button>
-            )}
-            {eventStep < 1 && (
-              <Button
-                icon={<CaretRightOutlined />}
-                onClick={() => next(() => form.validateFields())}
-              >
-                Next
-              </Button>
-            )}
-            {eventStep === 1 && (
-              <Button type="primary" onClick={submit}>
-                Submit
-              </Button>
-            )}
+            <PreviousFormButton />
+            <NextFormButton />
+            <SubmitFormButton />
           </Flex>
         </Card>
       </Layout>
     </PageLayout>
   );
 }
-
-export default CreateEventPage;
