@@ -23,6 +23,7 @@ export default function CreateSignupForm({
                   key={field?.id || index}
                   noStyle
                   shouldUpdate={(prev, next) => prev !== next}
+                  {...field}
                 >
                   {() => (
                     <ResponseItemForm

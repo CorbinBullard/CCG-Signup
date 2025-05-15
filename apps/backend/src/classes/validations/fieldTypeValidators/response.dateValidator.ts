@@ -10,6 +10,7 @@ export class DateValidator extends ResponseValidator {
   }
   override validate() {
     super.validate();
+    if (super.shouldSkipValidation()) return [];
     this.isDate();
     return this.errors;
   }

@@ -1,103 +1,145 @@
-import React, { useRef, useCallback } from "react";
-import { Button, Flex, Form } from "antd";
-import { useDrag, useDrop } from "react-dnd";
+import React from "react";
+import { CSS } from "@dnd-kit/utilities";
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+} from "@dnd-kit/core";
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  verticalListSortingStrategy,
+  useSortable,
+} from "@dnd-kit/sortable";
+import { Input, Typography } from "antd";
+import { Flex, Button, Form } from "antd";
 import ItemListItem from "./ItemListItem";
 
-const ITEM_TYPE = "LIST_ITEM";
-
-const DraggableItem = ({
-  field,
-  index,
-  moveItem,
-  remove,
-  children,
-  title,
-  card,
-}) => {
-  const ref = useRef(null);
-
-  const [{ isDragging }, drag] = useDrag({
-    type: ITEM_TYPE,
-    item: { index },
-    collect: (monitor) => ({
-      isDragging: monitor.isDragging(),
-    }),
-  });
-
-  const [, drop] = useDrop({
-    accept: ITEM_TYPE,
-    hover(item) {
-      if (item.index === index) return;
-      moveItem(item.index, index);
-      item.index = index;
-    },
-  });
-
-  drag(drop(ref));
-
-  return (
-    <div ref={ref} style={{ opacity: isDragging ? 0.5 : 1 }}>
-      <ItemListItem
-        card={card}
-        key={field.key}
-        remove={() => remove(field.name)}
-        title={`${title} ${field.name + 1}`}
-      >
-        {children}
-      </ItemListItem>
-    </div>
-  );
-};
-
-export default function CreateList({
+export default function CreateFormList({
   children,
   name,
   buttonLabel,
   title,
   card,
   type = "dashed",
-  initialValue,
+  initialValue = {},
+  required = false,
+  rules,
   ...props
 }: {
-  type:  "default" | "dashed" | "link" | "text" | "primary", 
+  children: React.ReactNode;
+  name: string;
+  buttonLabel: string;
+  title?: string;
+  card?: boolean;
+  initialValue?: any;
+  required?: boolean;
+  rules?: any;
+  props?: any;
+  type: "default" | "dashed" | "link" | "text" | "primary";
 }) {
   const form = Form.useFormInstance();
 
-  const moveItem = useCallback(
-    (from, to) => {
-      const values = form.getFieldValue(name) || [];
-      const updated = [...values];
-      const [movedItem] = updated.splice(from, 1);
-      updated.splice(to, 0, movedItem);
-      form.setFieldValue(name, updated);
-    },
-    [form, name]
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
   );
 
   return (
-    <Form.List name={name} initialValue={initialValue} {...props}>
-      {(fields, { add, remove }) => (
-        <Flex vertical gap={4}>
-          {fields.map((field, index) => (
-            <DraggableItem
-              key={field.key}
-              field={field}
-              index={index}
-              moveItem={moveItem}
-              remove={remove}
-              title={title}
-              card={card}
+    <Form.List name={name} {...props} rules={rules}>
+      {(fields, { add, remove, move }, { errors }) => {
+        function handleDragEnd(event) {
+          const { active, over } = event;
+          if (active.id !== over.id) {
+            move(active.id, over.id);
+          }
+        }
+        return (
+          <DndContext
+            sensors={sensors}
+            collisionDetection={closestCenter}
+            onDragEnd={handleDragEnd}
+          >
+            <SortableContext
+              items={fields.map((field) => field.name)}
+              strategy={verticalListSortingStrategy}
             >
-              {React.isValidElement(children)
-                ? React.cloneElement(children, { ...field })
-                : children}
-            </DraggableItem>
-          ))}
-          <Button type={type} onClick={() => add()}>
-            {buttonLabel}
-          </Button>
-        </Flex>
-      )}
+              <Flex vertical gap={4}>
+                {fields.map((field, index) => (
+                  <SortableItem
+                    id={field.name}
+                    key={field.key}
+                    field={field}
+                    index={index}
+                    remove={remove}
+                    title={title}
+                    card={card}
+                    fields={fields}
+                    required={required}
+                    errors={errors}
+                  >
+                    {React.isValidElement(children)
+                      ? React.cloneElement(children, { ...field })
+                      : children}
+                  </SortableItem>
+                ))}
+                <Button type={type} onClick={() => add(initialValue)}>
+                  {buttonLabel}
+                </Button>
+              </Flex>
+            </SortableContext>
+          </DndContext>
+        );
+      }}
     </Form.List>
+  );
+}
+
+function SortableItem({
+  id,
+  children,
+  required,
+  remove,
+  title,
+  card,
+  field,
+  fields,
+  errors,
+}) {
+  const { attributes, listeners, setNodeRef, transform, transition } =
+    useSortable({ id });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+  };
+
+  return (
+    <div ref={setNodeRef} style={style}>
+      <Typography.Text
+        type="warning"
+        style={{ paddingLeft: "12px", marginBottom: "12px" }}
+      >
+        <Form.ErrorList errors={errors} />
+      </Typography.Text>
+      <ItemListItem
+        card={card}
+        key={field.key}
+        remove={() => {
+          if (!required || fields.length > 1) remove(field.name);
+        }}
+        title={`${title} ${field.name + 1}`}
+        attributes={attributes}
+        listeners={listeners}
+      >
+        {children}
+      </ItemListItem>
+    </div>
   );
 }

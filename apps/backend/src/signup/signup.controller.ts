@@ -9,7 +9,6 @@ import {
 } from '@nestjs/common';
 import { SignupService } from './signup.service';
 import { UpdateSignupDto } from './dto/update-signup.dto';
-import { CreateSignupDto } from './dto/create-signup.dto';
 import { IsAdminGuard } from 'src/guards/jwt-auth.guard';
 
 @UseGuards(IsAdminGuard)
@@ -28,7 +27,8 @@ export class SignupController {
   }
 
   @Put(':id')
-  update(@Param('id') id: string, @Body() updateSignupDto: UpdateSignupDto) {
+  update(@Param('id') id: string, @Body() updateSignupDto: any) {
+    console.log('updateSignupDto', updateSignupDto);
     return this.signupService.update(+id, updateSignupDto);
   }
 

@@ -2,8 +2,6 @@ import { Event } from 'src/event/event.entity';
 import {
   Column,
   Entity,
-  JoinColumn,
-  JoinTable,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
@@ -18,7 +16,9 @@ export class Signup {
   @Column({ nullable: true })
   note: string;
 
-  @ManyToOne(() => Event, (event) => event.signups)
+  @ManyToOne(() => Event, (event) => event.signups, {
+    onDelete: 'CASCADE',
+  })
   event: Event;
 
   @OneToMany(() => Response, (response) => response.signup, {

@@ -1,26 +1,24 @@
-import { Card, Form, Typography } from "antd";
+import { Card, Form } from "antd";
 import React from "react";
-import PreviewItem from "./PreviewItem";
-import CreateSignupForm from "../../signups/CreateSignupForm";
+import SignupForm from "../../signups/SignupForm";
+import { signupDefaultValues } from "../../signups/signup.defaultValues";
+import ResponseItemForm from "../../signups/ResponseItemForm";
 
-export default function PreviewForm({ form }) {
-  const fields = Form.useWatch("fields", form);
+export default function PreviewForm({ mode = "create", form, ...props }) {
+  // Conditionally set the watch path based on mode
+  const watchPath = mode === "create" ? ["form", "fields"] : "fields";
+
+  const fields = Form.useWatch(watchPath, form) || [];
+
   const [fakeForm] = Form.useForm();
+
   return (
-    <Card title="Preview" style={{ width: "100%" }}>
-      {/* <Form layout="vertical">
-        {fields?.map((field, index) => (
-          <PreviewItem {...field} key={index} />
+    <Card title="Preview" style={{ width: "100%" }} {...props}>
+      <Form form={fakeForm} layout="vertical">
+        {fields.map((field, index) => (
+          <ResponseItemForm {...field} name={[index, "value"]} key={index} />
         ))}
-        <Form.Item noStyle shouldUpdate>
-          {() => (
-            <Typography>
-              <pre>{JSON.stringify(form.getFieldsValue(), null, 2)}</pre>
-            </Typography>
-          )}
-        </Form.Item>
-      </Form> */}
-      <CreateSignupForm fields={fields} form={fakeForm} />
+      </Form>
     </Card>
   );
 }

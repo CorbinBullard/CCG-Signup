@@ -1,61 +1,97 @@
-import { Card, Checkbox, Collapse, Flex, Form, Input, Select } from "antd";
-import { FieldTypeEnum } from "./field.type";
+// GenericFieldForm.tsx
+
+import { Checkbox, Collapse, Flex, Form, Input, Select } from "antd";
+import { FieldTypeEnum, SubFieldTypeEnum } from "./field.type";
 import CostInput from "../../components/formComponents/CostInput";
 import CreateList from "../../components/formComponents/CreateList";
-import SubfieldForm from "./SubfieldForm";
 import OptionForm from "./options/OptionForm";
 import ConditionalFormItem from "../../components/formComponents/DependentItem";
 
-export default function FieldForm(field) {
+interface GenericFieldFormProps {
+  name: (string | number)[];
+  mode?: "create" | "edit";
+  isSubfield?: boolean;
+  parentName?: (string | number)[];
+}
+
+export default function FieldForm({
+  name,
+  mode = "create",
+  isSubfield = false,
+  parentName = [],
+}: GenericFieldFormProps) {
+  const getName = (fieldName: (string | number)[]) => {
+    return mode === "create" ? ["form", ...fieldName] : fieldName;
+  };
+
+  const typeEnum = isSubfield ? SubFieldTypeEnum : FieldTypeEnum;
+
   return (
     <>
       <Flex gap={16}>
         <Form.Item
-          name={[field.name, "label"]}
+          name={[name, "label"]}
           label="Label"
           required
           rules={[{ required: true, message: "Field Label is required" }]}
+          style={{ flex: 1 }}
         >
           <Input placeholder="Field Label" />
         </Form.Item>
 
         <Form.Item
-          name={[field.name, "type"]}
+          name={[name, "type"]}
           label="Field Type"
           required
+          initialValue={isSubfield ? FieldTypeEnum.Text : undefined}
           rules={[{ required: true, message: "Field Type is required" }]}
+          style={{ flex: 1 }}
         >
           <Select
-            options={Object.entries(FieldTypeEnum).map((type) => {
-              return { label: type[0], value: type[1] };
-            })}
+            options={Object.entries(typeEnum).map(([key, value]) => ({
+              label: key,
+              value: value,
+            }))}
           />
         </Form.Item>
 
         <Form.Item
-          name={[field.name, "required"]}
+          name={[name, "required"]}
           label="Required"
           valuePropName="checked"
+          initialValue={isSubfield ? true : undefined}
+          style={{ flex: 1 }}
         >
           <Checkbox />
         </Form.Item>
       </Flex>
 
       <ConditionalFormItem
-        dependency={["fields", field.name, "type"]}
-        shouldRender={(type) =>
+        dependency={
+          isSubfield
+            ? [...parentName, name, "type"]
+            : getName(["fields", name, "type"])
+        }
+        shouldRender={(type: FieldTypeEnum | SubFieldTypeEnum) =>
           type === FieldTypeEnum.CheckBox ||
+          type === SubFieldTypeEnum.CheckBox ||
           type === FieldTypeEnum.MultiResponse
         }
       >
-        <Form.Item name={[field.name, "cost"]} label="Cost">
+        <Form.Item name={[name, "cost"]} label="Cost">
           <CostInput />
         </Form.Item>
       </ConditionalFormItem>
 
       <ConditionalFormItem
-        dependency={["fields", field.name, "type"]}
-        shouldRender={(type) => type === FieldTypeEnum.Select}
+        dependency={
+          isSubfield
+            ? [...parentName, name, "type"]
+            : getName(["fields", name, "type"])
+        }
+        shouldRender={(type: FieldTypeEnum | SubFieldTypeEnum) =>
+          type === FieldTypeEnum.Select || type === SubFieldTypeEnum.Select
+        }
       >
         <Collapse
           items={[
@@ -64,9 +100,23 @@ export default function FieldForm(field) {
               label: "Options",
               children: (
                 <CreateList
-                  name={[field.name, "options"]}
-                  buttonLabel={"Add Option"}
-                  title={"Option"}
+                  name={[name, "options"]}
+                  buttonLabel="Add Option"
+                  title="Option"
+                  required
+                  rules={[
+                    {
+                      validator: async (_, options) => {
+                        if (!options || options.length < 2) {
+                          return Promise.reject(
+                            new Error(
+                              "At least 2 Options are required for Select Field"
+                            )
+                          );
+                        }
+                      },
+                    },
+                  ]}
                 >
                   <OptionForm />
                 </CreateList>
@@ -76,32 +126,52 @@ export default function FieldForm(field) {
         />
       </ConditionalFormItem>
 
-      <ConditionalFormItem
-        dependency={["fields", field.name, "type"]}
-        shouldRender={(type) =>
-          type === FieldTypeEnum.Composite ||
-          type === FieldTypeEnum.MultiResponse
-        }
-      >
-        <Collapse
-          items={[
-            {
-              key: "1",
-              label: "Subfields",
-              children: (
-                <CreateList
-                  name={[field.name, "subfields"]}
-                  buttonLabel={"Add Subfield"}
-                  title={"Subfield"}
-                  card={true}
-                >
-                  <SubfieldForm parent={field} />
-                </CreateList>
-              ),
-            },
-          ]}
-        />
-      </ConditionalFormItem>
+      {!isSubfield && (
+        <ConditionalFormItem
+          dependency={getName(["fields", name, "type"])}
+          shouldRender={(type: FieldTypeEnum) =>
+            type === FieldTypeEnum.Composite ||
+            type === FieldTypeEnum.MultiResponse
+          }
+        >
+          <Collapse
+            items={[
+              {
+                key: "1",
+                label: "Subfields",
+                children: (
+                  <CreateList
+                    name={[name, "subfields"]}
+                    buttonLabel="Add Subfield"
+                    title="Subfield"
+                    card={true}
+                    required
+                    rules={[
+                      {
+                        validator: async (_, subfields) => {
+                          if (!subfields || subfields.length < 2) {
+                            return Promise.reject(
+                              new Error(
+                                "At least 2 Subfields are required for Composite Field"
+                              )
+                            );
+                          }
+                        },
+                      },
+                    ]}
+                  >
+                    <FieldForm
+                      isSubfield={true}
+                      parentName={getName(["fields", name, "subfields"])}
+                      name={[]}
+                    />
+                  </CreateList>
+                ),
+              },
+            ]}
+          />
+        </ConditionalFormItem>
+      )}
     </>
   );
 }

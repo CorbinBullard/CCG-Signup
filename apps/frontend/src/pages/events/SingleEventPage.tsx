@@ -6,15 +6,20 @@ import { Button, Flex, Form, Image, Modal, Tabs, TabsProps } from "antd";
 import FormForm from "../../features/forms/FormForm";
 import { useUpdateForm } from "../../features/forms/hooks/useForms";
 import EventSignups from "../../features/signups/EventSignups";
-import OpenModalButton from "../../components/OpenModalButton";
-import CreateSignupForm from "../../features/signups/CreateSignupForm";
+import OpenModalButton from "../../components/common/OpenModalButton";
+import SignupForm from "../../features/signups/SignupForm";
 import { PlusOutlined } from "@ant-design/icons";
 import UpdateEvent from "../../features/events/sections/UpdateEvent";
 import { useCreateSignup } from "../../features/signups/hooks/useSignups";
+import Loader from "../../components/common/Loader";
+import { signupDefaultValues } from "../../features/signups/signup.defaultValues";
 
 export default function SingleEventPage() {
   const params = useParams<{ id: string }>();
   const eventId = Number(params.id);
+  const modalRef = useRef<{ closeModal: () => void; openModal: () => void }>(
+    null
+  );
 
   const [formForm] = Form.useForm();
   const [signupForm] = Form.useForm();
@@ -37,7 +42,7 @@ export default function SingleEventPage() {
   }
 
   if (isLoading) {
-    return <div>Loading event...</div>;
+    return <Loader />;
   }
 
   if (isError || !event) {
@@ -53,7 +58,7 @@ export default function SingleEventPage() {
       key: "form",
       label: "Form",
       children: (
-        <Form form={formForm} initialValues={event.form}>
+        <Form form={formForm} initialValues={event.form} layout="vertical">
           <FormForm mode="edit" />
         </Form>
       ),
@@ -62,7 +67,7 @@ export default function SingleEventPage() {
 
   const handleUpdateFormSubmit = async () => {
     const values = await formForm.validateFields();
-
+    console.log("values", values);
     updateForm.mutate({
       id: event.form.id,
       form: values,
@@ -72,12 +77,16 @@ export default function SingleEventPage() {
   };
 
   const handleCreateSignupSubmit = async () => {
-    const values = await signupForm.validateFields();
-
-    createSignup.mutate({
-      signup: values,
-      eventId: event.id,
-    });
+    try {
+      const values = await signupForm.validateFields();
+      createSignup.mutate({
+        signup: values,
+        eventId: event.id,
+      });
+      modalRef?.current?.closeModal();
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -110,9 +119,16 @@ export default function SingleEventPage() {
               btnType="primary"
               icon={<PlusOutlined />}
               modalTitle="Create Signup"
+              ref={modalRef}
               onOk={handleCreateSignupSubmit}
             >
-              <CreateSignupForm fields={event.form.fields} form={signupForm} />
+              <Form
+                layout="vertical"
+                form={signupForm}
+                initialValues={signupDefaultValues(event.form.fields)}
+              >
+                <SignupForm fields={event.form.fields} />
+              </Form>
             </OpenModalButton>
           )
         }

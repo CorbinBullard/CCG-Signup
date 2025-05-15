@@ -6,9 +6,6 @@ export const useEventSubmission = (formRef, fileRef) => {
   const submit = async () => {
     const values = await formRef.validateFields();
 
-    console.log("EVENT SUBMISSION", values);
-    console.log("FILE REF: ", fileRef)
-
     const formData = new FormData();
     formData.append("title", values.title);
     formData.append("description", values.description);

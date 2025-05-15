@@ -24,13 +24,6 @@ export class DropboxService {
     this.clientSecret = process.env.DROPBOX_CLIENT_SECRET;
     this.refreshToken = process.env.DROPBOX_REFRESH_TOKEN;
     this.redirectUri = process.env.DROPBOX_REDIRECT_URI;
-
-    console.log(
-      this.clientId,
-      this.clientSecret,
-      this.redirectUri,
-      this.refreshToken,
-    );
   }
 
   getAuthUrl() {
@@ -57,9 +50,6 @@ export class DropboxService {
 
     // Token expires after ~4 hours (Dropbox default is 14400 seconds)
     this.tokenExpiresAt = Date.now() + response.data.expires_in * 1000;
-
-    console.log('Access Token:', this.accessToken);
-    console.log('Refresh Token:', this.refreshToken);
   }
 
   private async refreshAccessToken() {

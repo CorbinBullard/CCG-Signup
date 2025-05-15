@@ -63,7 +63,6 @@ const TextField = () => <Input />;
 const NumberField = () => <InputNumber style={{ width: "100%" }} />;
 
 const SelectField = ({ options }) => {
-
   const optionobj = options
     ? options.map((option) => {
         return option
@@ -80,7 +79,6 @@ const SelectField = ({ options }) => {
     <Select
       options={optionobj}
       optionRender={(option) => {
-
         return option ? (
           <Flex gap={8}>
             <Typography.Text>{option.label}</Typography.Text>

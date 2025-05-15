@@ -8,6 +8,7 @@ export class BooleanValidator extends ResponseValidator {
   }
   override validate() {
     super.validate();
+    if (super.shouldSkipValidation()) return [];
     this.isBoolean();
     return this.errors;
   }

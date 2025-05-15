@@ -10,6 +10,7 @@ export class SelectValidator extends ResponseValidator {
   }
   override validate(): string[] {
     super.validate();
+    if (super.shouldSkipValidation()) return [];
     this.isValidOption();
     return this.errors;
   }

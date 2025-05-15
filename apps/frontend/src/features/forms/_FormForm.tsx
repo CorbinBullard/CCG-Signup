@@ -7,7 +7,7 @@ import {
   Typography,
 } from "antd";
 import FieldForm from "../fields/FieldForm";
-import CreateList from "../../components/formComponents/CreateList";
+import CreateList from "../../components/formComponents/_CreateList";
 import ConditionalFormItem from "../../components/formComponents/DependentItem";
 import PreviewForm from "./preview/PreviewForm";
 import { FieldTypeEnum } from "../fields/field.type";
@@ -31,7 +31,6 @@ function FormForm({
   const handleChange = async () => {
     const allValues = newForm.getFieldsValue(true);
     onChange?.(allValues);
-    console.log("VALIDATING?");
     if (!form) {
       const fields = await newForm.validateFields();
       console.log(fields);

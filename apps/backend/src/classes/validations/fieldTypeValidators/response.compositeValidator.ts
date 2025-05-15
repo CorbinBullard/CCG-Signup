@@ -12,6 +12,7 @@ export class CompositeValidator extends ResponseValidator {
   }
   override validate(): string[] {
     super.validate();
+    if (super.shouldSkipValidation()) return [];
     this.isArray();
     this.validateSubResponse();
     return this.errors;

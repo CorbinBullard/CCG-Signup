@@ -9,11 +9,13 @@ export class EmailValidator extends ResponseValidator {
     super(response, field);
   }
   override validate(): string[] {
+    this.isValidEmail();
+    if (super.shouldSkipValidation()) return [];
     return this.errors;
   }
-  isValidEmail(email: string) {
+  isValidEmail() {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (emailRegex.test(email))
+    if (emailRegex.test(this.response.value))
       this.errors.push(`Field with id ${this.field.id} must be a valid email`);
   }
 }

@@ -29,9 +29,15 @@ export default function SelectField({
     : [];
 
   return (
-    <Form.Item {...props}>
+    <Form.Item
+      {...props}
+      rules={[
+        { required: props.required, message: `${props.label} is required` },
+      ]}
+    >
       <Select
         options={optionobj}
+        placeholder={`Select ${props.label}`}
         optionRender={(option) => {
           return option ? (
             <Flex gap={8}>

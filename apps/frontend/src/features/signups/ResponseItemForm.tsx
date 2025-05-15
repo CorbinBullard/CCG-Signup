@@ -43,12 +43,11 @@ export default function ResponseItemForm(props: {
           case FieldTypeEnum.MultiResponse:
             return <MultiResponseField {...props} />;
           default:
-            return <Input placeholder="Unknown field type" disabled type="error" />;
+            return (
+              <Input placeholder="Unknown field type" disabled type="error" />
+            );
         }
       })()}
-      <Form.Item name={[props.index, "fieldId"]} initialValue={props.id} hidden>
-        <Input />
-      </Form.Item>
     </>
   );
 }

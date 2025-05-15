@@ -9,6 +9,7 @@ export class SignupValidation {
   responses: ResponseType[];
   fields: Field[];
   fieldErrors: string[];
+
   constructor(signup: SignupType, event: Event) {
     this.responses = signup.responses;
     this.fields = event.form.fields;
@@ -28,7 +29,9 @@ export class SignupValidation {
       );
       this.fieldErrors.push(...responseValidation.getErrors());
     }
-    if (this.fieldErrors.length)
+    if (this.fieldErrors.length) {
+
       throw new BadRequestException(this.fieldErrors);
+    }
   }
 }

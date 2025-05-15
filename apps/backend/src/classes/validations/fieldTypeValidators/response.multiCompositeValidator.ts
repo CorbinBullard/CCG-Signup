@@ -12,6 +12,7 @@ export class MultiResponseValidator extends ResponseValidator {
   }
   override validate(): string[] {
     super.validate();
+    if (super.shouldSkipValidation()) return [];
     this.isNestedArray();
     this.validateSubResponses();
     return this.errors;

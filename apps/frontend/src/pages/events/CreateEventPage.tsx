@@ -3,7 +3,7 @@ import { Button, Card, Flex, Form, Layout, Steps, Typography } from "antd";
 import PageLayout from "../../components/layouts/PageLayout";
 import { useEventSubmission } from "../../features/events/hooks/useEventSubmission";
 import { createEventInitialValues } from "../../features/events/event.initialValues";
-import useFormStepper from "../../components/useFormStepper";
+import useFormStepper from "../../components/common/useFormStepper";
 import { createEventFormSteps } from "../../features/events/CreateEventFormSteps";
 
 export default function CreateEventPage() {
@@ -29,6 +29,7 @@ export default function CreateEventPage() {
       <Layout style={{ padding: "24px", width: "100%", height: "100%" }}>
         <Card>
           <Form
+            layout="vertical"
             form={form}
             initialValues={{ ...createEventInitialValues }}
             preserve

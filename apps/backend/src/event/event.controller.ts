@@ -28,7 +28,6 @@ export class EventController {
 
   @Get()
   getEvents(@Query() query: EventQueryParamsDto) {
-    console.log('Query params:', query);
     return this.eventService.getEvents(query);
   }
 
@@ -69,10 +68,5 @@ export class EventController {
   @Delete()
   deleteAllEvents() {
     return this.eventService.deleteAllEvents();
-  }
-
-  @Get(':id/signups')
-  getEventSignups(@Param('id') id: number, @Query() query: GetSignupsQueryDto) {
-    return query;
   }
 }

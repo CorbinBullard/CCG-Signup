@@ -53,8 +53,19 @@ export class SignupService {
     return this.signupRepository.save(newSignup);
   }
 
-  findAll() {
-    return this.signupRepository.find();
+  async findAll() {
+    return await this.signupRepository.find();
+  }
+
+  async findEventSignups(eventId: number): Promise<Signup[] | null> {
+    const event = await this.eventService.findOne(eventId);
+    if (!event)
+      throw new NotFoundException(`Event with id ${eventId} not found`);
+
+    const signups = await this.signupRepository.find({
+      where: { event: { id: event.id } },
+    });
+    return signups;
   }
 
   async findOne(id: number) {
@@ -77,9 +88,13 @@ export class SignupService {
     return this.signupRepository.save(newSignup);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} signup`;
+  async remove(id: number) {
+    const signup = await this.findOne(id);
+    if (!signup) throw new NotFoundException(`Signup with id ${id} not found`);
+    await this.signupRepository.remove(signup);
+    return `Signup with ID ${id} successfuly removed`;
   }
+
   async validateSignup(signup: SignupType, eventId: number) {
     const event = await this.eventService.findOne(eventId);
     if (!event) {

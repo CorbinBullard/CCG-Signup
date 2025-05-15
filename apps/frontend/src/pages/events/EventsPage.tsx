@@ -1,5 +1,5 @@
 import { useState } from "react";
-import CardsContainer from "../../components/CardsContainer";
+import CardsContainer from "../../components/common/CardsContainer";
 import useEvents from "../../features/events/hooks/useEvents";
 import EventCard from "../../features/events/components/EventCard";
 import PageLayout from "../../components/layouts/PageLayout";

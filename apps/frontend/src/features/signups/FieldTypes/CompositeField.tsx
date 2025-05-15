@@ -17,7 +17,7 @@ export default function CompositeField({
   return (
     <Form.List {...props} name={listName}>
       {(formListFields) => (
-        <Flex>
+        <Flex gap={4}>
           {subfields &&
             subfields.map((subfield, index) => (
               <ResponseItemField
@@ -25,6 +25,7 @@ export default function CompositeField({
                 key={index}
                 name={[formListFields[index]?.name ?? index, "value"]}
                 index={index}
+                style={{ flex: 1 }}
               />
             ))}
         </Flex>

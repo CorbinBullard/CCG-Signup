@@ -1,15 +1,29 @@
-import React, { useState } from "react";
+import React, { useState, forwardRef, useImperativeHandle } from "react";
 import { Button, Modal } from "antd";
 
-const OpenModalButton: React.FC = ({
+interface OpenModalButtonProps {
+  children: React.ReactNode;
+  btnType?: "link" | "text" | "ghost" | "default" | "primary" | "dashed";
+  label: string;
+  icon?: React.ReactNode;
+  modalTitle: string;
+  onOk: () => void;
+}
+
+const OpenModalButton = forwardRef(({
   children,
   btnType,
   label,
   icon,
   modalTitle,
   onOk,
-}) => {
+}: OpenModalButtonProps, ref) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  useImperativeHandle(ref, () => ({
+    closeModal: () => setIsModalOpen(false),
+    openModal: () => setIsModalOpen(true),
+  }));
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -17,7 +31,7 @@ const OpenModalButton: React.FC = ({
 
   const handleOk = () => {
     onOk();
-    setIsModalOpen(false);
+    // Do not automatically close the modal here; parent should call closeModal if desired
   };
 
   const handleCancel = () => {
@@ -30,6 +44,7 @@ const OpenModalButton: React.FC = ({
         {label}
       </Button>
       <Modal
+        destroyOnClose={true}
         title={modalTitle}
         open={isModalOpen}
         onOk={handleOk}
@@ -39,6 +54,6 @@ const OpenModalButton: React.FC = ({
       </Modal>
     </>
   );
-};
+});
 
 export default OpenModalButton;

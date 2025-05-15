@@ -5,7 +5,7 @@ import PageLayout from "../../components/layouts/PageLayout";
 import EventForm from "../../features/events/components/_EventForm";
 import NewFormForm from "../../features/forms/FormForm";
 import { useEventSubmission } from "../../features/events/hooks/useEventSubmission";
-import { useStepper } from "../../components/useStepper";
+import { useStepper } from "../../components/common/useStepper";
 import { FieldTypeEnum } from "../../features/fields/field.type";
 import FormForm from "../../features/forms/_FormForm";
 

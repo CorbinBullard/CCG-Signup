@@ -1,5 +1,5 @@
 import { CloseOutlined, HolderOutlined } from "@ant-design/icons";
-import { Card, Space } from "antd";
+import { Card, Flex, Space } from "antd";
 import React from "react";
 
 export default function ItemListItem({
@@ -8,12 +8,21 @@ export default function ItemListItem({
   title = "Item",
   card = false,
   size = "small",
+  attributes,
+  listeners,
   ...props
 }) {
   if (card)
     return (
       <Card
-        title={<HolderOutlined style={{ fontSize: "large", }} />}
+        style={{ width: "100%" }}
+        title={
+          <HolderOutlined
+            style={{ fontSize: "large" }}
+            {...attributes}
+            {...listeners}
+          />
+        }
         extra={<CloseOutlined onClick={remove} size={size} />}
       >
         {children}
@@ -21,8 +30,15 @@ export default function ItemListItem({
     );
   else
     return (
-      <Space>
-        {children} <CloseOutlined onClick={remove} />
-      </Space>
+      <Card>
+        <Flex gap={8} {...props}>
+          <HolderOutlined
+            style={{ fontSize: "large" }}
+            {...attributes}
+            {...listeners}
+          />
+          {children} <CloseOutlined onClick={remove} />
+        </Flex>
+      </Card>
     );
 }

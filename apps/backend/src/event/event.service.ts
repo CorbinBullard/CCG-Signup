@@ -20,7 +20,6 @@ export class EventService {
     if (query?.title) {
       where.title = ILike(`%${query.title}%`);
     }
-    console.log('Where Object:', where);
     return this.eventRepository.find({ where });
   }
 
@@ -33,7 +32,6 @@ export class EventService {
       ...createEventDto,
       image: imageUrl,
     };
-    console.log('New event:', newEvent);
     return this.eventRepository.save(newEvent);
   }
 

@@ -18,7 +18,6 @@ export class FormController {
     @Param('id') id: number,
     @Body() createFormDto: Partial<CreateFormDto>,
   ) {
-    console.log('updateForm', id, createFormDto);
     return this.formService.updateForm(id, createFormDto);
   }
 }

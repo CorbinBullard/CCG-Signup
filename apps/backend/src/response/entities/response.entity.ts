@@ -16,7 +16,9 @@ export class Response {
   @Column()
   fieldId: number;
 
-  @ManyToOne(() => Signup, (signup) => signup.responses)
+  @ManyToOne(() => Signup, (signup) => signup.responses, {
+    onDelete: 'CASCADE',
+  })
   signup: Signup;
 
   @ManyToOne(() => Field, (field) => field.responses, { cascade: true })

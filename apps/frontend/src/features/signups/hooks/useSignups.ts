@@ -1,5 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
+  deleteSignup,
+  fetchEventSignups,
   fetchSignup,
   fetchSignups,
   postSignup,
@@ -7,10 +9,11 @@ import {
 } from "../signups.api";
 import { useNotifications } from "../../../context/Notifications";
 
-export const useSignups = () => {
+export const useSignups = (eventId: number) => {
   return useQuery({
     queryKey: ["signups"],
-    queryFn: fetchSignups,
+    queryFn: () => fetchEventSignups(eventId),
+    enabled: !!eventId,
   });
 };
 
@@ -18,6 +21,7 @@ export const useSignup = (id: number) => {
   return useQuery({
     queryKey: ["signup", id],
     queryFn: () => fetchSignup(id),
+    enabled: !!id,
   });
 };
 
@@ -57,6 +61,30 @@ export const useUpdateSignup = () => {
       openNotification({
         message: "Signup updated",
         description: "The signup has been updated successfully.",
+        type: "success",
+      });
+    },
+    onError: (error) => {
+      openNotification({
+        message: error.message,
+        description: "There was an error updating the signup.",
+        type: "error",
+      });
+    },
+  });
+};
+
+export const useDeleteSignup = () => {
+  const queryClient = useQueryClient();
+  const openNotification = useNotifications();
+  return useMutation({
+    mutationFn: deleteSignup,
+    onSuccess: ({ id }) => {
+      queryClient.invalidateQueries({ queryKey: ["signups"] });
+      queryClient.invalidateQueries({ queryKey: ["signup", id] });
+      openNotification({
+        message: "Signup deleted",
+        description: "The signup has been deleted successfully.",
         type: "success",
       });
     },

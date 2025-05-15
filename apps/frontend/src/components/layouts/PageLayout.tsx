@@ -3,7 +3,7 @@ import React, { Suspense } from "react";
 import { Layout, Typography, Button, Space, Flex, Breadcrumb } from "antd";
 import { CaretLeftOutlined } from "@ant-design/icons";
 import { useLocation, useNavigate } from "react-router-dom";
-import Loader from "../Loader";
+import Loader from "../common/Loader";
 
 const { Header, Content } = Layout;
 const { Title } = Typography;

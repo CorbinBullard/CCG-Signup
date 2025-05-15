@@ -18,4 +18,8 @@ export abstract class ResponseValidator {
     }
     return this.errors;
   }
+  shouldSkipValidation(): boolean {
+    if (!this.field.required && this.response.value === null) return true;
+    else return false;
+  }
 }

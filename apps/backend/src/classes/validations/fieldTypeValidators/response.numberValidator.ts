@@ -10,6 +10,7 @@ export class NumberValidator extends ResponseValidator {
   }
   override validate(): string[] {
     super.validate();
+    if (super.shouldSkipValidation()) return [];
     this.isNumber();
     this.isPositive();
     this.isInteger();

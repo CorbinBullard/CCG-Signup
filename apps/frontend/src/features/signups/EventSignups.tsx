@@ -1,7 +1,6 @@
-import React from "react";
 import { Event } from "../events/event.types";
 import { Empty } from "antd";
-import SignupTable from "./signupTable/SignupTable";
+import SignupTable from "./Signups";
 
 export default function EventSignups({ event }: { event: Event }) {
   const { signups } = event;

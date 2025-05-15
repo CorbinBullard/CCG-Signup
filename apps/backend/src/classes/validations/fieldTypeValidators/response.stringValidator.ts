@@ -10,6 +10,7 @@ export class StringValidator extends ResponseValidator {
   }
   override validate() {
     super.validate();
+    if (super.shouldSkipValidation()) return [];
     this.isString();
     return this.errors;
   }

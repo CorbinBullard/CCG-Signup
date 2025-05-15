@@ -2,6 +2,7 @@ import {
   Alert,
   Descriptions,
   DescriptionsProps,
+  Empty,
   TableColumnsType,
   TableProps,
   Tag,
@@ -14,23 +15,32 @@ import { Signup } from "../types/signup.type";
 import dayjs from "dayjs";
 import { JSX } from "react";
 import { isValidEmail } from "../../../utils/utilFunctions";
+import { EditOutlined } from "@ant-design/icons";
+import OptionsButton from "../../../components/common/OptionsButton";
+import getMenuItems from "./getMenuItems";
+import { deleteSignup } from "../signups.api";
 
 export class TableData {
   private form: Form;
   private fields: Field[];
   private signups: Signup[];
-  private expandedColumns: TableColumnsType<unknown>[] | null;
-  private expandedData: TableData[];
+
+  public deleteSignup: (id: number) => void;
+  public editSignup: (id: number) => void;
 
   public fieldLookupObj: Record<string, Field>;
   public columns: TableColumnsType<unknown>;
   public data: TableProps;
   public expandedTables: JSX.Element[];
 
-  constructor(private event: Event) {
+  constructor(
+    private event: Event,
+    _signups: Signup[],
+    { deleteSignup, editSignup }
+  ) {
     this.form = event.form;
     this.fields = this.form.fields;
-    this.signups = this.event.signups;
+    this.signups = _signups;
 
     this.fieldLookupObj = this.buildFieldObject();
     this.columns = this.buildColumns();
@@ -39,6 +49,10 @@ export class TableData {
     // Data
     this.data = this.buildData();
     this.expandedData = [];
+
+    //Fn
+    this.deleteSignup = deleteSignup;
+    this.editSignup = editSignup;
   }
 
   buildFieldObject(): Record<string, Field> {
@@ -49,7 +63,7 @@ export class TableData {
   }
 
   buildColumns(): TableColumnsType<any> {
-    return this.fields.map((field) => {
+    const columns = this.fields.map((field) => {
       return {
         title: field.label,
         dataIndex: field.id,
@@ -59,6 +73,24 @@ export class TableData {
         },
       };
     });
+    // Make into dropdown with edit and delete
+    columns.push({
+      render: (record) => {
+        return (
+          <OptionsButton
+            items={getMenuItems({
+              name: "Signup",
+              handleDelete: () => this.deleteSignup(record.id),
+              handleEdit: () => this.editSignup(record.id),
+            })}
+          />
+        );
+      },
+      title: "",
+      dataIndex: undefined,
+      key: undefined,
+    });
+    return columns;
   }
 
   buildExpandedColumns(): TableColumnsType<unknown>[] | null {
@@ -79,7 +111,8 @@ export class TableData {
 
   buildData(): TableProps["dataSource"] {
     return this.signups.map((signup, signupIndex) => {
-      const row: Record<string, any> = { key: signupIndex };
+      const row: Record<string, any> = { key: signupIndex, id: signup.id };
+
       const multiResponses: {
         label: string;
         data: any[];
@@ -92,6 +125,8 @@ export class TableData {
           console.warn("Field not found:", response);
           return;
         }
+        // render empty value
+        if (!field.required && response.value === null) return <Empty />;
 
         switch (field.type) {
           case FieldTypeEnum.MultiResponse: {

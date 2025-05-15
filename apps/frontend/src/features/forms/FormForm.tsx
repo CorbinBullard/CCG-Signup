@@ -1,5 +1,6 @@
 import {
   Checkbox,
+  Flex,
   Form,
   FormInstance,
   Input,
@@ -13,30 +14,52 @@ import PreviewForm from "./preview/PreviewForm";
 import { FieldTypeEnum } from "../fields/field.type";
 
 // FormForm.tsx
-function FormForm({ form, preview = true, mode = "create", ...props }: { form: FormInstance; mode?: "create" | "edit" }) {
+function FormForm({
+  // form,
+  preview = true,
+  mode = "create",
+  ...props
+}: {
+  form: FormInstance;
+  mode?: "create" | "edit";
+}) {
   const getName = (fieldName: string | string[]) => {
-    return mode === "create" ? ["form", ...(Array.isArray(fieldName) ? fieldName : [fieldName])] : fieldName;
+    return mode === "create"
+      ? ["form", ...(Array.isArray(fieldName) ? fieldName : [fieldName])]
+      : fieldName;
   };
+  const form = Form.useFormInstance();
 
   return (
     <>
       {/* Same body as before, just nesting under form removed now */}
-      <Form.Item
-        name={getName("isSaved")}
-        label="Save Form"
-        valuePropName="checked"
-      >
-        <Checkbox />
-      </Form.Item>
-
-      <ConditionalFormItem
-        dependency={getName("isSaved")}
-        shouldRender={(isSaved) => isSaved}
-      >
-        <Form.Item name={getName("name")} label="Form Name" required>
-          <Input placeholder="Form Name" />
+      <Flex gap={4}>
+        <Form.Item
+          name={getName("isSaved")}
+          label="Save Form"
+          valuePropName="checked"
+          layout="horizontal"
+          style={{ flex: 1 }}
+        >
+          <Checkbox />
         </Form.Item>
-      </ConditionalFormItem>
+
+        <ConditionalFormItem
+          dependency={getName("isSaved")}
+          shouldRender={(isSaved) => isSaved}
+        >
+          <Form.Item
+            name={getName("name")}
+            label="Form Name"
+            required
+            layout="horizontal"
+            style={{ flex: 3 }}
+          >
+            <Input placeholder="Form Name" />
+          </Form.Item>
+        </ConditionalFormItem>
+      </Flex>
+
       <Splitter>
         <Splitter.Panel min={500}>
           <CreateList
@@ -44,29 +67,29 @@ function FormForm({ form, preview = true, mode = "create", ...props }: { form: F
             buttonLabel="Add Field"
             title={"Field"}
             card={true}
+            initialValue={{
+              label: "",
+              type: FieldTypeEnum.Text,
+              required: true,
+            }}
+            required
           >
-            <FieldForm />
+            <FieldForm mode={mode} />
           </CreateList>
         </Splitter.Panel>
-        {/* <Splitter.Panel collapsible>
+        <Splitter.Panel collapsible>
           <Form.Item noStyle>
-            {preview && <PreviewForm form={ } />}
+            {preview && <PreviewForm form={form} mode={mode} />}
           </Form.Item>
-        </Splitter.Panel> */}
+        </Splitter.Panel>
       </Splitter>
-      {/* <Form.Item noStyle shouldUpdate>
+      <Form.Item noStyle shouldUpdate>
         {() => (
           <Typography>
-            <pre>
-              {JSON.stringify(
-                form ? form.getFieldsValue() : newForm.getFieldValue(),
-                null,
-                2
-              )}
-            </pre>
+            <pre>{JSON.stringify(form.getFieldsValue(), null, 2)}</pre>
           </Typography>
         )}
-      </Form.Item> */}
+      </Form.Item>
     </>
   );
 }

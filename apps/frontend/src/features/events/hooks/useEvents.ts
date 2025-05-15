@@ -9,7 +9,6 @@ import { useNotifications } from "../../../context/Notifications";
 import { Event } from "../event.types";
 
 export const useEvents = (query) => {
-  console.log("query useEvents:", query);
   return useSuspenseQuery({
     queryKey: ["events", query],
     queryFn: () => fetchEvents(query),
