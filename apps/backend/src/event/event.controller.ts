@@ -20,7 +20,7 @@ import { GetSignupsQueryDto } from './dto/query-params.dto';
 import { IsAdminGuard } from 'src/guards/jwt-auth.guard';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { CreateFormDto } from 'src/form/dto/create-form.dto';
-import { EventQueryParamsDto } from './dto/event-queryParams';
+import { EventQueryParamsDto } from './dto/event-queryParams.dto';
 
 @Controller('events')
 export class EventController {

@@ -2,10 +2,10 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { fetchForm, fetchForms, updateForm } from "../form.api";
 import { useNotifications } from "../../../context/Notifications";
 
-export const useForms = () => {
+export const useForms = (query) => {
   return useQuery({
     queryKey: ["forms"],
-    queryFn: fetchForms,
+    queryFn: () => fetchForms(query),
   });
 };
 

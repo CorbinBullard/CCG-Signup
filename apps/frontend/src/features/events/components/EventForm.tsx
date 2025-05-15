@@ -40,7 +40,7 @@ const EventForm = ({
             label="Event Date"
             rules={[{ required: true, message: "Please enter the event date" }]}
           >
-            <DatePicker />
+            <DatePicker format="MM/DD/YYYY" />
           </Form.Item>
           <Form.Item
             name="time"

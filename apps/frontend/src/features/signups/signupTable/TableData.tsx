@@ -141,7 +141,7 @@ export class TableData {
             break;
           }
 
-          case FieldTypeEnum.CheckBox:
+          case FieldTypeEnum.Switch:
             row[field.id] = this.withValidation<boolean>(
               response,
               (val): val is boolean => typeof val === "boolean",
@@ -149,7 +149,7 @@ export class TableData {
                 val ? (
                   <Tag color="success">YES</Tag>
                 ) : (
-                  <Tag color="error">No</Tag>
+                  <Tag color="error">NO</Tag>
                 )
             );
             break;

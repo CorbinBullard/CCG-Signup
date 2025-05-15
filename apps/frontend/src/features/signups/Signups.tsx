@@ -10,6 +10,7 @@ import {
 import { Signup } from "./types/signup.type";
 import SignupForm from "./SignupForm";
 import { Event } from "../events/event.types";
+import Format from "../../utils/Format";
 
 export default function Signups({ event }: { event: Event }) {
   const signups = useSignups(event.id).data || [];
@@ -46,13 +47,16 @@ export default function Signups({ event }: { event: Event }) {
             const response = signup.responses.find(
               (response) => response.fieldId === field.id
             );
+
             if (!response) {
               return { value: null, fieldId: field.id };
-            } else
+            } else {
+              const formattedResponse = Format.Response(response);
               return {
-                value: response.value,
-                fieldId: response.fieldId,
+                value: formattedResponse.value,
+                fieldId: formattedResponse.fieldId,
               };
+            }
           }) || [],
       });
     }
@@ -123,6 +127,7 @@ export default function Signups({ event }: { event: Event }) {
         }}
         destroyOnClose
         onOk={onUpdateSignup}
+        okText="Update Signup"
       >
         <Form layout="vertical" form={updateSignupForm}>
           <SignupForm fields={event.form.fields} />

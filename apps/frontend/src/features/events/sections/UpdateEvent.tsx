@@ -33,6 +33,7 @@ export default function UpdateEvent({
         onCancel={() => setIsModalOpen(false)}
         onOk={handleEventSubmit}
         width={"fit-content"}
+        okText="Update Event"
       >
         <EventForm
           ref={fileRef}

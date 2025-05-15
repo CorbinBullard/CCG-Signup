@@ -126,6 +126,7 @@ export default function SingleEventPage() {
                 layout="vertical"
                 form={signupForm}
                 initialValues={signupDefaultValues(event.form.fields)}
+                scrollToFirstError
               >
                 <SignupForm fields={event.form.fields} />
               </Form>

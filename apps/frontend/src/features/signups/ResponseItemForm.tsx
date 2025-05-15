@@ -4,7 +4,7 @@ import { FieldTypeEnum } from "../fields/field.type";
 import TextField from "./FieldTypes/TextField";
 import NumberField from "./FieldTypes/NumberField";
 import SelectField from "./FieldTypes/SelectField";
-import CheckboxField from "./FieldTypes/CheckboxField";
+import CheckboxField from "./FieldTypes/SwitchField";
 import DateField from "./FieldTypes/DateField";
 import EmailField from "./FieldTypes/EmailField";
 import { Options } from "../fields/options/option.type";
@@ -32,7 +32,7 @@ export default function ResponseItemForm(props: {
             return <NumberField {...props} />;
           case FieldTypeEnum.Select:
             return <SelectField {...props} />;
-          case FieldTypeEnum.CheckBox:
+          case FieldTypeEnum.Switch:
             return <CheckboxField {...props} />;
           case FieldTypeEnum.Date:
             return <DateField {...props} />;

@@ -5,7 +5,7 @@ import { FindOptionsWhere, ILike, Repository } from 'typeorm';
 import { CreateEventDto } from './dto/create-event.dto';
 import { UpdateEventDto } from './dto/update-event.dto';
 import { DropboxService } from 'src/dropbox/dropbox.service';
-import { EventQueryParamsDto } from './dto/event-queryParams';
+import { EventQueryParamsDto } from './dto/event-queryParams.dto';
 
 @Injectable()
 export class EventService {
@@ -20,7 +20,7 @@ export class EventService {
     if (query?.title) {
       where.title = ILike(`%${query.title}%`);
     }
-    return this.eventRepository.find({ where });
+    return this.eventRepository.find({ where, order: { date: 'ASC' } });
   }
 
   async createEvent(

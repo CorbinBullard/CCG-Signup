@@ -71,6 +71,12 @@ export default function CreateFormList({
               strategy={verticalListSortingStrategy}
             >
               <Flex vertical gap={4}>
+                <Typography.Text
+                  type="danger"
+                  style={{ paddingLeft: "12px", marginBottom: "12px" }}
+                >
+                  <Form.ErrorList errors={errors} />
+                </Typography.Text>
                 {fields.map((field, index) => (
                   <SortableItem
                     id={field.name}
@@ -122,12 +128,12 @@ function SortableItem({
 
   return (
     <div ref={setNodeRef} style={style}>
-      <Typography.Text
+      {/* <Typography.Text
         type="warning"
         style={{ paddingLeft: "12px", marginBottom: "12px" }}
       >
         <Form.ErrorList errors={errors} />
-      </Typography.Text>
+      </Typography.Text> */}
       <ItemListItem
         card={card}
         key={field.key}

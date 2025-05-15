@@ -41,7 +41,7 @@ export default function PreviewItem({
             return <NumberField />;
           case FieldTypeEnum.Select:
             return <SelectField options={options} />;
-          case FieldTypeEnum.CheckBox:
+          case FieldTypeEnum.Switch:
             return <CheckboxField />;
           case FieldTypeEnum.Date:
             return <DateField />;

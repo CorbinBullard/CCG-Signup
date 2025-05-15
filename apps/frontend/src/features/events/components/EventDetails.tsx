@@ -1,11 +1,16 @@
-import { Descriptions, DescriptionsProps } from "antd";
+import {
+  Descriptions,
+  DescriptionsProps,
+  Divider,
+  Flex,
+  Typography,
+} from "antd";
 import React from "react";
 import { Event } from "../event.types";
 import dayjs from "dayjs";
 
 export default function EventDetails({ event }: { event: Event }) {
   const descriptionItems: DescriptionsProps["items"] = [
-    { label: "Event Description", children: event.description },
     {
       label: "Event Date",
       children: new Date(event.date).toLocaleDateString(),
@@ -19,5 +24,11 @@ export default function EventDetails({ event }: { event: Event }) {
     { label: "Signups", children: event.signups.length },
   ];
 
-  return <Descriptions items={descriptionItems} />;
+  return (
+    <Flex vertical gap={8}>
+      <Descriptions items={descriptionItems} />
+      <Divider>Description</Divider>
+      <Typography.Paragraph>{event.description}</Typography.Paragraph>
+    </Flex>
+  );
 }

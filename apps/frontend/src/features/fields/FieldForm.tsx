@@ -1,6 +1,6 @@
 // GenericFieldForm.tsx
 
-import { Checkbox, Collapse, Flex, Form, Input, Select } from "antd";
+import { Checkbox, Collapse, Flex, Form, Input, Select, Switch } from "antd";
 import { FieldTypeEnum, SubFieldTypeEnum } from "./field.type";
 import CostInput from "../../components/formComponents/CostInput";
 import CreateList from "../../components/formComponents/CreateList";
@@ -62,7 +62,7 @@ export default function FieldForm({
           initialValue={isSubfield ? true : undefined}
           style={{ flex: 1 }}
         >
-          <Checkbox />
+          <Switch />
         </Form.Item>
       </Flex>
 
@@ -73,8 +73,8 @@ export default function FieldForm({
             : getName(["fields", name, "type"])
         }
         shouldRender={(type: FieldTypeEnum | SubFieldTypeEnum) =>
-          type === FieldTypeEnum.CheckBox ||
-          type === SubFieldTypeEnum.CheckBox ||
+          type === FieldTypeEnum.Switch ||
+          type === SubFieldTypeEnum.Switch ||
           type === FieldTypeEnum.MultiResponse
         }
       >
@@ -149,10 +149,25 @@ export default function FieldForm({
                     rules={[
                       {
                         validator: async (_, subfields) => {
-                          if (!subfields || subfields.length < 2) {
+                          console.log(_, subfields);
+                          if (!subfields || subfields.length < 1) {
                             return Promise.reject(
                               new Error(
-                                "At least 2 Subfields are required for Composite Field"
+                                "At least 1 Subfield are required for Composite Field"
+                              )
+                            );
+                          }
+                        },
+                      },
+                      {
+                        validator: async (_, subfields) => {
+                          const hasRequired = subfields.some(
+                            (subfield) => subfield.required
+                          );
+                          if (!hasRequired) {
+                            return Promise.reject(
+                              new Error(
+                                "At least one Subfield must be marked as required."
                               )
                             );
                           }

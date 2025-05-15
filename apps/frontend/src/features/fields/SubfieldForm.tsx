@@ -40,7 +40,7 @@ export default function SubfieldForm(subfield) {
       <ConditionalFormItem
         dependency={["fields", parent.name, "subfields", subfield.name, "type"]}
         shouldRender={(type: SubFieldTypeEnum) =>
-          type === SubFieldTypeEnum.CheckBox
+          type === SubFieldTypeEnum.Switch
         }
       >
         <Form.Item name={[subfield.name, "cost"]} label="Cost">

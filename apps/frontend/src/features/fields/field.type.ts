@@ -3,7 +3,7 @@ import { Options } from "./options/option.type";
 export enum FieldTypeEnum {
   Text = "string",
   Number = "number",
-  CheckBox = "boolean",
+  Switch = "boolean",
   Date = "date",
   Email = "email",
   Select = "select",
@@ -24,7 +24,7 @@ export type Field = {
 export enum SubFieldTypeEnum {
   Text = "string",
   Number = "number",
-  CheckBox = "boolean",
+  Switch = "boolean",
   Date = "date",
   Email = "email",
   Select = "select",

@@ -49,7 +49,7 @@ const EventForm = ({ onSubmit, initialValues = {}, form, ref }: {
                 { required: true, message: "Please enter the event date" },
               ]}
             >
-              <DatePicker />
+              <DatePicker format="MM/DD/YYYY" />
             </Form.Item>
             <Form.Item
               name="time"
