@@ -8,6 +8,7 @@ export default function TextField(props: FormItemProps) {
       {...rest}
       rules={[{ required: required, message: `${props.label} is required` }]}
       initialValue={""}
+
     >
       <Input />
     </Form.Item>

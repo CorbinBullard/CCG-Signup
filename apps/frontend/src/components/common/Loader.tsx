@@ -1,26 +1,25 @@
-// LoadingModal.tsx
-import { Modal, Spin } from "antd";
+import React from "react";
+import { Spin } from "antd";
 
-export default function Loader() {
+const loaderStyle = {
+  position: "fixed",
+  top: 0,
+  left: 0,
+  width: "100vw",
+  height: "100vh",
+  zIndex: 9999,
+  background: "rgba(255,255,255,0.6)", // Slight overlay, adjust as needed
+  backdropFilter: "blur(6px)",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+};
+
+export default function Loader({ spinning = true }: { spinning?: boolean }) {
+  if (!spinning) return null;
   return (
-    <Modal
-      open={true}
-      footer={null}
-      closable={false}
-      centered
-      maskClosable={false}
-      keyboard={false}
-    >
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          minHeight: "150px",
-        }}
-      >
-        <Spin size="large" />
-      </div>
-    </Modal>
+    <div style={{ ...loaderStyle }}>
+      <Spin size="large" />
+    </div>
   );
 }

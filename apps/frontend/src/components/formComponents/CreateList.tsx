@@ -8,14 +8,14 @@ import {
   useSensor,
   useSensors,
 } from "@dnd-kit/core";
+import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
 import {
-  arrayMove,
   SortableContext,
   sortableKeyboardCoordinates,
   verticalListSortingStrategy,
   useSortable,
 } from "@dnd-kit/sortable";
-import { Input, Typography } from "antd";
+import { Typography } from "antd";
 import { Flex, Button, Form } from "antd";
 import ItemListItem from "./ItemListItem";
 
@@ -65,6 +65,7 @@ export default function CreateFormList({
             sensors={sensors}
             collisionDetection={closestCenter}
             onDragEnd={handleDragEnd}
+            modifiers={[restrictToVerticalAxis]}
           >
             <SortableContext
               items={fields.map((field) => field.name)}

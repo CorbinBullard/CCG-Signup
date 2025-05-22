@@ -48,6 +48,7 @@ export class EventController {
     const dto: CreateEventDto = {
       ...createEventDto,
       cost: +createEventDto.cost,
+      limit: +createEventDto.limit,
       form: parsedForm,
     };
     if (!image) throw new BadRequestException('Image file is required');
@@ -65,8 +66,9 @@ export class EventController {
     return this.eventService.updateEvent(id, updateEventDto, image);
   }
 
-  @Delete()
-  deleteAllEvents() {
-    return this.eventService.deleteAllEvents();
+  @Delete(':id')
+  @UseGuards(IsAdminGuard)
+  deleteEvent(@Param('id') id: number) {
+    return this.eventService.deleteEvent(id);
   }
 }

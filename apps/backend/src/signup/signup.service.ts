@@ -71,7 +71,10 @@ export class SignupService {
   async findOne(id: number) {
     const signup = await this.signupRepository.findOne({
       where: { id },
-      relations: { responses: { field: true }, event: true },
+      relations: {
+        responses: { field: true },
+        event: { form: { fields: true } },
+      },
     });
     if (!signup) throw new NotFoundException(`Signup with id ${id} not found`);
     return signup;

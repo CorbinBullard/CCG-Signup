@@ -1,22 +1,24 @@
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
-  useMutation,
-  useQuery,
-  useQueryClient,
-  useSuspenseQuery,
-} from "@tanstack/react-query";
-import { fetchEvents, postEvent, fetchEvent, updateEvent } from "../event.api";
+  fetchEvents,
+  postEvent,
+  fetchEvent,
+  updateEvent,
+  deleteEvent,
+} from "../event.api";
 import { useNotifications } from "../../../context/Notifications";
-import { Event } from "../event.types";
+
+import { useNavigate } from "react-router-dom";
 
 export const useEvents = (query) => {
-  return useSuspenseQuery({
+  return useQuery({
     queryKey: ["events", query],
     queryFn: () => fetchEvents(query),
   });
 };
 
 export const useEvent = (id: number) => {
-  return useSuspenseQuery({
+  return useQuery({
     queryKey: ["event", id],
     queryFn: () => fetchEvent(id),
   });
@@ -63,6 +65,32 @@ export const useUpdateEvent = () => {
       openNotification({
         message: error.message,
         description: "There was an error updating the event.",
+        type: "error",
+      });
+    },
+  });
+};
+
+export const useDeleteEvent = () => {
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
+  const openNotification = useNotifications();
+  return useMutation({
+    mutationFn: deleteEvent,
+    onSuccess: ({ id }) => {
+      queryClient.invalidateQueries({ queryKey: ["event"] });
+      queryClient.invalidateQueries({ queryKey: ["event", id] });
+      openNotification({
+        message: "Event deleted",
+        description: "The event has been deleted successfully.",
+        type: "success",
+      });
+      navigate("/events");
+    },
+    onError: (error) => {
+      openNotification({
+        message: error.message,
+        description: "There was an error deleting the event.",
         type: "error",
       });
     },

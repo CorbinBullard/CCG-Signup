@@ -19,6 +19,7 @@ const response_module_1 = require("./response/response.module");
 const auth_module_1 = require("./auth/auth.module");
 const config_1 = require("@nestjs/config");
 const dropbox_module_1 = require("./dropbox/dropbox.module");
+const form_template_module_1 = require("./form-template/form-template.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -40,6 +41,7 @@ exports.AppModule = AppModule = __decorate([
             auth_module_1.AuthModule,
             config_1.ConfigModule,
             dropbox_module_1.DropboxModule,
+            form_template_module_1.FormTemplateModule,
         ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],

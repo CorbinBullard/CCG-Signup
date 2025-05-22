@@ -1,6 +1,9 @@
 import React, { useRef, useState } from "react";
 import { useParams } from "react-router-dom";
-import { useEvent } from "../../features/events/hooks/useEvents";
+import {
+  useDeleteEvent,
+  useEvent,
+} from "../../features/events/hooks/useEvents";
 import PageLayout from "../../components/layouts/PageLayout";
 import { Button, Flex, Form, Image, Modal, Tabs, TabsProps } from "antd";
 import FormForm from "../../features/forms/FormForm";
@@ -13,6 +16,8 @@ import UpdateEvent from "../../features/events/sections/UpdateEvent";
 import { useCreateSignup } from "../../features/signups/hooks/useSignups";
 import Loader from "../../components/common/Loader";
 import { signupDefaultValues } from "../../features/signups/signup.defaultValues";
+import OptionsButton from "../../components/common/OptionsButton";
+import getMenuItems from "../../features/signups/signupTable/getMenuItems";
 
 export default function SingleEventPage() {
   const params = useParams<{ id: string }>();
@@ -27,15 +32,15 @@ export default function SingleEventPage() {
   const [tab, setTab] = useState("signups");
 
   const updateForm = useUpdateForm();
+  const deleteEvent = useDeleteEvent();
   const createSignup = useCreateSignup();
 
   const {
     data: event,
     isLoading,
     isError,
-  } = useEvent(eventId, {
-    enabled: !isNaN(eventId),
-  });
+  } = useEvent(eventId);
+  console.log(event, isLoading, isError)
 
   if (isNaN(eventId)) {
     return <div>Invalid event ID</div>;
@@ -44,7 +49,7 @@ export default function SingleEventPage() {
   if (isLoading) {
     return <Loader />;
   }
-
+  console.log(isError, event)
   if (isError || !event) {
     return <div>Event not found</div>;
   }
@@ -67,7 +72,6 @@ export default function SingleEventPage() {
 
   const handleUpdateFormSubmit = async () => {
     const values = await formForm.validateFields();
-    console.log("values", values);
     updateForm.mutate({
       id: event.form.id,
       form: values,
@@ -93,11 +97,13 @@ export default function SingleEventPage() {
     <PageLayout
       title={event.title}
       actions={[
-        {
-          label: "Edit Event Details",
-          type: "primary",
-          onClick: () => setIsModalOpen(true),
-        },
+        <OptionsButton
+          items={getMenuItems({
+            name: "Event",
+            handleDelete: () => deleteEvent.mutate(eventId),
+            handleEdit: () => setIsModalOpen(true),
+          })}
+        />,
       ]}
     >
       <UpdateEvent

@@ -15,7 +15,8 @@ export class EmailValidator extends ResponseValidator {
   }
   isValidEmail() {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (emailRegex.test(this.response.value))
+    if (!emailRegex.test(this.response.value)) {
       this.errors.push(`Field with id ${this.field.id} must be a valid email`);
+    }
   }
 }

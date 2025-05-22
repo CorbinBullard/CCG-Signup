@@ -13,12 +13,6 @@ export class Form {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ nullable: true })
-  name: string;
-
-  @Column({ default: false })
-  isSaved: boolean;
-
   @OneToMany(() => Field, (field) => field.form, {
     cascade: true,
     eager: true,

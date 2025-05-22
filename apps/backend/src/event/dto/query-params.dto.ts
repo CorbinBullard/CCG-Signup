@@ -15,5 +15,4 @@ export class GetSignupsQueryDto {
   @IsOptional()
   @IsDateString()
   beforeDate?: string;
-  
 }

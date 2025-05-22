@@ -5,9 +5,10 @@ import {
   Flex,
   Typography,
 } from "antd";
-import React from "react";
 import { Event } from "../event.types";
 import dayjs from "dayjs";
+import { useMemo, useState } from "react";
+import EventSignupStatus from "./EventSignupStatus";
 
 export default function EventDetails({ event }: { event: Event }) {
   const descriptionItems: DescriptionsProps["items"] = [
@@ -21,7 +22,10 @@ export default function EventDetails({ event }: { event: Event }) {
     },
     { label: "Event Cost", children: `$${event.cost}` },
     { label: "Event Funds", children: event.funds.toUpperCase() },
-    { label: "Signups", children: event.signups.length },
+    {
+      label: "Signups",
+      children: <EventSignupStatus event={event} />,
+    },
   ];
 
   return (

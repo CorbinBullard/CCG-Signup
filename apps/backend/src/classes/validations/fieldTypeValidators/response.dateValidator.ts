@@ -16,7 +16,8 @@ export class DateValidator extends ResponseValidator {
   }
   isDate() {
     const date: Date = new Date(this.response.value);
-    if (isNaN(date.getTime()))
+    if (isNaN(date.getTime())) {
       this.errors.push(`Field with id ${this.field.id} must be a valid Date`);
+    }
   }
 }

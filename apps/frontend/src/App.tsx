@@ -7,6 +7,8 @@ import EventsPage from "./pages/events/EventsPage";
 import CreateEventPage from "./pages/events/CreateEventPage";
 import SingleEventPage from "./pages/events/SingleEventPage";
 import NotFoundPage from "./pages/NotFoundPage";
+import FormsPage from "./pages/forms/FormsPage";
+import SingleFormPage from "./pages/forms/SingleFormPage";
 
 function App() {
   return (
@@ -18,6 +20,9 @@ function App() {
             <Route path="/events" element={<EventsPage />} />
             <Route path="/events/create" element={<CreateEventPage />} />
             <Route path="/events/:id" element={<SingleEventPage />} />
+            <Route path="/forms" element={<FormsPage />} />
+            <Route path="/forms/:id" element={<SingleFormPage />} />
+            <Route path="/forms/create" element={<SingleFormPage />} />
             {/* 404 */}
             <Route path="*" element={<NotFoundPage />} />
           </Route>

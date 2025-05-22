@@ -15,6 +15,10 @@ export const useEventSubmission = (formRef, fileRef) => {
     formData.append("funds", values.funds);
     formData.append("form", JSON.stringify(values.form));
 
+    if (values.signupLimit) {
+      formData.append("signupLimit", values.signupLimit.toString());
+    }
+
     if (fileRef.current) {
       formData.append("image", fileRef.current);
     } else {

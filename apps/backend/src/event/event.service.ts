@@ -6,12 +6,14 @@ import { CreateEventDto } from './dto/create-event.dto';
 import { UpdateEventDto } from './dto/update-event.dto';
 import { DropboxService } from 'src/dropbox/dropbox.service';
 import { EventQueryParamsDto } from './dto/event-queryParams.dto';
+import { FormTemplateService } from 'src/form-template/form-template.service';
 
 @Injectable()
 export class EventService {
   constructor(
     @InjectRepository(Event) private eventRepository: Repository<Event>,
     private readonly dropboxService: DropboxService,
+    private formtemplateService: FormTemplateService,
   ) {}
 
   async getEvents(query: EventQueryParamsDto): Promise<Event[]> {
@@ -28,10 +30,15 @@ export class EventService {
     image: Express.Multer.File,
   ): Promise<Event> {
     const imageUrl = await this.dropboxService.uploadFile(image);
+    const { form } = createEventDto;
     const newEvent = {
       ...createEventDto,
       image: imageUrl,
     };
+    if (form.isSaved) {
+      await this.formtemplateService.create(form);
+    }
+
     return this.eventRepository.save(newEvent);
   }
 
@@ -61,7 +68,14 @@ export class EventService {
     return await this.findOne(id);
   }
 
-  async deleteAllEvents(): Promise<void> {
-    await this.eventRepository.clear();
+  async deleteEvent(id: number): Promise<void> {
+    const event = await this.findOne(id);
+    console.log(event?.image);
+    if (event) {
+      await this.eventRepository.delete(id);
+      await this.dropboxService.deleteFile(event.image);
+    } else {
+      throw new NotFoundException(`Event with id ${id} was not found`);
+    }
   }
 }

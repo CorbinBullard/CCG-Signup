@@ -30,10 +30,14 @@ export class CreateEventDto {
 
   @IsOptional()
   @IsNumber()
-  cost: number;
+  cost?: number;
 
   @IsEnum(FundLocationEnum)
   funds: FundLocationEnum;
+
+  @IsOptional()
+  @IsNumber()
+  signupLimit?: number;
 
   @IsObject()
   @ValidateNested()

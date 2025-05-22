@@ -4,8 +4,4 @@ export class FormQueryParamsDto {
   @IsOptional()
   @IsString()
   name?: string;
-
-  @IsOptional()
-  @IsString()
-  isSaved?: boolean;
 }

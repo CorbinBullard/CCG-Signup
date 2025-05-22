@@ -3,6 +3,7 @@ import { Type } from 'class-transformer';
 import {
   ArrayMinSize,
   IsArray,
+  IsBoolean,
   IsOptional,
   IsString,
   ValidateNested,
@@ -13,6 +14,10 @@ export class CreateFormDto {
   @IsOptional()
   @IsString()
   name: string;
+
+  @IsOptional()
+  @IsBoolean()
+  isSaved: boolean;
 
   @IsArray()
   @ArrayMinSize(1, { message: 'Form must have at least one field' })

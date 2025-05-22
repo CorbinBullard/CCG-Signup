@@ -44,25 +44,18 @@ export default function Signups({ event }: { event: Event }) {
         ...signup,
         responses:
           event.form.fields.map((field) => {
-            const response = signup.responses.find(
-              (response) => response.fieldId === field.id
-            );
-
-            if (!response) {
-              return { value: null, fieldId: field.id };
-            } else {
-              const formattedResponse = Format.Response(response);
-              return {
-                value: formattedResponse.value,
-                fieldId: formattedResponse.fieldId,
-              };
-            }
+            const response = signup.responses.find((response) => {
+              return response.fieldId === field.id;
+            });
+            return Format.Response(response, field);
           }) || [],
       });
     }
+    // if (signup) {
+    //   console.log("Formatted Signup, ", Format.Signup(signup));
+    //   updateSignupForm.setFieldsValue(Format.Signup(signup));
+    // }
   }, [signup, updateSignupForm, event]);
-
-  console.log("FIELDS: ", event.form.fields);
 
   const tableData = useMemo(
     () =>

@@ -1,7 +1,7 @@
 import { Card, Checkbox, Collapse, Flex, Form, Input, Select } from "antd";
 import { FieldTypeEnum, SubFieldTypeEnum } from "./field.type";
 import CostInput from "../../components/formComponents/CostInput";
-import CreateList from "../../components/formComponents/_CreateList";
+import CreateList from "../../components/formComponents/CreateList";
 import OptionForm from "./options/OptionForm";
 import ConditionalFormItem from "../../components/formComponents/DependentItem";
 

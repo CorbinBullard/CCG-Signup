@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { CalendarOutlined } from "@ant-design/icons";
+import { CalendarOutlined, FileTextOutlined } from "@ant-design/icons";
 import type { MenuProps } from "antd";
 import { Layout, Menu, theme } from "antd";
 import { Outlet, useLocation, useNavigate, useParams } from "react-router-dom";
@@ -24,7 +24,10 @@ function getItem(
   } as MenuItem;
 }
 
-const items: MenuItem[] = [getItem("Events", "events", <CalendarOutlined />)];
+const items: MenuItem[] = [
+  getItem("Events", "events", <CalendarOutlined />),
+  getItem("Forms", "forms", <FileTextOutlined />),
+];
 
 const AppLayout: React.FC = () => {
   const [collapsed, setCollapsed] = useState(false);

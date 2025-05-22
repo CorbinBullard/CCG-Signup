@@ -141,8 +141,39 @@ export class DropboxService {
       throw new InternalServerErrorException('Failed to upload to Dropbox');
     }
   }
+
+  async deleteFile(path: string): Promise<void> {
+    const filePath = extractDropboxFilePath(path);
+    console.log('PATH: ', filePath);
+    try {
+      const token = await this.getValidAccessToken();
+
+      await axios.post(
+        'https://api.dropboxapi.com/2/files/delete_v2',
+        { path: filePath },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        },
+      );
+    } catch (error) {
+      console.error('Dropbox delete error:', error.response?.data || error);
+      throw new InternalServerErrorException('Failed to delete from Dropbox');
+    }
+  }
 }
 
 function convertDropboxToDirect(url: string): string {
   return url.replace(/dl=0$/, 'raw=1').replace(/dl=1$/, 'raw=1');
+}
+
+function extractDropboxFilePath(url: string): string | null {
+  // Match the last part before '?' which is the file name
+  const match = url.match(/\/([^\/\?]+)\?/);
+  if (match) {
+    return `/event-images/${match[1]}`;
+  }
+  return null;
 }

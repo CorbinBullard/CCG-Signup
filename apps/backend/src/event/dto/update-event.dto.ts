@@ -29,4 +29,7 @@ export class UpdateEventDto {
 
   @IsEnum(FundLocationEnum)
   funds: FundLocationEnum;
+
+  @IsNumber()
+  signupLimit: number;
 }

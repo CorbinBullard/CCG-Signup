@@ -2,7 +2,7 @@ import React, { useRef, useState } from "react";
 import { Event } from "../event.types";
 import { Flex, Form, Image, Modal } from "antd";
 import EventDetails from "../components/eventDetails";
-import EventForm from "../components/_EventForm";
+import EventForm from "../components/EventForm";
 import { useUpdateEventSubmission } from "../hooks/useUpdateEventSubmission";
 import Format from "../../../utils/Format";
 
@@ -20,26 +20,30 @@ export default function UpdateEvent({
 
   const { submit } = useUpdateEventSubmission(event.id, eventForm, fileRef);
 
-  const handleEventSubmit = async () => {
+  const handleUpdateEventSubmit = async () => {
     await eventForm.validateFields();
     submit();
     setIsModalOpen(false);
   };
+
+  
 
   return (
     <>
       <Modal
         open={isModalOpen}
         onCancel={() => setIsModalOpen(false)}
-        onOk={handleEventSubmit}
+        onOk={handleUpdateEventSubmit}
         width={"fit-content"}
         okText="Update Event"
       >
-        <EventForm
-          ref={fileRef}
+        <Form
           form={eventForm}
           initialValues={Format.Event(event)}
-        />
+          layout="vertical"
+        >
+          <EventForm ref={fileRef} />
+        </Form>
       </Modal>
       <Flex gap={16}>
         <Flex flex={1}>

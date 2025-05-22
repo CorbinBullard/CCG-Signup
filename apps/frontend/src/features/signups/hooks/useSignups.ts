@@ -91,7 +91,7 @@ export const useDeleteSignup = () => {
     onError: (error) => {
       openNotification({
         message: error.message,
-        description: "There was an error updating the signup.",
+        description: "There was an error deleting the signup.",
         type: "error",
       });
     },

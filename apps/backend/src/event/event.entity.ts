@@ -38,6 +38,9 @@ export class Event {
   @Column({ type: 'decimal', precision: 10, scale: 2 })
   cost: number;
 
+  @Column({ nullable: true, type: 'integer' })
+  signupLimit: number;
+
   @OneToOne(() => Form, (form) => form.event, {
     cascade: ['insert', 'update'],
   })

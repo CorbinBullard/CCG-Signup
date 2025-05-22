@@ -1,5 +1,4 @@
 import {
-  Checkbox,
   Flex,
   Form,
   FormInstance,
@@ -15,7 +14,8 @@ import CreateList from "../../components/formComponents/CreateList";
 import ConditionalFormItem from "../../components/formComponents/DependentItem";
 import PreviewForm from "./preview/PreviewForm";
 import { FieldTypeEnum } from "../fields/field.type";
-import { useForms } from "./hooks/useForms";
+import { useSavedForms } from "./hooks/useSavedForms";
+import FormNameItem from "./savedForms/FormNameItem";
 
 // FormForm.tsx
 function FormForm({
@@ -33,7 +33,7 @@ function FormForm({
       : fieldName;
   };
   const form = Form.useFormInstance();
-  const savedForms = useForms({ isSaved: true }).data || [];
+  const savedForms = useSavedForms({}).data || [];
 
   const handleFormSelect = (id) => {
     const { fields } = savedForms.find((form) => form.id === id);
@@ -71,6 +71,7 @@ function FormForm({
                 return <Typography.Text>{option.label}</Typography.Text>;
               }}
               onChange={handleFormSelect}
+              value={null}
             />
           </Form.Item>
           <Form.Item
@@ -87,21 +88,7 @@ function FormForm({
           dependency={getName("isSaved")}
           shouldRender={(isSaved) => isSaved}
         >
-          <Form.Item
-            name={getName("name")}
-            label="Form Name"
-            required
-            layout="vertical"
-            style={{ flex: 3 }}
-            rules={[
-              {
-                required: true,
-                message: "Please enter a form name",
-              },
-            ]}
-          >
-            <Input placeholder="Form Name" />
-          </Form.Item>
+          <FormNameItem name={getName("name")} />
         </ConditionalFormItem>
       </Flex>
 

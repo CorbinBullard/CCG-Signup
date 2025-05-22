@@ -12,6 +12,7 @@ import { ConfigModule } from '@nestjs/config';
 import { DropboxController } from './dropbox/dropbox.controller';
 import { DropboxService } from './dropbox/dropbox.service';
 import { DropboxModule } from './dropbox/dropbox.module';
+import { FormTemplateModule } from './form-template/form-template.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { DropboxModule } from './dropbox/dropbox.module';
     AuthModule,
     ConfigModule,
     DropboxModule,
+    FormTemplateModule,
   ],
   controllers: [AppController],
   providers: [AppService],

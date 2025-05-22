@@ -4,7 +4,7 @@ import useEvents from "../../features/events/hooks/useEvents";
 import EventCard from "../../features/events/components/EventCard";
 import PageLayout from "../../components/layouts/PageLayout";
 import { useNavigate } from "react-router-dom";
-import { Input } from "antd";
+import { Button, Input } from "antd";
 
 function EventsPage() {
   const [queryParams, setQueryParams] = useState({});
@@ -20,11 +20,9 @@ function EventsPage() {
       title={"Events"}
       Component={<Input.Search onSearch={handleSearch} enterButton />}
       actions={[
-        {
-          type: "primary",
-          label: "Create Event",
-          onClick: () => navigate("/events/create"),
-        },
+        <Button type="primary" onClick={() => navigate("/events/create")}>
+          Create Event
+        </Button>,
       ]}
     >
       <CardsContainer data={events} CardComponent={EventCard} />

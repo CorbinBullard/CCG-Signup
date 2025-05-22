@@ -1,6 +1,6 @@
 import { Event } from "../events/event.types";
 import { Empty } from "antd";
-import SignupTable from "./Signups";
+import Signups from "./Signups";
 
 export default function EventSignups({ event }: { event: Event }) {
   const { signups } = event;
@@ -8,5 +8,5 @@ export default function EventSignups({ event }: { event: Event }) {
     return <Empty description="No signups yet" />;
   }
 
-  return <SignupTable event={event} />;
+  return <Signups event={event} />;
 }

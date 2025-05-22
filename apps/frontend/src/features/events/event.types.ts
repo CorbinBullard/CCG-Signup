@@ -11,4 +11,6 @@ export type Event = {
   form: Form;
   funds?: FundLocationEnum;
   signups: [];
+  signupLimit: number;
+  id?: number;
 };

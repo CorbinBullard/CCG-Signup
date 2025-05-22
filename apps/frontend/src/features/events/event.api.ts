@@ -37,3 +37,8 @@ export const updateEvent = async ({
   });
   return response.data;
 };
+
+export const deleteEvent = async (id: number) => {
+  const response = await api.delete(`/api/events/${id}`);
+  return response.data;
+};

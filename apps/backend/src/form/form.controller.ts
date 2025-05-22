@@ -1,16 +1,31 @@
-import { Body, Controller, Get, Param, Put, Query, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Put,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import { FormService } from './form.service';
 import { CreateFormDto } from './dto/create-form.dto';
 import { IsAdminGuard } from 'src/guards/jwt-auth.guard';
 import { FormQueryParamsDto } from './dto/form-queryParams.dto';
-
+@UseGuards(IsAdminGuard)
 @Controller('forms')
 export class FormController {
   constructor(private formService: FormService) {}
 
   @Get()
-  getEvents(@Query() query: FormQueryParamsDto) {
-    return this.formService.find(query);
+  getForms() {
+    return this.formService.find();
+  }
+
+  @Post()
+  createForm(@Body() createFormDto: CreateFormDto) {
+    console.log(createFormDto);
+    return this.formService.createForm(createFormDto);
   }
 
   @Get(':id')
@@ -19,7 +34,6 @@ export class FormController {
   }
 
   @Put(':id')
-  @UseGuards(IsAdminGuard)
   updateForm(
     @Param('id') id: number,
     @Body() createFormDto: Partial<CreateFormDto>,

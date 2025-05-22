@@ -6,6 +6,7 @@ import {
   TableColumnsType,
   TableProps,
   Tag,
+  Tooltip,
 } from "antd";
 import { Event } from "../../events/event.types";
 import { Response } from "../types/response.type";
@@ -15,10 +16,11 @@ import { Signup } from "../types/signup.type";
 import dayjs from "dayjs";
 import { JSX } from "react";
 import { isValidEmail } from "../../../utils/utilFunctions";
-import { EditOutlined } from "@ant-design/icons";
+import { EditOutlined, QuestionCircleOutlined } from "@ant-design/icons";
 import OptionsButton from "../../../components/common/OptionsButton";
 import getMenuItems from "./getMenuItems";
 import { deleteSignup } from "../signups.api";
+import Format from "../../../utils/Format";
 
 export class TableData {
   private form: Form;
@@ -29,6 +31,7 @@ export class TableData {
   public editSignup: (id: number) => void;
 
   public fieldLookupObj: Record<string, Field>;
+  public signupLookupObj: Record<string, Signup>;
   public columns: TableColumnsType<unknown>;
   public data: TableProps;
   public expandedTables: JSX.Element[];
@@ -43,6 +46,7 @@ export class TableData {
     this.signups = _signups;
 
     this.fieldLookupObj = this.buildFieldObject();
+    this.signupLookupObj = this.buildSignupLookupObject();
     this.columns = this.buildColumns();
     this.expandedColumns = this.buildExpandedColumns();
 
@@ -53,6 +57,12 @@ export class TableData {
     //Fn
     this.deleteSignup = deleteSignup;
     this.editSignup = editSignup;
+  }
+  buildSignupLookupObject(): Record<string, Signup> {
+    return this.signups.reduce((acc, signup) => {
+      acc[signup.id] = signup;
+      return acc;
+    }, {} as Record<string, Signup>);
   }
 
   buildFieldObject(): Record<string, Field> {
@@ -73,6 +83,27 @@ export class TableData {
         },
       };
     });
+    columns.push({
+      title: "Note",
+      dataIndex: undefined,
+      key: undefined,
+      render: ({ id }) => {
+        const note = this.signupLookupObj[id].note;
+        if (!note) return;
+        return (
+          <Tooltip trigger={"hover"} title={note}>
+            <QuestionCircleOutlined
+              style={{
+                width: "100%",
+                color: "skyblue",
+                fontSize: "large",
+              }}
+            />
+          </Tooltip>
+        );
+      },
+    });
+
     // Make into dropdown with edit and delete
     columns.push({
       render: (record) => {
@@ -126,7 +157,10 @@ export class TableData {
           return;
         }
         // render empty value
-        if (!field.required && response.value === null) return <Empty />;
+        if (!field.required && response.value === null) {
+          console.log("FIELD NOT FOUND: ", field);
+          return <Empty />;
+        }
 
         switch (field.type) {
           case FieldTypeEnum.MultiResponse: {
@@ -142,16 +176,7 @@ export class TableData {
           }
 
           case FieldTypeEnum.Switch:
-            row[field.id] = this.withValidation<boolean>(
-              response,
-              (val): val is boolean => typeof val === "boolean",
-              (val) =>
-                val ? (
-                  <Tag color="success">YES</Tag>
-                ) : (
-                  <Tag color="error">NO</Tag>
-                )
-            );
+            row[field.id] = this.buildSwitchFieldData(response);
             break;
 
           case FieldTypeEnum.Email:
@@ -159,7 +184,7 @@ export class TableData {
             break;
 
           case FieldTypeEnum.Date:
-            row[field.id] = this.buildCheckboxFieldData(response);
+            row[field.id] = this.buildDateFieldData(response);
             break;
 
           case FieldTypeEnum.Composite:
@@ -184,7 +209,14 @@ export class TableData {
       return row;
     });
   }
-
+  private buildSwitchFieldData(response: Response): JSX.Element {
+    return this.withValidation<boolean>(
+      response,
+      (val): val is boolean => typeof val === "boolean",
+      (val) =>
+        val ? <Tag color="success">YES</Tag> : <Tag color="error">NO</Tag>
+    );
+  }
   private buildEmailFieldData(response: Response): JSX.Element {
     return this.withValidation<string>(
       response,
@@ -192,7 +224,7 @@ export class TableData {
       (val) => <a>{val}</a>
     );
   }
-  private buildCheckboxFieldData(response: Response): JSX.Element {
+  private buildDateFieldData(response: Response): JSX.Element {
     return this.withValidation<string>(
       response,
       (val): val is string => typeof val === "string" && dayjs(val).isValid(),
@@ -203,11 +235,18 @@ export class TableData {
   private buildCompositeFieldData(response: Response): JSX.Element {
     return this.withValidation<any[]>(response, Array.isArray, (values) => {
       const field = this.fieldLookupObj[response.fieldId];
-      const items: DescriptionsProps["items"] = values.map((value, index) => ({
-        label: field.subfields[index].label,
-        children: value.value,
-      }));
-      return <Descriptions items={items} />;
+      const items: DescriptionsProps["items"] = values.map((value, index) => {
+        console.log(field.type);
+        return {
+          label: field.subfields[index].label,
+          children:
+            field.subfields[index].type === FieldTypeEnum.Date
+              ? Format.Date(value.value).format("DD/MM/YYYY")
+              : value.value,
+          style: { whiteSpace: "nowrap" },
+        };
+      });
+      return <Descriptions items={items} size="small" layout="vertical" />;
     });
   }
 
@@ -246,19 +285,14 @@ export class TableData {
   ): JSX.Element | string {
     const value = response.value;
     if (!validator(value)) {
-      return this.renderError("Invalid value", value);
+      return this.renderError("Invalid Value", value);
     }
     return render(value);
   }
 
   renderError(message: string, value: any) {
     return (
-      <Alert
-        message={`${message}: Value: ${value}`}
-        type="error"
-        showIcon
-        banner
-      />
+      <Alert message={`${message}: ${value}`} type="error" showIcon banner />
     );
   }
 }
