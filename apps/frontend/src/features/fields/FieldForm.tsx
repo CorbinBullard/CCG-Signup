@@ -20,11 +20,21 @@ export default function FieldForm({
   isSubfield = false,
   parentName = [],
 }: GenericFieldFormProps) {
+  const form = Form.useFormInstance();
+
   const getName = (fieldName: (string | number)[]) => {
     return mode === "create" ? ["form", ...fieldName] : fieldName;
   };
 
   const typeEnum = isSubfield ? SubFieldTypeEnum : FieldTypeEnum;
+
+  const handleTypeChange = (value: FieldTypeEnum | SubFieldTypeEnum) => {
+    const fieldsPath = mode === "create" ? ["form", "fields", name] : ["fields", name];
+    form.setFields([
+      { name: [...fieldsPath, "subfields"], value: undefined },
+      { name: [...fieldsPath, "options"], value: undefined },
+    ]);
+  };
 
   return (
     <>
@@ -52,6 +62,7 @@ export default function FieldForm({
               label: key,
               value: value,
             }))}
+            onChange={handleTypeChange}
           />
         </Form.Item>
 
@@ -98,6 +109,7 @@ export default function FieldForm({
             {
               key: "1",
               label: "Options",
+              forceRender: true,
               children: (
                 <CreateList
                   name={[name, "options"]}
@@ -139,6 +151,7 @@ export default function FieldForm({
               {
                 key: "1",
                 label: "Subfields",
+                forceRender: true,
                 children: (
                   <CreateList
                     name={[name, "subfields"]}
@@ -149,21 +162,36 @@ export default function FieldForm({
                     rules={[
                       {
                         validator: async (_, subfields) => {
-                          console.log(_, subfields);
-                          if (!subfields || subfields.length < 1) {
-                            return Promise.reject(
-                              new Error(
-                                "At least 1 Subfield are required for Composite Field"
-                              )
-                            );
+                          // Get the field type from the form instance
+                          const type = form.getFieldValue(
+                            getName(["fields", name, "type"])
+                          );
+                          if (type === FieldTypeEnum.Composite) {
+                            if (!subfields || subfields.length < 2) {
+                              return Promise.reject(
+                                new Error(
+                                  "At least 2 Subfields are required for Composite Field"
+                                )
+                              );
+                            }
+                          } else if (type === FieldTypeEnum.MultiResponse) {
+                            if (!subfields || subfields.length < 1) {
+                              return Promise.reject(
+                                new Error(
+                                  "At least 1 Subfield is required for MultiResponse Field"
+                                )
+                              );
+                            }
                           }
                         },
                       },
                       {
                         validator: async (_, subfields) => {
+                          if (!subfields || !subfields.length) return;
                           const hasRequired = subfields.some(
                             (subfield) => subfield.required
                           );
+                          console.log(hasRequired);
                           if (!hasRequired) {
                             return Promise.reject(
                               new Error(

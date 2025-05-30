@@ -95,7 +95,6 @@ export class TableData {
           <Tooltip trigger={"hover"} title={note}>
             <QuestionCircleOutlined
               style={{
-                // width: "100%",
                 color: "skyblue",
                 fontSize: "large",
               }}
@@ -160,7 +159,6 @@ export class TableData {
         }
         // render empty value
         if (!field.required && response.value === null) {
-          console.log("FIELD NOT FOUND: ", field);
           return <Empty />;
         }
 
@@ -178,25 +176,16 @@ export class TableData {
           }
 
           case FieldTypeEnum.Switch:
-            row[field.id] = this.buildSwitchFieldData(response);
-            break;
-
           case FieldTypeEnum.Email:
-            row[field.id] = this.buildEmailFieldData(response);
-            break;
-
           case FieldTypeEnum.Date:
-            row[field.id] = this.buildDateFieldData(response);
-            break;
-
           case FieldTypeEnum.Composite:
-            row[field.id] = this.buildCompositeFieldData(response);
+            row[field.id] = this.renderFieldByType(field, response);
             break;
 
           default:
             row[field.id] = this.withValidation<any>(
               response,
-              (val): val is any => val !== undefined && val !== null,
+              field,
               (val) => `${val}`
             );
             break;
@@ -211,45 +200,47 @@ export class TableData {
       return row;
     });
   }
-  private buildSwitchFieldData(response: Response): JSX.Element {
-    return this.withValidation<boolean>(
-      response,
-      (val): val is boolean => typeof val === "boolean",
-      (val) =>
-        val ? <Tag color="success">YES</Tag> : <Tag color="error">NO</Tag>
-    );
-  }
-  private buildEmailFieldData(response: Response): JSX.Element {
-    return this.withValidation<string>(
-      response,
-      (val): val is string => typeof val === "string" && isValidEmail(val),
-      (val) => <a>{val}</a>
-    );
-  }
-  private buildDateFieldData(response: Response): JSX.Element {
-    return this.withValidation<string>(
-      response,
-      (val): val is string => typeof val === "string" && dayjs(val).isValid(),
-      (val) => dayjs(val).format("M/DD/YYYY")
-    );
-  }
 
-  private buildCompositeFieldData(response: Response): JSX.Element {
-    return this.withValidation<any[]>(response, Array.isArray, (values) => {
-      const field = this.fieldLookupObj[response.fieldId];
-      const items: DescriptionsProps["items"] = values.map((value, index) => {
-        console.log(field.type);
-        return {
-          label: field.subfields[index].label,
-          children:
-            field.subfields[index].type === FieldTypeEnum.Date
-              ? Format.Date(value.value).format("DD/MM/YYYY")
-              : value.value,
-          style: { whiteSpace: "nowrap" },
-        };
-      });
-      return <Descriptions items={items} size="small" layout="vertical" />;
-    });
+  private renderFieldByType(field: Field, response: Response): JSX.Element | string {
+    switch (field.type) {
+      case FieldTypeEnum.Switch:
+        return this.withValidation<boolean>(
+          response,
+          field,
+          (val) =>
+            val ? <Tag color="success">YES</Tag> : <Tag color="error">NO</Tag>
+        );
+
+      case FieldTypeEnum.Email:
+        return this.withValidation<string>(
+          response,
+          field,
+          (val) => <a>{val}</a>
+        );
+
+      case FieldTypeEnum.Date:
+        return this.withValidation<string>(
+          response,
+          field,
+          (val) => dayjs(val).format("M/DD/YYYY")
+        );
+
+      case FieldTypeEnum.Composite:
+        return this.withValidation<any[]>(response, field, (values) => {
+          const items: DescriptionsProps["items"] = values.map((value, index) => ({
+            label: field.subfields[index].label,
+            children:
+              field.subfields[index].type === FieldTypeEnum.Date
+                ? Format.Date(value.value).format("DD/MM/YYYY")
+                : value.value,
+            style: { whiteSpace: "nowrap" },
+          }));
+          return <Descriptions items={items} size="small" layout="vertical" />;
+        });
+
+      default:
+        return this.renderError("Unsupported field type", response.value);
+    }
   }
 
   private buildMutliResponseFieldData(response: Response) {
@@ -282,14 +273,13 @@ export class TableData {
 
   private withValidation<T>(
     response: Response,
-    validator: (value: any) => value is T,
+    field: Field,
     render: (validatedValue: T) => JSX.Element | string
   ): JSX.Element | string {
-    const value = response.value;
-    if (!validator(value)) {
-      return this.renderError("Invalid Value", value);
+    if (!Format.isResponseValid(field, response)) {
+      return this.renderError("Invalid or Outdated Response", response.value);
     }
-    return render(value);
+    return render(response.value as T);
   }
 
   renderError(message: string, value: any) {

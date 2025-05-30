@@ -13,7 +13,7 @@ import { JwtService } from '@nestjs/jwt';
 import { DropboxService } from 'src/dropbox/dropbox.service';
 import { FormTemplateModule } from 'src/form-template/form-template.module';
 import { AwsS3Service } from 'src/aws-s3/aws-s3.service';
-import { EventConsentFormsModule } from 'src/event_consent_forms/event_consent_forms.module';
+import { EventConsentFormsModule } from 'src/event-consent-forms/event-consent-forms.module';
 
 @Module({
   imports: [

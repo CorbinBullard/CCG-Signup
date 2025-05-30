@@ -21,7 +21,7 @@ export class CreateFormDto {
 
   @IsArray()
   @ArrayMinSize(1, { message: 'Form must have at least one field' })
-  @ValidateNested()
+  @ValidateNested({ each: true })
   @Type(() => CreateFieldDto)
   fields: CreateFieldDto[];
 }

@@ -7,8 +7,8 @@ import { UpdateEventDto } from './dto/update-event.dto';
 import { EventQueryParamsDto } from './dto/event-queryParams.dto';
 import { FormTemplateService } from 'src/form-template/form-template.service';
 import { AwsS3Service } from 'src/aws-s3/aws-s3.service';
-import { EventConsentFormsService } from 'src/event_consent_forms/event_consent_forms.service';
-import { CreateEventConsentFormDto } from 'src/event_consent_forms/dto/create-event_consent_form.dto';
+import { EventConsentFormsService } from 'src/event-consent-forms/event-consent-forms.service';
+import { CreateEventConsentFormDto } from 'src/event-consent-forms/dto/create-event-consent-form.dto';
 
 @Injectable()
 export class EventService {

@@ -1,10 +1,10 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { CreateConsentFormDto } from './dto/create-consent_form.dto';
-import { UpdateConsentFormDto } from './dto/update-consent_form.dto';
+import { CreateConsentFormDto } from './dto/create-consent-form.dto';
+import { UpdateConsentFormDto } from './dto/update-consent-form.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ConsentForm } from './entities/consent_form.entity';
+import { ConsentForm } from './entities/consent-form.entity';
 import { FindOptionsWhere, ILike, Repository } from 'typeorm';
-import { ConsentFormQueryParamsDto } from './dto/consent_form-query-params.dto';
+import { ConsentFormQueryParamsDto } from './dto/consent-form-query-params.dto';
 
 @Injectable()
 export class ConsentFormsService {

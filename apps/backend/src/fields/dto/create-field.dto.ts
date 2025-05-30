@@ -45,8 +45,8 @@ export class CreateFieldDto {
       field.type === FieldTypeEnum.multiResponse,
   )
   @IsArray()
-  @ArrayMinSize(2)
-  @ValidateNested({ each: true }) 
+  @ArrayMinSize(1)
+  @ValidateNested({ each: true })
   @Type(() => Subfield)
   subfields: Subfield[];
 }

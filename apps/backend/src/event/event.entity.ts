@@ -11,7 +11,7 @@ import {
 import { Form } from 'src/form/form.entity';
 import { Signup } from 'src/signup/signup.entity';
 import { FundLocationEnum } from './FundLocationEnum';
-import { EventConsentForm } from 'src/event_consent_forms/entities/event_consent_form.entity';
+import { EventConsentForm } from 'src/event-consent-forms/entities/event-consent-form.entity';
 
 @Entity()
 @Index(['title', 'date'], { unique: true })

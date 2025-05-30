@@ -8,10 +8,10 @@ import {
   Put,
   Query,
 } from '@nestjs/common';
-import { ConsentFormsService } from './consent_forms.service';
-import { CreateConsentFormDto } from './dto/create-consent_form.dto';
-import { UpdateConsentFormDto } from './dto/update-consent_form.dto';
-import { ConsentFormQueryParamsDto } from './dto/consent_form-query-params.dto';
+import { ConsentFormsService } from './consent-forms.service';
+import { CreateConsentFormDto } from './dto/create-consent-form.dto';
+import { UpdateConsentFormDto } from './dto/update-consent-form.dto';
+import { ConsentFormQueryParamsDto } from './dto/consent-form-query-params.dto';
 
 @Controller('consent-forms')
 export class ConsentFormsController {

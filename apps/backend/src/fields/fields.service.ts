@@ -12,4 +12,8 @@ export class FieldsService {
   async findOne(id: number) {
     return await this.fieldRepository.findOne({ where: { id } });
   }
+
+  async deleteFields(fields: Field[]) {
+    return await this.fieldRepository.remove(fields);
+  }
 }

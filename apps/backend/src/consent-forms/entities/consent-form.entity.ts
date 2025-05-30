@@ -1,4 +1,4 @@
-import { EventConsentForm } from 'src/event_consent_forms/entities/event_consent_form.entity';
+import { EventConsentForm } from 'src/event-consent-forms/entities/event-consent-form.entity';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()

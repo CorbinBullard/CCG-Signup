@@ -30,7 +30,6 @@ export class SignupValidation {
       this.fieldErrors.push(...responseValidation.getErrors());
     }
     if (this.fieldErrors.length) {
-
       throw new BadRequestException(this.fieldErrors);
     }
   }

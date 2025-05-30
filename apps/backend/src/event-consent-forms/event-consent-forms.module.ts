@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
-import { EventConsentFormsService } from './event_consent_forms.service';
-import { EventConsentFormsController } from './event_consent_forms.controller';
+import { EventConsentFormsService } from './event-consent-forms.service';
+import { EventConsentFormsController } from './event-consent-forms.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { EventConsentForm } from './entities/event_consent_form.entity';
-import { ConsentFormsModule } from 'src/consent_forms/consent_forms.module';
+import { EventConsentForm } from './entities/event-consent-form.entity';
+import { ConsentFormsModule } from 'src/consent-forms/consent-forms.module';
 
 @Module({
   imports: [TypeOrmModule.forFeature([EventConsentForm]), ConsentFormsModule],

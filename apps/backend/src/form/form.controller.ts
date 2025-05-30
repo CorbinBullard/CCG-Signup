@@ -5,13 +5,12 @@ import {
   Param,
   Post,
   Put,
-  Query,
   UseGuards,
 } from '@nestjs/common';
 import { FormService } from './form.service';
 import { CreateFormDto } from './dto/create-form.dto';
 import { IsAdminGuard } from 'src/guards/jwt-auth.guard';
-import { FormQueryParamsDto } from './dto/form-queryParams.dto';
+import { UpdateFormDto } from './dto/update-form.dto';
 @UseGuards(IsAdminGuard)
 @Controller('forms')
 export class FormController {
@@ -34,10 +33,8 @@ export class FormController {
   }
 
   @Put(':id')
-  updateForm(
-    @Param('id') id: number,
-    @Body() createFormDto: Partial<CreateFormDto>,
-  ) {
-    return this.formService.updateForm(id, createFormDto);
+  updateForm(@Param('id') id: number, @Body() updateFormDto: UpdateFormDto) {
+    console.log('UPDATED FORM: ', updateFormDto);
+    return this.formService.updateForm(id, updateFormDto);
   }
 }

@@ -9,9 +9,9 @@ import {
   Param,
   Delete,
 } from '@nestjs/common';
-import { EventConsentFormsService } from './event_consent_forms.service';
-import { CreateEventConsentFormDto } from './dto/create-event_consent_form.dto';
-import { UpdateEventConsentFormDto } from './dto/update-event_consent_form.dto';
+import { EventConsentFormsService } from './event-consent-forms.service';
+import { CreateEventConsentFormDto } from './dto/create-event-consent-form.dto';
+import { UpdateEventConsentFormDto } from './dto/update-event-consent-form.dto';
 
 @Controller('event-consent-forms')
 export class EventConsentFormsController {

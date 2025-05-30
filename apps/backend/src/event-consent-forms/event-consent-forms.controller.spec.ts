@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { EventConsentFormsController } from './event_consent_forms.controller';
-import { EventConsentFormsService } from './event_consent_forms.service';
+import { EventConsentFormsController } from './event-consent-forms.controller';
+import { EventConsentFormsService } from './event-consent-forms.service';
 
 describe('EventConsentFormsController', () => {
   let controller: EventConsentFormsController;
@@ -11,7 +11,9 @@ describe('EventConsentFormsController', () => {
       providers: [EventConsentFormsService],
     }).compile();
 
-    controller = module.get<EventConsentFormsController>(EventConsentFormsController);
+    controller = module.get<EventConsentFormsController>(
+      EventConsentFormsController,
+    );
   });
 
   it('should be defined', () => {

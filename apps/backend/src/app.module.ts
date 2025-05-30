@@ -12,8 +12,9 @@ import { ConfigModule } from '@nestjs/config';
 import { DropboxModule } from './dropbox/dropbox.module';
 import { FormTemplateModule } from './form-template/form-template.module';
 import { AwsS3Service } from './aws-s3/aws-s3.service';
-import { ConsentFormsModule } from './consent_forms/consent_forms.module';
-import { EventConsentFormsModule } from './event_consent_forms/event_consent_forms.module';
+import { ConsentFormsModule } from './consent-forms/consent-forms.module';
+import { EventConsentFormsModule } from './event-consent-forms/event-consent-forms.module';
+import { SignupConsentFormsModule } from './signup-consent-forms/signup-consent-forms.module';
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import { EventConsentFormsModule } from './event_consent_forms/event_consent_for
     FormTemplateModule,
     ConsentFormsModule,
     EventConsentFormsModule,
+    SignupConsentFormsModule,
   ],
   controllers: [AppController],
   providers: [AppService, AwsS3Service],

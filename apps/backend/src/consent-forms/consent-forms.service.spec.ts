@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { ConsentFormsService } from './consent_forms.service';
+import { ConsentFormsService } from './consent-forms.service';
 
 describe('ConsentFormsService', () => {
   let service: ConsentFormsService;

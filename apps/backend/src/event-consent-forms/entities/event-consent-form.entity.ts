@@ -1,4 +1,4 @@
-import { ConsentForm } from 'src/consent_forms/entities/consent_form.entity';
+import { ConsentForm } from 'src/consent-forms/entities/consent-form.entity';
 import { Event } from 'src/event/event.entity';
 import {
   Column,

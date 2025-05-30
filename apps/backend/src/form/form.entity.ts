@@ -19,6 +19,8 @@ export class Form {
   })
   fields: Field[];
 
-  @OneToOne(() => Event, (event) => event.form)
+  @OneToOne(() => Event, (event) => event.form, {
+    onDelete: 'CASCADE',
+  })
   event: Event;
 }

@@ -14,7 +14,7 @@ import {
 } from 'class-validator';
 import { CreateFormDto } from 'src/form/dto/create-form.dto';
 import { FundLocationEnum } from '../FundLocationEnum';
-import { CreateEventConsentFormDto } from 'src/event_consent_forms/dto/create-event_consent_form.dto';
+import { CreateEventConsentFormDto } from 'src/event-consent-forms/dto/create-event-consent-form.dto';
 
 export class CreateEventDto {
   @IsString()

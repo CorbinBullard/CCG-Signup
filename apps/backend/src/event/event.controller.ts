@@ -21,7 +21,7 @@ import { IsAdminGuard } from 'src/guards/jwt-auth.guard';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { CreateFormDto } from 'src/form/dto/create-form.dto';
 import { EventQueryParamsDto } from './dto/event-queryParams.dto';
-import { CreateEventConsentFormDto } from 'src/event_consent_forms/dto/create-event_consent_form.dto';
+import { CreateEventConsentFormDto } from 'src/event-consent-forms/dto/create-event-consent-form.dto';
 
 @Controller('events')
 export class EventController {

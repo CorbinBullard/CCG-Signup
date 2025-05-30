@@ -40,7 +40,9 @@ export class Field {
   @Column({ nullable: true })
   cost?: number;
 
-  @ManyToOne(() => Form, (form) => form.fields)
+  @ManyToOne(() => Form, (form) => form.fields, {
+    onDelete: 'CASCADE',
+  })
   form: Form;
 
   @OneToMany(() => Response, (response) => response.field)

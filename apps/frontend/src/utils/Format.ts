@@ -26,19 +26,11 @@ export default class Format {
   }
 
   static Signup(signup: Signup): object {
-    // too long for nesting
     const fields = signup.event.form.fields;
-    console.log(
-      "Fields, \n",
-      fields,
-      "\nEVENT FIELDS: \n",
-      signup.event.form.fields
-    );
     const responseLookup = signup.responses.reduce((acc, curr) => {
       acc[curr.fieldId] = curr;
       return acc;
     }, {});
-    console.log(fields);
     return {
       ...signup,
       responses: fields.map((field) =>
@@ -50,7 +42,6 @@ export default class Format {
   static Response(response: Response, field: Field): object {
     const fieldId = field.id || undefined;
     let value = response?.value;
-    console.log("Field", field.label, value, field);
 
     switch (field.type) {
       case FieldTypeEnum.Text: {
@@ -66,7 +57,7 @@ export default class Format {
         if (!dayjs.isDayjs(dateTest)) {
           value = null;
         } else {
-          value = Format.Date(response.value);
+          value = Format.Date(value);
         }
         break;
       }
@@ -79,7 +70,10 @@ export default class Format {
         break;
       }
       case FieldTypeEnum.Select: {
-        // VALUE MUST BE WITHIN SELECT OPTIONS!!!
+        if (!field.options) {
+          value = null;
+          break;
+        }
         const options = field.options.map((option) => option.label);
         if (!options.includes(value)) value = null;
         break;
@@ -95,11 +89,15 @@ export default class Format {
         value = formatCompositeFieldValues(compositeField, compositeValues);
         break;
       }
+
       case FieldTypeEnum.MultiResponse: {
-        const compositeValues = response.value;
-        const compositeField = response.field.subfields;
+        if (!Array.isArray(value)) {
+          value = null;
+          break;
+        }
+        const compositeValues = response?.value;
+        const compositeField = response?.field.subfields;
         const formattedValues = compositeValues.map((compositeValue) => {
-          console.log("comp values", compositeValue);
           return {
             value: formatCompositeFieldValues(
               compositeField,
@@ -114,8 +112,56 @@ export default class Format {
       default:
         break;
     }
-    // console.log("RETURN: ", { fieldId, value });
     return { fieldId, value };
+  }
+
+  static isResponseValid(field: Field, response: Response): boolean {
+    const { value } = response;
+
+    switch (field.type) {
+      case FieldTypeEnum.Text:
+        return typeof value === "string";
+
+      case FieldTypeEnum.Switch:
+        return typeof value === "boolean";
+
+      case FieldTypeEnum.Date:
+        return dayjs(value).isValid();
+
+      case FieldTypeEnum.Email:
+        return typeof value === "string" && isValidEmail(value);
+
+      case FieldTypeEnum.Number:
+        return typeof value === "number";
+
+      case FieldTypeEnum.Select:
+        return field.options?.some((option) => option.label === value);
+
+      case FieldTypeEnum.Composite:
+        return (
+          Array.isArray(value) &&
+          field.subfields.every((subfield, index) =>
+            Format.isResponseValid(subfield, { value: value[index]?.value })
+          )
+        );
+
+      case FieldTypeEnum.MultiResponse:
+        return (
+          Array.isArray(value) &&
+          value.every(
+            (item) =>
+              Array.isArray(item.value) &&
+              field.subfields.every((subfield, index) =>
+                Format.isResponseValid(subfield, {
+                  value: item.value[index]?.value,
+                })
+              )
+          )
+        );
+
+      default:
+        return false;
+    }
   }
 }
 

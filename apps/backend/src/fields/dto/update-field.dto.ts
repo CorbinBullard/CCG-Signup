@@ -17,35 +17,8 @@ import { Type } from 'class-transformer';
 import { Options } from '../Options';
 import { Subfield } from '../Subfield';
 
-export class UpdateFieldDto extends PartialType(CreateFieldDto) {
-  @IsString()
-  label: string;
-
-  @IsEnum(FieldTypeEnum)
-  type: FieldTypeEnum;
-
-  @IsBoolean()
-  required: boolean;
-
+export class UpdateFieldDto extends CreateFieldDto {
   @IsOptional()
   @IsNumber()
-  @ValidateIf((field) => field.type === FieldTypeEnum.composite)
-  cost?: number;
-
-  @ValidateIf((field) => field.type === FieldTypeEnum.select)
-  @IsArray()
-  @ArrayMinSize(2)
-  @ValidateNested({ each: true })
-  @Type(() => Options)
-  options?: Options[];
-
-  @ValidateIf(
-    (field) =>
-      field.type === FieldTypeEnum.composite ||
-      field.type === FieldTypeEnum.multiResponse,
-  )
-  @IsArray()
-  @ArrayMinSize(2)
-  @Type(() => Subfield)
-  subfields: Subfield[];
+  id?: number;
 }

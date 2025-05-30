@@ -38,6 +38,7 @@ export class FormService {
       };
       await this.formTemplateService.create(formTemplateDto);
     }
+
     return await this.formRepository.save({ id, ...updateFormDto });
   }
 
