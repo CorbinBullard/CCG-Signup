@@ -1,6 +1,4 @@
-import { Field } from 'src/fields/entities/field.entity';
 import { FieldTypeEnum } from 'src/fields/fieldTypeEnums';
-import { CreateResponseDto } from 'src/response/dto/create-response.dto';
 import { ResponseValidator } from './fieldTypeValidators/response.validator';
 import { NumberValidator } from './fieldTypeValidators/response.numberValidator';
 import { StringValidator } from './fieldTypeValidators/response.stringValidator';

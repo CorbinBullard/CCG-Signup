@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 import { Type } from 'class-transformer';
 import {
+  IsArray,
   IsDateString,
   IsEnum,
   IsMilitaryTime,
@@ -9,11 +10,11 @@ import {
   IsObject,
   IsOptional,
   IsString,
-  ValidateIf,
   ValidateNested,
 } from 'class-validator';
 import { CreateFormDto } from 'src/form/dto/create-form.dto';
 import { FundLocationEnum } from '../FundLocationEnum';
+import { CreateEventConsentFormDto } from 'src/event_consent_forms/dto/create-event_consent_form.dto';
 
 export class CreateEventDto {
   @IsString()
@@ -40,7 +41,12 @@ export class CreateEventDto {
   signupLimit?: number;
 
   @IsObject()
-  @ValidateNested()
+  @ValidateNested({ each: true })
   @Type(() => CreateFormDto)
   form: CreateFormDto;
+
+  @IsArray()
+  @ValidateNested()
+  @Type(() => CreateEventConsentFormDto)
+  eventConsentForms: CreateEventConsentFormDto[];
 }

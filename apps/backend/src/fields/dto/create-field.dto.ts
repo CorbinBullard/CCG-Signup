@@ -46,6 +46,7 @@ export class CreateFieldDto {
   )
   @IsArray()
   @ArrayMinSize(2)
+  @ValidateNested({ each: true }) 
   @Type(() => Subfield)
   subfields: Subfield[];
 }

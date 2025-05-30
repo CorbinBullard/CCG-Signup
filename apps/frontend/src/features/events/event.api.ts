@@ -42,3 +42,9 @@ export const deleteEvent = async (id: number) => {
   const response = await api.delete(`/api/events/${id}`);
   return response.data;
 };
+
+export const updateEFC = async ({ id, ecfArray }) => {
+  console.log(ecfArray)
+  const response = await api.put(`/api/events/${id}/consent-forms`, ecfArray);
+  return response.data;
+};

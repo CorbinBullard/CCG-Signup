@@ -21,6 +21,7 @@ import { IsAdminGuard } from 'src/guards/jwt-auth.guard';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { CreateFormDto } from 'src/form/dto/create-form.dto';
 import { EventQueryParamsDto } from './dto/event-queryParams.dto';
+import { CreateEventConsentFormDto } from 'src/event_consent_forms/dto/create-event_consent_form.dto';
 
 @Controller('events')
 export class EventController {
@@ -43,14 +44,19 @@ export class EventController {
     @UploadedFile() image: Express.Multer.File,
     @Body() createEventDto: any,
   ) {
+    console.log('EVENT DTO: ', createEventDto);
     const parsedForm: CreateFormDto = JSON.parse(createEventDto.form);
-
+    const parsedConsentForms: CreateEventConsentFormDto = JSON.parse(
+      createEventDto.consentForms,
+    );
     const dto: CreateEventDto = {
       ...createEventDto,
       cost: +createEventDto.cost,
       limit: +createEventDto.limit,
       form: parsedForm,
+      consentForms: parsedConsentForms,
     };
+
     if (!image) throw new BadRequestException('Image file is required');
     return this.eventService.createEvent(dto, image);
   }
@@ -70,5 +76,15 @@ export class EventController {
   @UseGuards(IsAdminGuard)
   deleteEvent(@Param('id') id: number) {
     return this.eventService.deleteEvent(id);
+  }
+
+  @Put(':id/consent-forms')
+  @UseGuards(IsAdminGuard)
+  updateEventConsentForms(
+    @Param('id') id: number,
+    @Body() ecfArray: CreateEventConsentFormDto[],
+  ) {
+    console.log(ecfArray);
+    return this.eventService.updateEventConsentForms(id, ecfArray);
   }
 }

@@ -7,13 +7,13 @@ async function bootstrap() {
     const app = await core_1.NestFactory.create(app_module_1.AppModule);
     app.useGlobalPipes(new common_1.ValidationPipe({
         whitelist: true,
-        forbidNonWhitelisted: true,
+        forbidNonWhitelisted: false,
         transform: true,
     }));
     app.enableCors({
         origin: ['http://localhost:3000'],
         methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
-        credntials: true,
+        credentials: true,
         allowedHeaders: ['Authorization', 'Content-Type'],
     });
     app.setGlobalPrefix('api', {

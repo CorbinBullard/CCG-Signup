@@ -1,10 +1,12 @@
 import { List } from "antd";
-import { Form } from "../form.types";
-import OptionsButton from "../../../components/common/OptionsButton";
-import getMenuItems from "../../signups/signupTable/getMenuItems";
+import { Form } from "../forms/form.types";
+import OptionsButton from "../../components/common/OptionsButton";
+import getMenuItems from "../signups/signupTable/getMenuItems";
 import { useNavigate } from "react-router-dom";
+import { useDeleteSavedForm } from "./hooks/useSavedForms";
 
 export default function SavedFormList({ forms }: { forms: Form[] }) {
+  const deleteSavedForm = useDeleteSavedForm();
   const navigate = useNavigate();
   const handleEdit = (id: number) => {
     navigate(`/forms/${id}`);
@@ -20,7 +22,7 @@ export default function SavedFormList({ forms }: { forms: Form[] }) {
             <OptionsButton
               items={getMenuItems({
                 name: "Form",
-                handleDelete: () => {},
+                handleDelete: () => deleteSavedForm.mutate(form.id),
                 handleEdit: () => handleEdit(form.id),
               })}
             />,

@@ -23,7 +23,6 @@ function EventCard(event: Event) {
         description={
           <Flex justify="space-between">
             <Typography.Text>{dayjs(date).format("M/DD/YYYY")}</Typography.Text>
-            <EventSignupStatus event={event} />
           </Flex>
         }
       />

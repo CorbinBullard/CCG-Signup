@@ -7,11 +7,11 @@ import {
   Splitter,
   Typography,
 } from "antd";
-import CreateList from "../../../components/formComponents/CreateList";
-import { FieldTypeEnum } from "../../fields/field.type";
-import FieldForm from "../../fields/FieldForm";
-import PreviewForm from "../preview/PreviewForm";
-import FormNameItem from "./FormNameItem";
+import CreateList from "../../components/formComponents/CreateList.tsx";
+import { FieldTypeEnum } from "../fields/field.type.ts";
+import FieldForm from "../fields/FieldForm.tsx";
+import PreviewForm from "../forms/preview/PreviewForm.tsx";
+import FormNameItem from "./FormNameItem.tsx";
 
 export default function SavedFormForm({
   form,

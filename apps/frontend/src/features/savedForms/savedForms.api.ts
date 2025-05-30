@@ -1,6 +1,7 @@
-import api from "../../../utils/axiosApi";
+import api from "../../utils/axiosApi";
 import qs from "query-string";
-import { Form } from "../form.types";
+import { Form } from "../forms/form.types";
+
 export const fetchSavedForms = async (query: object) => {
   const queryString = qs.stringify(query);
   const response = await api.get(`/api/form-templates?${queryString}`);
@@ -25,5 +26,10 @@ export const updateSavedForm = async ({
   form: Form;
 }) => {
   const response = await api.put(`/api/form-templates/${id}`, form);
+  return response.data;
+};
+
+export const deleteSavedForm = async (id: number) => {
+  const response = await api.delete(`/api/form-templates/${id}`);
   return response.data;
 };

@@ -1,7 +1,13 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { useNotifications } from "../../../context/Notifications";
-import { createSavedForm, fetchSavedForm, fetchSavedForms, updateSavedForm } from "../savedForms/savedForms.api";
+import {
+  createSavedForm,
+  deleteSavedForm,
+  fetchSavedForm,
+  fetchSavedForms,
+  updateSavedForm,
+} from "../savedForms.api";
 
 export const useSavedForms = (query) => {
   return useQuery({
@@ -32,6 +38,7 @@ export const useCreateSavedForm = () => {
       });
     },
     onError: (error) => {
+      console.log(error);
       openNotification({
         message: error.message,
         description: "There was an error creating the form.",
@@ -59,6 +66,29 @@ export const useUpdateSavedForm = () => {
       openNotification({
         message: error.message,
         description: "There was an error updating the form.",
+        type: "error",
+      });
+    },
+  });
+};
+
+export const useDeleteSavedForm = () => {
+  const queryClient = useQueryClient();
+  const openNotification = useNotifications();
+  return useMutation({
+    mutationFn: deleteSavedForm,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["savedForms"] });
+      openNotification({
+        message: "Form Deleted",
+        description: "The form has been deleted successfully.",
+        type: "success",
+      });
+    },
+    onError: (error) => {
+      openNotification({
+        message: error.message,
+        description: "There was an error deleting the form.",
         type: "error",
       });
     },

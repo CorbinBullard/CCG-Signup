@@ -94,7 +94,7 @@ const EventForm = ({
             name="image"
             label="Event Image"
             rules={[
-              { required: true, message: "Please enter the event image URL" },
+              { required: true, message: "Please upload an event Image" },
             ]}
             style={{ flex: 1 }}
           >

@@ -19,6 +19,7 @@ export class FormTemplateController {
 
   @Post()
   create(@Body() createFormTemplateDto: CreateFormTemplateDto) {
+    console.log(createFormTemplateDto);
     return this.formTemplateService.create(createFormTemplateDto);
   }
 
@@ -37,6 +38,7 @@ export class FormTemplateController {
     @Param('id') id: string,
     @Body() updateFormTemplateDto: UpdateFormTemplateDto,
   ) {
+    console.log(updateFormTemplateDto);
     return this.formTemplateService.update(+id, updateFormTemplateDto);
   }
 

@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import {
   useDeleteEvent,
   useEvent,
+  useUpdateECF,
 } from "../../features/events/hooks/useEvents";
 import PageLayout from "../../components/layouts/PageLayout";
 import { Button, Flex, Form, Image, Modal, Tabs, TabsProps } from "antd";
@@ -18,6 +19,7 @@ import Loader from "../../components/common/Loader";
 import { signupDefaultValues } from "../../features/signups/signup.defaultValues";
 import OptionsButton from "../../components/common/OptionsButton";
 import getMenuItems from "../../features/signups/signupTable/getMenuItems";
+import AttachCFToEventForm from "../../features/ecf/AttachCFToEventForm";
 
 export default function SingleEventPage() {
   const params = useParams<{ id: string }>();
@@ -28,19 +30,16 @@ export default function SingleEventPage() {
 
   const [formForm] = Form.useForm();
   const [signupForm] = Form.useForm();
+  const [consentForm] = Form.useForm();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [tab, setTab] = useState("signups");
+  const [tab, setTab] = useState<"signups" | "form" | "consents">("signups");
 
   const updateForm = useUpdateForm();
   const deleteEvent = useDeleteEvent();
   const createSignup = useCreateSignup();
+  const updateECF = useUpdateECF();
 
-  const {
-    data: event,
-    isLoading,
-    isError,
-  } = useEvent(eventId);
-  console.log(event, isLoading, isError)
+  const { data: event, isLoading, isError } = useEvent(eventId);
 
   if (isNaN(eventId)) {
     return <div>Invalid event ID</div>;
@@ -49,10 +48,12 @@ export default function SingleEventPage() {
   if (isLoading) {
     return <Loader />;
   }
-  console.log(isError, event)
+
   if (isError || !event) {
     return <div>Event not found</div>;
   }
+  console.log("EVENT CONSENT FORMS: ", event);
+
   const tabItems: TabsProps["items"] = [
     {
       key: "signups",
@@ -68,7 +69,60 @@ export default function SingleEventPage() {
         </Form>
       ),
     },
+    {
+      key: "consents",
+      label: "Consent Forms",
+      children: (
+        <Form
+          form={consentForm}
+          initialValues={{ consentForms: event.eventConsentForms || [] }}
+        >
+          <AttachCFToEventForm />
+        </Form>
+      ),
+    },
   ];
+
+  const tabActionItem = () => {
+    switch (tab) {
+      case "form": {
+        return (
+          <Button onClick={() => handleUpdateFormSubmit()} type="primary">
+            Save Form
+          </Button>
+        );
+      }
+      case "signups": {
+        return (
+          <OpenModalButton
+            label="New Signup"
+            btnType="primary"
+            icon={<PlusOutlined />}
+            modalTitle="Create Signup"
+            ref={modalRef}
+            onOk={handleCreateSignupSubmit}
+          >
+            <Form
+              layout="vertical"
+              form={signupForm}
+              initialValues={signupDefaultValues(event.form.fields)}
+              scrollToFirstError
+            >
+              <SignupForm fields={event.form.fields} />
+            </Form>
+          </OpenModalButton>
+        );
+      }
+      case "consents": {
+        return (
+          <Button onClick={() => handleUpdateEFC()} type="primary">
+            Update Consent Forms
+          </Button>
+        );
+        return;
+      }
+    }
+  };
 
   const handleUpdateFormSubmit = async () => {
     const values = await formForm.validateFields();
@@ -79,7 +133,6 @@ export default function SingleEventPage() {
     });
     signupForm.resetFields();
   };
-
   const handleCreateSignupSubmit = async () => {
     try {
       const values = await signupForm.validateFields();
@@ -93,6 +146,10 @@ export default function SingleEventPage() {
     }
   };
 
+  const handleUpdateEFC = async () => {
+    const { consentForms } = consentForm.getFieldsValue();
+    updateECF.mutate({ id: event.id, ecfArray: consentForms });
+  };
   return (
     <PageLayout
       title={event.title}
@@ -114,31 +171,7 @@ export default function SingleEventPage() {
       <Tabs
         type="card"
         items={tabItems}
-        tabBarExtraContent={
-          tab === "form" ? (
-            <Button onClick={() => handleUpdateFormSubmit()} type="primary">
-              Save Form
-            </Button>
-          ) : (
-            <OpenModalButton
-              label="New Signup"
-              btnType="primary"
-              icon={<PlusOutlined />}
-              modalTitle="Create Signup"
-              ref={modalRef}
-              onOk={handleCreateSignupSubmit}
-            >
-              <Form
-                layout="vertical"
-                form={signupForm}
-                initialValues={signupDefaultValues(event.form.fields)}
-                scrollToFirstError
-              >
-                <SignupForm fields={event.form.fields} />
-              </Form>
-            </OpenModalButton>
-          )
-        }
+        tabBarExtraContent={tabActionItem()}
         onChange={(key) => setTab(key)}
         activeKey={tab}
       />

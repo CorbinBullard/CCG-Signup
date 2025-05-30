@@ -25,6 +25,10 @@ export const useEventSubmission = (formRef, fileRef) => {
       console.error("No file selected");
     }
 
+    if (values.consentForms) {
+      formData.append("consentForms", JSON.stringify(values.consentForms));
+    }
+
     createEvent.mutate(formData);
   };
 

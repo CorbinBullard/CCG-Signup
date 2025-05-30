@@ -9,10 +9,11 @@ import { FieldsModule } from './fields/fields.module';
 import { ResponseModule } from './response/response.module';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
-import { DropboxController } from './dropbox/dropbox.controller';
-import { DropboxService } from './dropbox/dropbox.service';
 import { DropboxModule } from './dropbox/dropbox.module';
 import { FormTemplateModule } from './form-template/form-template.module';
+import { AwsS3Service } from './aws-s3/aws-s3.service';
+import { ConsentFormsModule } from './consent_forms/consent_forms.module';
+import { EventConsentFormsModule } from './event_consent_forms/event_consent_forms.module';
 
 @Module({
   imports: [
@@ -32,8 +33,10 @@ import { FormTemplateModule } from './form-template/form-template.module';
     ConfigModule,
     DropboxModule,
     FormTemplateModule,
+    ConsentFormsModule,
+    EventConsentFormsModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, AwsS3Service],
 })
 export class AppModule {}

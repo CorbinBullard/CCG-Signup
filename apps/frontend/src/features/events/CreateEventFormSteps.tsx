@@ -1,6 +1,7 @@
 import { FormInstance } from "antd";
 import FormForm from "../forms/FormForm";
 import EventForm from "./components/EventForm";
+import AttachCFToEventForm from "../ecf/AttachCFToEventForm";
 
 export const createEventFormSteps = (fileRef) => [
   {
@@ -12,5 +13,10 @@ export const createEventFormSteps = (fileRef) => [
     form: <FormForm mode="create" />,
     fields: ["form"],
     stepperLabel: "Build Form",
+  },
+  {
+    form: <AttachCFToEventForm />,
+    fields: ["consentForms"],
+    stepperLabel: "Consent Forms",
   },
 ];

@@ -87,6 +87,7 @@ export class TableData {
       title: "Note",
       dataIndex: undefined,
       key: undefined,
+      width: 10,
       render: ({ id }) => {
         const note = this.signupLookupObj[id].note;
         if (!note) return;
@@ -94,7 +95,7 @@ export class TableData {
           <Tooltip trigger={"hover"} title={note}>
             <QuestionCircleOutlined
               style={{
-                width: "100%",
+                // width: "100%",
                 color: "skyblue",
                 fontSize: "large",
               }}
@@ -106,6 +107,7 @@ export class TableData {
 
     // Make into dropdown with edit and delete
     columns.push({
+      width: 10,
       render: (record) => {
         return (
           <OptionsButton

@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import PageLayout from "../../components/layouts/PageLayout";
-import SavedFormForm from "../../features/forms/savedForms/SavedFormForm";
+import SavedFormForm from "../../features/savedForms/SavedFormForm";
 import { Button, Form } from "antd";
 
 import Loader from "../../components/common/Loader";
@@ -10,7 +10,7 @@ import {
   useSavedForm,
   useSavedForms,
   useUpdateSavedForm,
-} from "../../features/forms/hooks/useSavedForms";
+} from "../../features/savedForms/hooks/useSavedForms";
 
 export enum ModeEnum {
   create = "create",

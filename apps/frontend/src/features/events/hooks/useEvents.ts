@@ -5,6 +5,7 @@ import {
   fetchEvent,
   updateEvent,
   deleteEvent,
+  updateEFC,
 } from "../event.api";
 import { useNotifications } from "../../../context/Notifications";
 
@@ -25,6 +26,7 @@ export const useEvent = (id: number) => {
 };
 
 export const useCreateEvent = () => {
+  const navigate = useNavigate();
   const queryClient = useQueryClient();
   const openNotification = useNotifications();
   return useMutation({
@@ -36,6 +38,7 @@ export const useCreateEvent = () => {
         description: "The event has been created successfully.",
         type: "success",
       });
+      navigate("/events");
     },
     onError: (error) => {
       openNotification({
@@ -91,6 +94,31 @@ export const useDeleteEvent = () => {
       openNotification({
         message: error.message,
         description: "There was an error deleting the event.",
+        type: "error",
+      });
+    },
+  });
+};
+
+export const useUpdateECF = () => {
+  const queryClient = useQueryClient();
+  const openNotification = useNotifications();
+  return useMutation({
+    mutationFn: updateEFC,
+    onSuccess: (returnObj) => {
+      console.log("RETURN OBJ: ", returnObj);
+      queryClient.invalidateQueries({ queryKey: ["events"] });
+      // queryClient.invalidateQueries({ queryKey: ["event"] });
+      openNotification({
+        message: "Event Consent Form updated",
+        description: "The event consent form has been updated successfully.",
+        type: "success",
+      });
+    },
+    onError: (error) => {
+      openNotification({
+        message: error.message,
+        description: "There was an error updating the event consent form.",
         type: "error",
       });
     },

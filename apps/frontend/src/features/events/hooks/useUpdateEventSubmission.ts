@@ -5,7 +5,6 @@ export const useUpdateEventSubmission = (eventId, formRef, fileRef) => {
 
   const submit = async () => {
     const values = await formRef.validateFields();
-    console.log("FORM: ", values);
 
     const formData = new FormData();
     formData.append("title", values.title);
@@ -18,11 +17,16 @@ export const useUpdateEventSubmission = (eventId, formRef, fileRef) => {
 
     if (values.signupLimit) {
       formData.append("signupLimit", values.signupLimit.toString());
-    } 
+    }
 
     if (fileRef.current) {
       formData.append("image", fileRef.current);
     }
+
+    if (values.consentForms) {
+      formData.append("consentForms", JSON.stringify(values.consentForms));
+    }
+
     updateEvent.mutate({ id: eventId, event: formData });
   };
 

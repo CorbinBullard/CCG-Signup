@@ -1,5 +1,10 @@
 import React, { useState } from "react";
-import { CalendarOutlined, FileTextOutlined } from "@ant-design/icons";
+import {
+  CalendarOutlined,
+  CheckSquareOutlined,
+  FileTextOutlined,
+  FormOutlined,
+} from "@ant-design/icons";
 import type { MenuProps } from "antd";
 import { Layout, Menu, theme } from "antd";
 import { Outlet, useLocation, useNavigate, useParams } from "react-router-dom";
@@ -26,7 +31,10 @@ function getItem(
 
 const items: MenuItem[] = [
   getItem("Events", "events", <CalendarOutlined />),
-  getItem("Forms", "forms", <FileTextOutlined />),
+  getItem("Forms", "", <FormOutlined />, [
+    getItem("Saved Forms", "forms", <FileTextOutlined />),
+    getItem("Consent Forms", "consent-forms", <CheckSquareOutlined />),
+  ]),
 ];
 
 const AppLayout: React.FC = () => {

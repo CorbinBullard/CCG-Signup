@@ -13,7 +13,10 @@ export class EventSignupController {
   }
 
   @Post(':eventId/signups')
-  create(@Body() createSignupDto: any, @Param('eventId') eventId: number) {
+  create(
+    @Body() createSignupDto: CreateSignupDto,
+    @Param('eventId') eventId: number,
+  ) {
     return this.signupService.create(createSignupDto, eventId);
   }
 }

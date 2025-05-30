@@ -35,14 +35,13 @@ export default function CreateEventPage() {
             preserve
           >
             <StepperForm />
-
-            <Form.Item noStyle shouldUpdate>
+            {/* <Form.Item noStyle shouldUpdate>
               {() => (
                 <Typography>
                   <pre>{JSON.stringify(form.getFieldsValue(), null, 2)}</pre>
                 </Typography>
               )}
-            </Form.Item>
+            </Form.Item> */}
           </Form>
           <Flex justify="end" style={{ marginTop: 16 }}>
             <PreviousFormButton />
