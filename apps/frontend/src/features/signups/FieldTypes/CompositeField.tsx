@@ -1,6 +1,6 @@
 import { Flex, Form, FormItemProps } from "antd";
 import { SubField } from "../../fields/field.type";
-import ResponseItemField from "../ResponseItemForm";
+import ResponseItemForm from "../ResponseItemForm";
 
 export default function CompositeField({
   subfields,
@@ -20,7 +20,7 @@ export default function CompositeField({
         <Flex gap={4}>
           {subfields &&
             subfields.map((subfield, index) => (
-              <ResponseItemField
+              <ResponseItemForm
                 {...subfield}
                 key={index}
                 name={[formListFields[index]?.name ?? index, "value"]}

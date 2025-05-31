@@ -18,7 +18,7 @@ export default function Signups({ event }: { event: Event }) {
   const updateSignup = useUpdateSignup();
   const [currentSignupId, setCurrentSignupId] = useState<number | null>(null);
   const [updateSignupForm] = Form.useForm<Signup>();
-  const signup = useSignup(currentSignupId).data;
+  const { data: signup } = useSignup(currentSignupId);
 
   const handleDelete = async (id: number) => {
     await deleteSignup.mutate(id);

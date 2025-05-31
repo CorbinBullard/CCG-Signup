@@ -34,6 +34,7 @@ export default function SelectField({
       rules={[
         { required: props.required, message: `${props.label} is required` },
       ]}
+      initialValue={null}
     >
       <Select
         options={optionobj}

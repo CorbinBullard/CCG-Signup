@@ -12,6 +12,7 @@ export default function EmailField(props: FormItemProps) {
           message: "Please enter a valid email address",
         },
       ]}
+      initialValue={""}
     >
       <Input placeholder="example@email.com" />
     </Form.Item>

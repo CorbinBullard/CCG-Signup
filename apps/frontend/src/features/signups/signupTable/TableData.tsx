@@ -229,10 +229,16 @@ export class TableData {
         return this.withValidation<any[]>(response, field, (values) => {
           const items: DescriptionsProps["items"] = values.map((value, index) => ({
             label: field.subfields[index].label,
-            children:
-              field.subfields[index].type === FieldTypeEnum.Date
-                ? Format.Date(value.value).format("DD/MM/YYYY")
-                : value.value,
+            children: (() => {
+              switch (field.subfields[index].type) {
+                case FieldTypeEnum.Date:
+                  return dayjs(value.value).format("MM/DD/YYYY");
+                case FieldTypeEnum.Switch:
+                  return value.value ? <Tag color="success">YES</Tag> : <Tag color="error">NO</Tag>;
+                default:
+                  return value.value;
+              }
+            })(),
             style: { whiteSpace: "nowrap" },
           }));
           return <Descriptions items={items} size="small" layout="vertical" />;
@@ -254,7 +260,17 @@ export class TableData {
     const data = values.map((valueArr, rowIndex) => {
       const rowData: Record<string, any> = { key: rowIndex };
       field.subfields.forEach((subfield, subfieldIndex) => {
-        rowData[`field_${subfieldIndex}`] = valueArr.value[subfieldIndex].value;
+        rowData[`field_${subfieldIndex}`] = (() => {
+          const val = valueArr.value[subfieldIndex].value;
+          switch (subfield.type) {
+            case FieldTypeEnum.Date:
+              return dayjs(val).format("MM/DD/YYYY");
+            case FieldTypeEnum.Switch:
+              return val ? <Tag color="success">YES</Tag> : <Tag color="error">NO</Tag>;
+            default:
+              return val;
+          }
+        })();
       });
       return rowData;
     });

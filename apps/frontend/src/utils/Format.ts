@@ -170,3 +170,8 @@ function formatCompositeFieldValues(fields, values) {
     return Format.Response({ value: value.value }, fields[index]);
   });
 }
+
+export function isValidEmail(email: string): boolean {
+  // General email RFC 5322 compliant regex (simplified for most cases)
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
+}

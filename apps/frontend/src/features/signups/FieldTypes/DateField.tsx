@@ -8,7 +8,7 @@ export default function DateField(props: FormItemProps) {
       rules={[
         { required: props.required, message: `${props.label} is required` },
       ]}
-      initialValue={props.initialValue ? dayjs(props.initialValue) : null}
+      initialValue={null}
     >
       <DatePicker style={{ width: "100%" }} format={"M/DD/YYYY"} />
     </Form.Item>

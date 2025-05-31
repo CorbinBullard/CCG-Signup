@@ -17,6 +17,7 @@ export class EventSignupController {
     @Body() createSignupDto: CreateSignupDto,
     @Param('eventId') eventId: number,
   ) {
+    console.log('SIGN UP : ', createSignupDto);
     return this.signupService.create(createSignupDto, eventId);
   }
 }

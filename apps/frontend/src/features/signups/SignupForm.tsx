@@ -9,6 +9,7 @@ export default function SignupForm({
   form: FormInstance;
   fields: Field[];
 }) {
+  const form: FormInstance = Form.useFormInstance();
   return (
     <>
       <Form.List name="responses">
@@ -36,13 +37,13 @@ export default function SignupForm({
         <Input.TextArea rows={3} />
       </Form.Item>
 
-      {/* <Form.Item noStyle shouldUpdate>
+      <Form.Item noStyle shouldUpdate>
         {() => (
           <Typography>
-          <pre>{JSON.stringify(form.getFieldsValue(), null, 2)}</pre>
+            <pre>{JSON.stringify(form.getFieldsValue(), null, 2)}</pre>
           </Typography>
-          )}
-          </Form.Item> */}
+        )}
+      </Form.Item>
     </>
   );
 }

@@ -140,7 +140,9 @@ export default function SingleEventPage() {
         signup: values,
         eventId: event.id,
       });
+
       modalRef?.current?.closeModal();
+      signupForm.resetFields();
     } catch (error) {
       console.error(error);
     }
