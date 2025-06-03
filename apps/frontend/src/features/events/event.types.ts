@@ -1,3 +1,4 @@
+import { ConsentForm } from "../consentForms/consentForm.type";
 import { Form } from "../forms/form.types";
 import { FundLocationEnum } from "./fund.type";
 
@@ -13,4 +14,5 @@ export type Event = {
   signups: [];
   signupLimit: number;
   id?: number;
+  consentForms?: ConsentForm[]
 };

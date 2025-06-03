@@ -10,7 +10,6 @@ import {
   Delete,
 } from '@nestjs/common';
 import { EventConsentFormsService } from './event-consent-forms.service';
-import { CreateEventConsentFormDto } from './dto/create-event-consent-form.dto';
 import { UpdateEventConsentFormDto } from './dto/update-event-consent-form.dto';
 
 @Controller('event-consent-forms')

@@ -18,15 +18,12 @@ export class EventConsentFormsService {
     event: Event,
     eventConsentFormDtos: CreateEventConsentFormDto[],
   ) {
-    console.log(eventConsentFormDtos);
-
     for (const efcDto of eventConsentFormDtos) {
       const { consentFormId, required } = efcDto;
-      console.log('ID: ', consentFormId);
+
       const efc = await this.consentFormService.findOne(consentFormId);
-      console.log('EFC: ', efc);
+
       if (!efc) {
-        console.log('EFC NOT FOUND!!! ');
         throw new NotFoundException(
           `Event Consent Form with id: ${consentFormId} not found`,
         );

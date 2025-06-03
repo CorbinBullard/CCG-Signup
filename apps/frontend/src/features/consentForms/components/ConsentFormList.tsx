@@ -1,6 +1,6 @@
 import { List } from "antd";
 import React from "react";
-import getMenuItems from "../../signups/signupTable/getMenuItems";
+import getMenuItems from "../../../components/common/getMenuItems";
 import OptionsButton from "../../../components/common/OptionsButton";
 import { ConsentForm } from "../consentForm.type";
 

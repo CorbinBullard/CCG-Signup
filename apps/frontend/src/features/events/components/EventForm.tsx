@@ -77,6 +77,7 @@ const EventForm = ({
               rules={[
                 { required: true, message: "Please enter the event funds" },
               ]}
+              initialValue={FundLocationEnum.General}
             >
               <Select
                 options={Object.entries(FundLocationEnum).map((type) => {

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 import {
   BadRequestException,
@@ -44,17 +45,28 @@ export class EventController {
     @UploadedFile() image: Express.Multer.File,
     @Body() createEventDto: any,
   ) {
-    console.log('EVENT DTO: ', createEventDto);
-    const parsedForm: CreateFormDto = JSON.parse(createEventDto.form);
-    const parsedConsentForms: CreateEventConsentFormDto = JSON.parse(
-      createEventDto.consentForms,
-    );
+    console.log(createEventDto);
+    // Parse 'form' only if it's a string
+    const parsedForm =
+      typeof createEventDto.form === 'string'
+        ? JSON.parse(createEventDto.form)
+        : createEventDto.form;
+
+    // Parse 'consentForms' only if it's present and a string
+    const parsedConsentForms = createEventDto.consentForms
+      ? typeof createEventDto.consentForms === 'string'
+        ? JSON.parse(createEventDto.consentForms)
+        : createEventDto.consentForms
+      : [];
+
     const dto: CreateEventDto = {
       ...createEventDto,
-      cost: +createEventDto.cost,
-      limit: +createEventDto.limit,
+      cost: createEventDto.cost ? +createEventDto.cost : undefined,
+      signupLimit: createEventDto.signupLimit
+        ? +createEventDto.signupLimit
+        : undefined,
       form: parsedForm,
-      consentForms: parsedConsentForms,
+      eventConsentForms: parsedConsentForms,
     };
 
     if (!image) throw new BadRequestException('Image file is required');

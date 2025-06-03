@@ -8,7 +8,6 @@ import {
   Delete,
 } from '@nestjs/common';
 import { SignupConsentFormsService } from './signup-consent-forms.service';
-import { CreateSignupConsentFormDto } from './dto/create-signup-consent-form.dto';
 import { UpdateSignupConsentFormDto } from './dto/update-signup-consent-form.dto';
 
 @Controller('signup-consent-forms')
@@ -16,11 +15,6 @@ export class SignupConsentFormsController {
   constructor(
     private readonly signupConsentFormsService: SignupConsentFormsService,
   ) {}
-
-  @Post()
-  create(@Body() createSignupConsentFormDto: CreateSignupConsentFormDto) {
-    return this.signupConsentFormsService.create(createSignupConsentFormDto);
-  }
 
   @Get()
   findAll() {
@@ -41,10 +35,5 @@ export class SignupConsentFormsController {
       +id,
       updateSignupConsentFormDto,
     );
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.signupConsentFormsService.remove(+id);
   }
 }

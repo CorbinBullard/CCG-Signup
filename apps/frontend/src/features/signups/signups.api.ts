@@ -20,7 +20,7 @@ export const postSignup = async ({
 }: {
   eventId: number;
   signup: any;
-  }) => {
+}) => {
   console.log("postSignup", signup);
   const response = await api.post(`/api/events/${eventId}/signups`, signup);
   return response.data;
@@ -38,5 +38,20 @@ export const updateSignup = async ({
 
 export const deleteSignup = async (id: number) => {
   const response = await api.delete(`/api/signups/${id}`);
+  return response.data;
+};
+
+export const createSCF = async ({
+  signupId,
+  scfs,
+}: {
+  signupId: number;
+  scfs: any;
+}) => {
+  console.log(signupId, scfs);
+  const response = await api.post(
+    `/api/signups/${signupId}/consent-forms`,
+    scfs
+  );
   return response.data;
 };

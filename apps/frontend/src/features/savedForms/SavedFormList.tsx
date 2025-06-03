@@ -1,7 +1,7 @@
 import { List } from "antd";
 import { Form } from "../forms/form.types";
 import OptionsButton from "../../components/common/OptionsButton";
-import getMenuItems from "../signups/signupTable/getMenuItems";
+import getMenuItems from "../../components/common/getMenuItems";
 import { useNavigate } from "react-router-dom";
 import { useDeleteSavedForm } from "./hooks/useSavedForms";
 

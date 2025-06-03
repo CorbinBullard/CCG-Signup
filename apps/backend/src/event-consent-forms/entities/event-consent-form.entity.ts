@@ -1,9 +1,11 @@
 import { ConsentForm } from 'src/consent-forms/entities/consent-form.entity';
 import { Event } from 'src/event/event.entity';
+import { SignupConsentForm } from 'src/signup-consent-forms/entities/signup-consent-form.entity';
 import {
   Column,
   Entity,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   Unique,
 } from 'typeorm';
@@ -34,4 +36,7 @@ export class EventConsentForm {
 
   @Column({ default: false })
   required: boolean;
+
+  @OneToMany(() => SignupConsentForm, (scf) => scf.eventConsentForm)
+  signupConsentForms: SignupConsentForm[];
 }

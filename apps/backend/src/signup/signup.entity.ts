@@ -7,6 +7,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Response } from 'src/response/entities/response.entity';
+import { SignupConsentForm } from 'src/signup-consent-forms/entities/signup-consent-form.entity';
 
 @Entity()
 export class Signup {
@@ -26,4 +27,7 @@ export class Signup {
     eager: true,
   })
   responses: Response[];
+
+  @OneToMany(() => SignupConsentForm, (scf) => scf.signup)
+  signupConsentForms: SignupConsentForm[];
 }

@@ -14,6 +14,8 @@ import { SignupValidation } from 'src/classes/validations/SignupValidation';
 import { FieldsService } from 'src/fields/fields.service';
 import { Response } from 'src/response/entities/response.entity';
 import { SignupType } from 'src/Types/signup/SignupType';
+import { CreateSignupConsentFormDto } from 'src/signup-consent-forms/dto/create-signup-consent-form.dto';
+import { SignupConsentFormsService } from 'src/signup-consent-forms/signup-consent-forms.service';
 
 @Injectable()
 export class SignupService {
@@ -21,6 +23,7 @@ export class SignupService {
     @InjectRepository(Signup) private signupRepository: Repository<Signup>,
     private eventService: EventService,
     private fieldsService: FieldsService,
+    private scfService: SignupConsentFormsService,
     @InjectRepository(Response)
     private responseRepository: Repository<Response>,
   ) {}
@@ -108,5 +111,24 @@ export class SignupService {
       event,
     );
     signupValidation.validate();
+  }
+
+  async attachSignupConsentForms(
+    signupId: number,
+    scfArray: CreateSignupConsentFormDto[],
+  ) {
+    const signup: Signup | null = await this.signupRepository.findOne({
+      where: { id: signupId },
+    });
+    if (!signup) throw new NotFoundException('Signup Not Found');
+    //remove all duplicates of signup consents
+    const removedSCFs = await this.scfService.removeBySignup(signup);
+
+    // await this.scfService.clear();
+
+    for (const scf of scfArray) {
+      await this.scfService.create(signup, scf);
+    }
+    return 'successfully added Signed Consent Forms';
   }
 }

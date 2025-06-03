@@ -2,6 +2,7 @@ import { Flex, Form, Modal, Table, Typography } from "antd";
 import { useEffect, useMemo, useState } from "react";
 import { TableData } from "./signupTable/TableData";
 import {
+  useCreateSCF,
   useDeleteSignup,
   useSignup,
   useSignups,
@@ -11,93 +12,118 @@ import { Signup } from "./types/signup.type";
 import SignupForm from "./SignupForm";
 import { Event } from "../events/event.types";
 import Format from "../../utils/Format";
+import SignConsentFormsModal from "../scf/SignupConsentFormsModal";
+
+// Extracted Edit Modal
+function EditSignupModal({ open, onCancel, onOk, form, fields }) {
+  return (
+    <Modal
+      title="Update Signup"
+      open={open}
+      onCancel={onCancel}
+      destroyOnClose
+      onOk={onOk}
+      okText="Update Signup"
+    >
+      <Form layout="vertical" form={form}>
+        <SignupForm fields={fields} />
+      </Form>
+    </Modal>
+  );
+}
+
+// Extracted Sign Forms Modal
 
 export default function Signups({ event }: { event: Event }) {
+  // State hooks
   const signups = useSignups(event.id).data || [];
   const deleteSignup = useDeleteSignup();
   const updateSignup = useUpdateSignup();
-  const [currentSignupId, setCurrentSignupId] = useState<number | null>(null);
+
+  const createSCF = useCreateSCF();
+
+  const [editSignupId, setEditSignupId] = useState<number | null>(null);
+  const [signFormsSignupId, setSignFormsSignupId] = useState<number | null>(
+    null
+  );
+
   const [updateSignupForm] = Form.useForm<Signup>();
-  const { data: signup } = useSignup(currentSignupId);
+  const [signFormsForm] = Form.useForm();
+  const { data: editingSignup } = useSignup(editSignupId);
 
-  const handleDelete = async (id: number) => {
-    await deleteSignup.mutate(id);
-  };
+  // Callbacks
+  const handleDelete = async (id: number) => await deleteSignup.mutate(id);
+  const handleEditClick = (id: number) => setEditSignupId(id);
+  const handleSignForms = (id: number) => setSignFormsSignupId(id);
 
-  const onUpdateSignup = async () => {
+  const handleUpdateSignup = async () => {
     const values = await updateSignupForm.validateFields();
-    console.log("values", values);
     await updateSignup.mutate({
       signup: values,
       id: updateSignupForm.getFieldValue("id"),
     });
-    setCurrentSignupId(null);
+    setEditSignupId(null);
   };
 
-  const onEditClick = async (id: number) => {
-    setCurrentSignupId(id);
+  const handleSubmitSignupConsents = async () => {
+    if (!signFormsSignupId) return;
+    const { consents } = await signFormsForm.validateFields();
+    await createSCF.mutate({ signupId: signFormsSignupId, scfs: consents });
   };
-
+  // Sync form with editing signup
   useEffect(() => {
-    if (signup) {
+    if (editingSignup) {
       updateSignupForm.setFieldsValue({
-        ...signup,
+        ...editingSignup,
         responses:
           event.form.fields.map((field) => {
-            const response = signup.responses.find((response) => {
-              return response.fieldId === field.id;
-            });
+            const response = editingSignup.responses.find(
+              (response) => response.fieldId === field.id
+            );
             return Format.Response(response, field);
           }) || [],
       });
     }
-    // if (signup) {
-    //   console.log("Formatted Signup, ", Format.Signup(signup));
-    //   updateSignupForm.setFieldsValue(Format.Signup(signup));
-    // }
-  }, [signup, updateSignupForm, event]);
+  }, [editingSignup, updateSignupForm, event]);
 
+  // Memoize table data instance
   const tableData = useMemo(
     () =>
       new TableData(event, signups, {
         deleteSignup: handleDelete,
-        editSignup: onEditClick,
+        editSignup: handleEditClick,
+        signForms: handleSignForms,
       }),
     [event, signups]
   );
 
+  // Expanded row renderer
   const expandedRowRender = (record: any) => {
-    if (!record._multiResponses) {
-      return null;
-    }
-
+    if (!record._multiResponses) return null;
     return (
       <Flex style={{ width: "100%", paddingLeft: "16px" }} gap={16}>
-        {record._multiResponses.map((response: any, index: number) => {
-          return (
-            <Flex vertical flex={1}>
-              <Typography.Text
-                strong
-                style={{ paddingLeft: "8px", paddingBottom: "4px" }}
-              >
-                {response.fieldLabel}
-              </Typography.Text>
-              <Table
-                style={{ width: "100%" }}
-                key={index}
-                columns={response.columns}
-                dataSource={response.data}
-                pagination={false}
-                size="small"
-                bordered
-              />
-            </Flex>
-          );
-        })}
+        {record._multiResponses.map((response: any, index: number) => (
+          <Flex vertical flex={1} key={index}>
+            <Typography.Text
+              strong
+              style={{ paddingLeft: "8px", paddingBottom: "4px" }}
+            >
+              {response.fieldLabel}
+            </Typography.Text>
+            <Table
+              style={{ width: "100%" }}
+              columns={response.columns}
+              dataSource={response.data}
+              pagination={false}
+              size="small"
+              bordered
+            />
+          </Flex>
+        ))}
       </Flex>
     );
   };
-
+  // Render
   return (
     <>
       <Table
@@ -105,27 +131,30 @@ export default function Signups({ event }: { event: Event }) {
         dataSource={tableData.data}
         expandable={{
           expandedRowRender,
-          rowExpandable: (record) => {
-            return !!record._multiResponses;
-          },
+          rowExpandable: (record) => !!record._multiResponses,
         }}
         bordered
       />
-      <Modal
-        title="Update Signup"
-        open={!!signup}
+      {/* Edit Modal */}
+      <EditSignupModal
+        open={!!editingSignup}
         onCancel={() => {
-          setCurrentSignupId(null);
+          setEditSignupId(null);
           updateSignupForm.resetFields();
         }}
-        destroyOnClose
-        onOk={onUpdateSignup}
-        okText="Update Signup"
-      >
-        <Form layout="vertical" form={updateSignupForm}>
-          <SignupForm fields={event.form.fields} />
-        </Form>
-      </Modal>
+        onOk={handleUpdateSignup}
+        form={updateSignupForm}
+        fields={event.form.fields}
+      />
+      {/* Sign Forms Modal */}
+      <SignConsentFormsModal
+        isOpen={!!signFormsSignupId}
+        onCancel={() => setSignFormsSignupId(null)}
+        signupId={signFormsSignupId}
+        ecfs={event.eventConsentForms}
+        form={signFormsForm}
+        handleSubmit={handleSubmitSignupConsents}
+      />
     </>
   );
 }

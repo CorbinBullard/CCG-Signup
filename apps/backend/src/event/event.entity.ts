@@ -34,10 +34,9 @@ export class Event {
   @Column()
   image: string;
 
+  //Fix this when using POSTGRES
   @Column({
-    type: 'text',
-    enum: FundLocationEnum,
-    default: FundLocationEnum.General,
+    nullable: true,
   })
   funds?: FundLocationEnum;
 

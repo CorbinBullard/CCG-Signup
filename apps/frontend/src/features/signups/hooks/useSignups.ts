@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
+  createSCF,
   deleteSignup,
   fetchEventSignups,
   fetchSignup,
@@ -92,6 +93,30 @@ export const useDeleteSignup = () => {
       openNotification({
         message: error.message,
         description: "There was an error deleting the signup.",
+        type: "error",
+      });
+    },
+  });
+};
+
+export const useCreateSCF = () => {
+  const queryClient = useQueryClient();
+  const openNotification = useNotifications();
+  return useMutation({
+    mutationFn: createSCF,
+    onSuccess: (params) => {
+      console.log("PARAMS: ", params);
+      queryClient.invalidateQueries(["event", params.id]);
+      openNotification({
+        message: "Signup Consent Created",
+        description: "The consent has been deleted successfully.",
+        type: "success",
+      });
+    },
+    onError: (error) => {
+      openNotification({
+        message: error.message,
+        description: "There was an error creating the Consents.",
         type: "error",
       });
     },

@@ -18,7 +18,7 @@ import { useCreateSignup } from "../../features/signups/hooks/useSignups";
 import Loader from "../../components/common/Loader";
 import { signupDefaultValues } from "../../features/signups/signup.defaultValues";
 import OptionsButton from "../../components/common/OptionsButton";
-import getMenuItems from "../../features/signups/signupTable/getMenuItems";
+import getMenuItems from "../../components/common/getMenuItems";
 import AttachCFToEventForm from "../../features/ecf/AttachCFToEventForm";
 
 export default function SingleEventPage() {

@@ -103,5 +103,6 @@ export default function useFormStepper(form: FormInstance, formSteps, submit) {
     SubmitFormButton,
     Stepper,
     StepperForm,
+    current,
   };
 }

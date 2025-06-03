@@ -11,6 +11,7 @@ import { ResponseModule } from 'src/response/response.module';
 import { EventModule } from 'src/event/event.module';
 import { Response } from 'src/response/entities/response.entity';
 import { JwtService } from '@nestjs/jwt';
+import { SignupConsentFormsModule } from 'src/signup-consent-forms/signup-consent-forms.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { JwtService } from '@nestjs/jwt';
     FieldsModule,
     ResponseModule,
     EventModule,
+    SignupConsentFormsModule,
   ],
   controllers: [SignupController, EventSignupController],
   providers: [SignupService, JwtService],

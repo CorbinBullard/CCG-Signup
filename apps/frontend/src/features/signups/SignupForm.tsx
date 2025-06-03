@@ -37,13 +37,13 @@ export default function SignupForm({
         <Input.TextArea rows={3} />
       </Form.Item>
 
-      <Form.Item noStyle shouldUpdate>
+      {/* <Form.Item noStyle shouldUpdate>
         {() => (
           <Typography>
             <pre>{JSON.stringify(form.getFieldsValue(), null, 2)}</pre>
           </Typography>
         )}
-      </Form.Item>
+      </Form.Item> */}
     </>
   );
 }

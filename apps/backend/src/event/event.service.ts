@@ -59,7 +59,7 @@ export class EventService {
       relations: {
         form: { fields: true },
         signups: true,
-        eventConsentForms: true,
+        eventConsentForms: { consentForm: true },
       },
     });
     if (!event) {

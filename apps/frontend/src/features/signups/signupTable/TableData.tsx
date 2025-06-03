@@ -15,10 +15,13 @@ import { Form } from "../../forms/form.types";
 import { Signup } from "../types/signup.type";
 import dayjs from "dayjs";
 import { JSX } from "react";
-import { isValidEmail } from "../../../utils/utilFunctions";
-import { EditOutlined, QuestionCircleOutlined } from "@ant-design/icons";
+import {
+  EditOutlined,
+  FileDoneOutlined,
+  QuestionCircleOutlined,
+} from "@ant-design/icons";
 import OptionsButton from "../../../components/common/OptionsButton";
-import getMenuItems from "./getMenuItems";
+import getMenuItems from "../../../components/common/getMenuItems";
 import { deleteSignup } from "../signups.api";
 import Format from "../../../utils/Format";
 
@@ -29,6 +32,7 @@ export class TableData {
 
   public deleteSignup: (id: number) => void;
   public editSignup: (id: number) => void;
+  public signForms: (id: number) => void;
 
   public fieldLookupObj: Record<string, Field>;
   public signupLookupObj: Record<string, Signup>;
@@ -39,7 +43,7 @@ export class TableData {
   constructor(
     private event: Event,
     _signups: Signup[],
-    { deleteSignup, editSignup }
+    { deleteSignup, editSignup, signForms }
   ) {
     this.form = event.form;
     this.fields = this.form.fields;
@@ -57,6 +61,7 @@ export class TableData {
     //Fn
     this.deleteSignup = deleteSignup;
     this.editSignup = editSignup;
+    this.signForms = signForms;
   }
   buildSignupLookupObject(): Record<string, Signup> {
     return this.signups.reduce((acc, signup) => {
@@ -114,6 +119,14 @@ export class TableData {
               name: "Signup",
               handleDelete: () => this.deleteSignup(record.id),
               handleEdit: () => this.editSignup(record.id),
+              extraFields: [
+                {
+                  key: 3,
+                  label: "Sign Forms",
+                  icon: <FileDoneOutlined style={{ color: "green" }} />,
+                  onClick: () => this.signForms(record.id),
+                },
+              ],
             })}
           />
         );
@@ -201,48 +214,56 @@ export class TableData {
     });
   }
 
-  private renderFieldByType(field: Field, response: Response): JSX.Element | string {
+  private renderFieldByType(
+    field: Field,
+    response: Response
+  ): JSX.Element | string {
     switch (field.type) {
       case FieldTypeEnum.Switch:
-        return this.withValidation<boolean>(
-          response,
-          field,
-          (val) =>
-            val ? <Tag color="success">YES</Tag> : <Tag color="error">NO</Tag>
+        return this.withValidation<boolean>(response, field, (val) =>
+          val ? <Tag color="success">YES</Tag> : <Tag color="error">NO</Tag>
         );
 
       case FieldTypeEnum.Email:
-        return this.withValidation<string>(
-          response,
-          field,
-          (val) => <a>{val}</a>
-        );
+        return this.withValidation<string>(response, field, (val) => (
+          <a>{val}</a>
+        ));
 
       case FieldTypeEnum.Date:
-        return this.withValidation<string>(
-          response,
-          field,
-          (val) => dayjs(val).format("M/DD/YYYY")
+        return this.withValidation<string>(response, field, (val) =>
+          dayjs(val).format("M/DD/YYYY")
         );
 
-      case FieldTypeEnum.Composite:
-        return this.withValidation<any[]>(response, field, (values) => {
-          const items: DescriptionsProps["items"] = values.map((value, index) => ({
+      case FieldTypeEnum.Composite: {
+        if (!Array.isArray(response.value))
+          return this.renderError("Invalid Response", response.value);
+        const items: DescriptionsProps["items"] = response?.value.map(
+          (value, index) => ({
             label: field.subfields[index].label,
-            children: (() => {
-              switch (field.subfields[index].type) {
-                case FieldTypeEnum.Date:
-                  return dayjs(value.value).format("MM/DD/YYYY");
-                case FieldTypeEnum.Switch:
-                  return value.value ? <Tag color="success">YES</Tag> : <Tag color="error">NO</Tag>;
-                default:
-                  return value.value;
+            children: this.withValidation<any>(
+              value,
+              field.subfields[index],
+              (validatedValue) => {
+                switch (field.subfields[index].type) {
+                  case FieldTypeEnum.Date:
+                    return dayjs(validatedValue).format("MM/DD/YYYY");
+                  case FieldTypeEnum.Switch:
+                    return validatedValue ? (
+                      <Tag color="success">YES</Tag>
+                    ) : (
+                      <Tag color="error">NO</Tag>
+                    );
+                  default:
+                    return validatedValue;
+                }
               }
-            })(),
+            ),
             style: { whiteSpace: "nowrap" },
-          }));
-          return <Descriptions items={items} size="small" layout="vertical" />;
-        });
+          })
+        );
+        console.log("ITEMS : ", items);
+        return <Descriptions items={items} size="small" layout="vertical" />;
+      }
 
       default:
         return this.renderError("Unsupported field type", response.value);
@@ -252,25 +273,43 @@ export class TableData {
   private buildMutliResponseFieldData(response: Response) {
     const { value: values } = response;
 
-    if (!Array.isArray(values) || !Array.isArray(values[0]?.value))
-      return this.renderError("Invalid Value", response.value);
-
     const field = this.fieldLookupObj[response.fieldId];
+
+    if (!Array.isArray(values) || !Array.isArray(values[0]?.value))
+      return {
+        label: this.renderError("Invalid Value", response.value),
+        fieldLabel: field.label,
+        columns: field.subfields.map((subfield, index) => ({
+          title: subfield.label,
+          dataIndex: `field_${index}`,
+          key: `field_${index}`,
+        })),
+      };
 
     const data = values.map((valueArr, rowIndex) => {
       const rowData: Record<string, any> = { key: rowIndex };
       field.subfields.forEach((subfield, subfieldIndex) => {
-        rowData[`field_${subfieldIndex}`] = (() => {
-          const val = valueArr.value[subfieldIndex].value;
-          switch (subfield.type) {
-            case FieldTypeEnum.Date:
-              return dayjs(val).format("MM/DD/YYYY");
-            case FieldTypeEnum.Switch:
-              return val ? <Tag color="success">YES</Tag> : <Tag color="error">NO</Tag>;
-            default:
-              return val;
-          }
-        })();
+        const responseItem = valueArr.value[subfieldIndex];
+
+        rowData[`field_${subfieldIndex}`] = Format.isResponseValid(
+          subfield,
+          responseItem
+        )
+          ? (() => {
+              switch (subfield.type) {
+                case FieldTypeEnum.Date:
+                  return dayjs(responseItem.value).format("MM/DD/YYYY");
+                case FieldTypeEnum.Switch:
+                  return responseItem.value ? (
+                    <Tag color="success">YES</Tag>
+                  ) : (
+                    <Tag color="error">NO</Tag>
+                  );
+                default:
+                  return responseItem.value;
+              }
+            })()
+          : this.renderError("Invalid Response", responseItem.value);
       });
       return rowData;
     });
@@ -293,7 +332,7 @@ export class TableData {
     render: (validatedValue: T) => JSX.Element | string
   ): JSX.Element | string {
     if (!Format.isResponseValid(field, response)) {
-      return this.renderError("Invalid or Outdated Response", response.value);
+      return this.renderError("Invalid Response", response.value);
     }
     return render(response.value as T);
   }

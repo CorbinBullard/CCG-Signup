@@ -28,6 +28,7 @@ const getMenuItems = ({
       icon: <EditOutlined style={{ color: "skyblue" }} />,
       onClick: handleEdit,
     },
+    ...extraFields,
     {
       key: 1,
       label: `Delete ${name}`,
@@ -35,7 +36,7 @@ const getMenuItems = ({
       danger: true,
       onClick: () => onDelete(),
     },
-    ...extraFields,
+    
   ];
 };
 

@@ -45,6 +45,7 @@ export class CreateEventDto {
   @Type(() => CreateFormDto)
   form: CreateFormDto;
 
+  @IsOptional()
   @IsArray()
   @ValidateNested()
   @Type(() => CreateEventConsentFormDto)
