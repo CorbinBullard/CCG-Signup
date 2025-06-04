@@ -23,10 +23,14 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { CreateFormDto } from 'src/form/dto/create-form.dto';
 import { EventQueryParamsDto } from './dto/event-queryParams.dto';
 import { CreateEventConsentFormDto } from 'src/event-consent-forms/dto/create-event-consent-form.dto';
+import { EventConsentFormsService } from 'src/event-consent-forms/event-consent-forms.service';
 
 @Controller('events')
 export class EventController {
-  constructor(private eventService: EventService) {}
+  constructor(
+    private eventService: EventService,
+    private efcService: EventConsentFormsService,
+  ) {}
 
   @Get()
   getEvents(@Query() query: EventQueryParamsDto) {
@@ -88,6 +92,12 @@ export class EventController {
   @UseGuards(IsAdminGuard)
   deleteEvent(@Param('id') id: number) {
     return this.eventService.deleteEvent(id);
+  }
+
+  @Get(':id/consent-forms')
+  @UseGuards(IsAdminGuard)
+  getEventConsentForms(@Param('id') id: number) {
+    return this.efcService.find(id);
   }
 
   @Put(':id/consent-forms')

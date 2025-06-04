@@ -1,4 +1,4 @@
-import { Card, Form } from "antd";
+import { Card, Flex, Form } from "antd";
 import React from "react";
 import SignupForm from "../../signups/SignupForm";
 import { signupDefaultValues } from "../../signups/signup.defaultValues";
@@ -15,9 +15,11 @@ export default function PreviewForm({ mode = "create", form, ...props }) {
   return (
     <Card title="Preview" style={{ width: "100%" }} {...props}>
       <Form form={fakeForm} layout="vertical">
-        {fields.map((field, index) => (
-          <ResponseItemForm {...field} name={[index, "value"]} key={index} />
-        ))}
+        <Flex vertical gap={8}>
+          {fields.map((field, index) => (
+            <ResponseItemForm {...field} name={[index, "value"]} key={index} />
+          ))}
+        </Flex>
       </Form>
     </Card>
   );

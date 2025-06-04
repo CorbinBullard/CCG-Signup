@@ -1,12 +1,13 @@
 import { Button, Form, Input } from "antd";
 import PageLayout from "../../components/layouts/PageLayout";
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import OpenModalButton from "../../components/common/OpenModalButton";
 import ConsentFormForm from "../../features/consentForms/components/consentFormForm";
 import {
   useConsentForm,
   useConsentForms,
   useCreateConsentForm,
+  useDeleteConsentForm,
   useUpdateConsentForm,
 } from "../../features/consentForms/hooks/useConsentForms";
 import ConsentFormList from "../../features/consentForms/components/ConsentFormList";
@@ -24,6 +25,7 @@ export default function ConsentFormsPage() {
   const { data: currentConsentForm } = useConsentForm(consentFormId);
   const createConsentForm = useCreateConsentForm();
   const updateConsentForm = useUpdateConsentForm();
+  const deleteConsentForm = useDeleteConsentForm();
 
   // Search handler
   const handleSearch = (value: string) => {
@@ -67,6 +69,7 @@ export default function ConsentFormsPage() {
       Component={<Input.Search onSearch={handleSearch} enterButton />}
       actions={[
         <OpenModalButton
+          key={"new-consent-modal-btn"}
           btnType="primary"
           label="New Consent Form"
           modalTitle="Consent Form"
@@ -90,6 +93,7 @@ export default function ConsentFormsPage() {
       <ConsentFormList
         consentForms={consentForms}
         handleEdit={setConsentFormId}
+        handleDelete={deleteConsentForm.mutate}
       />
     </PageLayout>
   );

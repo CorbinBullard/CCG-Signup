@@ -14,5 +14,9 @@ export function useStepper(stepsCount: number) {
     setCurrent((prev) => (prev > 0 ? prev - 1 : prev));
   };
 
-  return { current, next, prev };
+  const reset = () => {
+    setCurrent(0);
+  };
+
+  return { current, next, prev, reset };
 }

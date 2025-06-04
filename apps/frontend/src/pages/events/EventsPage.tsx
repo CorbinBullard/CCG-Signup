@@ -20,7 +20,11 @@ function EventsPage() {
       title={"Events"}
       Component={<Input.Search onSearch={handleSearch} enterButton />}
       actions={[
-        <Button type="primary" onClick={() => navigate("/events/create")}>
+        <Button
+          type="primary"
+          onClick={() => navigate("/events/create")}
+          key={"create-event-btn"}
+        >
           Create Event
         </Button>,
       ]}

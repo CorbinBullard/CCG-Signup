@@ -15,7 +15,7 @@ import ConditionalFormItem from "../../components/formComponents/DependentItem";
 import PreviewForm from "./preview/PreviewForm";
 import { FieldTypeEnum } from "../fields/field.type";
 import { useSavedForms } from "../savedForms/hooks/useSavedForms";
-import FormNameItem from "../savedForms/FormNameItem";
+import UniqueNameField from "../../components/formComponents/UniqueField";
 
 // FormForm.tsx
 function FormForm({
@@ -56,7 +56,6 @@ function FormForm({
 
   return (
     <>
-      {/* Same body as before, just nesting under form removed now */}
       <Flex gap={16}>
         <Flex gap={16}>
           <Form.Item label="Import Form" layout="vertical">
@@ -88,11 +87,22 @@ function FormForm({
           dependency={getName("isSaved")}
           shouldRender={(isSaved) => isSaved}
         >
-          <FormNameItem name={getName("name")} />
+          <UniqueNameField
+            label={"Name"}
+            name={getName("name")}
+            getItemsQueryFn={useSavedForms}
+          />
         </ConditionalFormItem>
       </Flex>
 
-      <Splitter>
+      <Splitter
+        style={{
+          backgroundColor: "#f5f5f5",
+          padding: "8px",
+          border: "1px solid rgb(227, 227, 227)",
+          borderRadius: "8px"
+        }}
+      >
         <Splitter.Panel min={500}>
           <CreateList
             name={getName("fields")}
@@ -132,13 +142,13 @@ function FormForm({
           </Form.Item>
         </Splitter.Panel>
       </Splitter>
-      <Form.Item noStyle shouldUpdate>
+      {/* <Form.Item noStyle shouldUpdate>
         {() => (
           <Typography>
             <pre>{JSON.stringify(form.getFieldsValue(), null, 2)}</pre>
           </Typography>
         )}
-      </Form.Item>
+      </Form.Item> */}
     </>
   );
 }

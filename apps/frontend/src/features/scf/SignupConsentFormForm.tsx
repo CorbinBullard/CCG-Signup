@@ -9,7 +9,6 @@ export default function SignupConsentFormForm({
   const formInstance = Form.useFormInstance();
   const handleAgreed = (e) => {
     if (e.target.checked) {
-      console.log("CHECKED ", formInstance.getFieldsValue());
       formInstance.setFieldValue([...fieldName, "agreedAt"], new Date());
     } else {
       formInstance.setFieldValue([...fieldName, "agreedAt"], null);

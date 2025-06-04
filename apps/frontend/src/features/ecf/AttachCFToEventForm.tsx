@@ -1,7 +1,11 @@
 import { data } from "react-router-dom";
-import { useConsentForms } from "../consentForms/hooks/useConsentForms";
+import {
+  useConsentForms,
+  useCreateConsentForm,
+} from "../consentForms/hooks/useConsentForms";
 import {
   Divider,
+  Flex,
   Form,
   Input,
   List,
@@ -11,12 +15,19 @@ import {
   Typography,
 } from "antd";
 
-import { useMemo } from "react";
-import { CloseOutlined } from "@ant-design/icons";
+import { useMemo, useRef } from "react";
+import { CloseOutlined, PlusOutlined } from "@ant-design/icons";
 import Loader from "../../components/common/Loader";
+import OpenModalButton from "../../components/common/OpenModalButton";
+import ConsentFormForm from "../consentForms/components/consentFormForm";
 
 export default function AttachCFToEventForm({ ...props }) {
   const { data: consentForms, isLoading } = useConsentForms({});
+  const [newConsentForm] = Form.useForm();
+  const modalRef = useRef<{ closeModal: () => void; openModal: () => void }>(
+    null
+  );
+  const createConsentForm = useCreateConsentForm();
 
   const cfLookupObj = useMemo(
     () =>
@@ -27,8 +38,6 @@ export default function AttachCFToEventForm({ ...props }) {
     [consentForms]
   );
 
-  console.log(cfLookupObj);
-
   const selectOptions: SelectProps["options"] =
     consentForms?.map((form) => {
       return {
@@ -38,6 +47,21 @@ export default function AttachCFToEventForm({ ...props }) {
       };
     }) || [];
   const formInstance = Form.useFormInstance();
+
+  const handleSubmit = async () => {
+    try {
+      const values = await newConsentForm.validateFields();
+      createConsentForm.mutate(values);
+      modalRef.current?.closeModal();
+      handleModalClose();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  const handleModalClose = () => {
+    newConsentForm.resetFields();
+    console.log("modal closed");
+  };
 
   if (isLoading) return <Loader />;
 
@@ -59,15 +83,37 @@ export default function AttachCFToEventForm({ ...props }) {
 
           return (
             <>
-              <Select
-                value={null}
-                options={filteredOptions}
-                style={{ width: "100%" }}
-                onSelect={(value, { data }) => {
-                  add({ consentFormId: value, required: false });
-                }}
-                placeholder="Add Consent Form to this Event"
-              />
+              <Flex gap={8}>
+                <OpenModalButton
+                  key={"new-consent-modal-btn"}
+                  btnType="dashed"
+                  label="New Consent Form"
+                  modalTitle="Consent Form"
+                  ref={modalRef}
+                  onOk={handleSubmit}
+                  onClose={handleModalClose}
+                  modalProps={undefined}
+                  icon={<PlusOutlined />}
+                >
+                  <Form
+                    layout="vertical"
+                    form={newConsentForm}
+                    preserve={false}
+                    initialValues={{}}
+                  >
+                    <ConsentFormForm />
+                  </Form>
+                </OpenModalButton>
+                <Select
+                  value={null}
+                  options={filteredOptions}
+                  style={{ width: "100%" }}
+                  onSelect={(value, { data }) => {
+                    add({ consentFormId: value, required: false });
+                  }}
+                  placeholder="Add Consent Form to this Event"
+                />
+              </Flex>
               <Divider>Added Consent Forms</Divider>
               <List
                 size="small"

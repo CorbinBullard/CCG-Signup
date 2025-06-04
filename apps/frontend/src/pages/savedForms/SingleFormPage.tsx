@@ -44,7 +44,11 @@ export default function SingleFormPage() {
     <PageLayout
       title={"Form"}
       actions={[
-        <Button type="primary" onClick={handleSubmit}>
+        <Button
+          type="primary"
+          onClick={handleSubmit}
+          key={"create/update-form-btn"}
+        >
           {mode === ModeEnum.create ? "Create Form" : "Update Form"}
         </Button>,
       ]}

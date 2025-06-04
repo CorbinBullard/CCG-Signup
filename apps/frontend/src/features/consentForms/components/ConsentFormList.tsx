@@ -7,9 +7,11 @@ import { ConsentForm } from "../consentForm.type";
 export default function ConsentFormList({
   consentForms,
   handleEdit,
+  handleDelete,
 }: {
   consentForms: ConsentForm[];
   handleEdit: (id: number) => void;
+  handleDelete: (id: number) => void;
 }) {
   return (
     <List
@@ -22,7 +24,7 @@ export default function ConsentFormList({
               key="options"
               items={getMenuItems({
                 name: "Consent Form",
-                handleDelete: () => {}, // TODO: Add delete logic
+                handleDelete: () => handleDelete(consentForm.id),
                 handleEdit: () => handleEdit(consentForm.id),
               })}
             />,

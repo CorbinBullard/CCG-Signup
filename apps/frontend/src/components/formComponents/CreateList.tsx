@@ -42,8 +42,6 @@ export default function CreateFormList({
   props?: any;
   type: "default" | "dashed" | "link" | "text" | "primary";
 }) {
-  const form = Form.useFormInstance();
-
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
@@ -72,12 +70,6 @@ export default function CreateFormList({
               strategy={verticalListSortingStrategy}
             >
               <Flex vertical gap={4}>
-                <Typography.Text
-                  type="danger"
-                  style={{ paddingLeft: "12px", marginBottom: "12px" }}
-                >
-                  <Form.ErrorList errors={errors} />
-                </Typography.Text>
                 {fields.map((field, index) => (
                   <SortableItem
                     id={field.name}

@@ -3,6 +3,7 @@ import {
   Descriptions,
   DescriptionsProps,
   Empty,
+  Flex,
   TableColumnsType,
   TableProps,
   Tag,
@@ -16,8 +17,11 @@ import { Signup } from "../types/signup.type";
 import dayjs from "dayjs";
 import { JSX } from "react";
 import {
+  CheckSquareOutlined,
+  CloseSquareOutlined,
   EditOutlined,
   FileDoneOutlined,
+  IssuesCloseOutlined,
   QuestionCircleOutlined,
 } from "@ant-design/icons";
 import OptionsButton from "../../../components/common/OptionsButton";
@@ -88,6 +92,42 @@ export class TableData {
         },
       };
     });
+    console.log(this.event);
+    if (this.event.eventConsentForms && this.event.eventConsentForms?.length)
+      columns.push({
+        title: "Consents",
+        dataIndex: undefined,
+        key: "consents",
+        width: 10,
+        render: ({ id }) => {
+          const { signupConsentForms } = this.signupLookupObj[id];
+          console.log(signupConsentForms);
+          if (!signupConsentForms.length)
+            return (
+              <IssuesCloseOutlined
+                style={{ color: "orange", fontSize: "large" }}
+              />
+            );
+          else {
+            return (
+              <Flex>
+                {signupConsentForms.map((consent) =>
+                  consent.agreed ? (
+                    <CheckSquareOutlined
+                      style={{ color: "lime", fontSize: "large" }}
+                    />
+                  ) : (
+                    <CloseSquareOutlined
+                      style={{ color: "red", fontSize: "large" }}
+                    />
+                  )
+                )}
+              </Flex>
+            );
+          }
+        },
+      });
+
     columns.push({
       title: "Note",
       dataIndex: undefined,

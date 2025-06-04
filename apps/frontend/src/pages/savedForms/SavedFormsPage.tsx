@@ -19,7 +19,11 @@ export default function SavedFormsPage() {
       title="Saved Forms"
       Component={<Input.Search onSearch={handleSearch} enterButton />}
       actions={[
-        <Button type="primary" onClick={() => navigate("/forms/create")}>
+        <Button
+          type="primary"
+          onClick={() => navigate("/forms/create")}
+          key={"new-form-btn"}
+        >
           New Form
         </Button>,
       ]}

@@ -33,8 +33,11 @@ export class EventConsentFormsService {
     return 'Successfuly added consent forms to event';
   }
 
-  async findAll() {
-    return `This action returns all eventConsentForms`;
+  async find(eventId: number) {
+    return await this.ecfRepository.find({
+      where: { eventId },
+      relations: { consentForm: true },
+    });
   }
 
   async findOne(id: number) {

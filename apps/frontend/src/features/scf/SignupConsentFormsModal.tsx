@@ -1,70 +1,92 @@
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { ECFType } from "../ecf/efcType";
-import { Form, FormInstance, Modal, Typography } from "antd";
+import { Flex, Form, FormInstance, Modal, Typography } from "antd";
 import { CreateSignupFormSteps } from "./CreateSignupFormSteps";
 import useFormStepper from "../../components/common/useFormStepper";
+import { useEventConsentForms } from "../events/hooks/useEvents";
+import Loader from "../../components/common/Loader";
 import { useCreateSCF } from "../signups/hooks/useSignups";
 
 export default function SignupConsentFormsModal({
-  form,
-  isOpen,
   onCancel,
   signupId,
-  ecfs,
-  handleSubmit,
+  eventId,
 }: {
-  form: FormInstance;
   isOpen: boolean;
   signupId: number | null;
   onCancel: () => void;
-  handleSubmit: () => void;
-  ecfs: any[];
+  eventId?: number;
 }) {
-  
-  const formattedECFArray: ECFType[] = ecfs?.map((ecf: ECFType) => {
-    return { ...ecf.consentForm, ...ecf };
-  });
+  const { data: ecfs, isLoading, refetch } = useEventConsentForms(eventId);
+  const createSCF = useCreateSCF();
+
+  const [form] = Form.useForm();
+
+  const handleSubmit = async () => {
+    if (!signupId) return;
+    try {
+      const { consents } = await form.validateFields();
+      await createSCF.mutate({ signupId, scfs: consents });
+      onCancel();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const formattedECFArray: ECFType[] =
+    ecfs?.map((ecf: ECFType) => {
+      return { ...ecf.consentForm, ...ecf };
+    }) || [];
 
   const signupFormSteps = useMemo(
     () => CreateSignupFormSteps(formattedECFArray),
     [ecfs]
   );
 
-  console.log(signupFormSteps);
   const {
     NextFormButton,
     PreviousFormButton,
     SubmitFormButton,
     Stepper,
     StepperForm,
+    reset: resetStepper,
   } = useFormStepper(form, signupFormSteps, handleSubmit);
+
+  useEffect(() => {
+    if (!signupId) {
+      form.resetFields();
+    } else {
+      refetch();
+    }
+  }, [signupId]);
+
+  if (isLoading) return <Loader />;
 
   return (
     <Modal
       title={<Stepper />}
-      open={isOpen}
-      onCancel={onCancel}
+      open={!!signupId}
+      onCancel={() => {
+        resetStepper();
+        onCancel();
+      }}
       destroyOnClose
       width={800}
+      closeIcon={null}
       footer={(_, { CancelBtn }) => (
-        <>
+        <Flex justify="space-between">
           <CancelBtn />
-          <PreviousFormButton />
-          <NextFormButton />
-          <SubmitFormButton />
-        </>
+          <Flex justify="end" gap={8}>
+            <PreviousFormButton />
+            <NextFormButton />
+            <SubmitFormButton />
+          </Flex>
+        </Flex>
       )}
     >
       {/* Placeholder for content */}
       <Form form={form}>
         <StepperForm />
-        <Form.Item noStyle shouldUpdate>
-          {() => (
-            <Typography>
-              <pre>{JSON.stringify(form.getFieldsValue(), null, 2)}</pre>
-            </Typography>
-          )}
-        </Form.Item>
       </Form>
     </Modal>
   );

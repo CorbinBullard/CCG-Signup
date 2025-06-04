@@ -67,6 +67,7 @@ export class SignupService {
 
     const signups = await this.signupRepository.find({
       where: { event: { id: event.id } },
+      relations: { signupConsentForms: true },
     });
     return signups;
   }

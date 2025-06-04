@@ -6,7 +6,7 @@ import {
   FormOutlined,
 } from "@ant-design/icons";
 import type { MenuProps } from "antd";
-import { Layout, Menu, theme } from "antd";
+import { Flex, Image, Layout, Menu, theme } from "antd";
 import { Outlet, useLocation, useNavigate, useParams } from "react-router-dom";
 import PageLayout from "./PageLayout";
 import BreadcrumbNav from "../BreadcrumbNav";
@@ -67,8 +67,19 @@ const AppLayout: React.FC = () => {
         />
       </Sider>
       <Layout>
-        <Header style={{ padding: 0, background: colorBgContainer }} />
-        <BreadcrumbNav />
+        <Header
+          style={{
+            paddingLeft: 32,
+            background: colorBgContainer,
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
+          <Flex align="center" justify="space-between" style={{width: "100%"}}>
+            <BreadcrumbNav />
+            <Image src="/logos/dove.png" preview={false} width={60}/>
+          </Flex>
+        </Header>
         <Content
           style={{
             padding: 24,

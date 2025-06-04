@@ -4,7 +4,7 @@ import { Button, FormInstance, Steps } from "antd";
 import { CaretLeftOutlined, CaretRightOutlined } from "@ant-design/icons";
 
 export default function useFormStepper(form: FormInstance, formSteps, submit) {
-  const { current, next, prev } = useStepper(formSteps.length);
+  const { current, next, prev, reset } = useStepper(formSteps.length);
   const [currForm, setCurrForm] = useState(formSteps[current]);
 
   useEffect(() => {
@@ -104,5 +104,6 @@ export default function useFormStepper(form: FormInstance, formSteps, submit) {
     Stepper,
     StepperForm,
     current,
+    reset,
   };
 }

@@ -1,16 +1,15 @@
 import { Form, Input } from "antd";
+import { useConsentForms } from "../hooks/useConsentForms";
+import UniqueNameField from "../../../components/formComponents/UniqueField";
 
 export default function ConsentFormForm({ ...props }) {
   return (
     <>
-      <Form.Item
+      <UniqueNameField
+        label={"Name"}
         name={"name"}
-        label="Name"
-        required
-        rules={[{ required: true }]}
-      >
-        <Input />
-      </Form.Item>
+        getItemsQueryFn={useConsentForms}
+      />
       <Form.Item
         name={"body"}
         label="Message Body"

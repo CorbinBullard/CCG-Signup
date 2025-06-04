@@ -18,11 +18,6 @@ export class EventConsentFormsController {
     private readonly eventConsentFormsService: EventConsentFormsService,
   ) {}
 
-  @Get()
-  findAll() {
-    return this.eventConsentFormsService.findAll();
-  }
-
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.eventConsentFormsService.findOne(+id);

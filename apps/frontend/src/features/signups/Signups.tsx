@@ -40,15 +40,12 @@ export default function Signups({ event }: { event: Event }) {
   const deleteSignup = useDeleteSignup();
   const updateSignup = useUpdateSignup();
 
-  const createSCF = useCreateSCF();
-
   const [editSignupId, setEditSignupId] = useState<number | null>(null);
   const [signFormsSignupId, setSignFormsSignupId] = useState<number | null>(
     null
   );
 
   const [updateSignupForm] = Form.useForm<Signup>();
-  const [signFormsForm] = Form.useForm();
   const { data: editingSignup } = useSignup(editSignupId);
 
   // Callbacks
@@ -65,11 +62,6 @@ export default function Signups({ event }: { event: Event }) {
     setEditSignupId(null);
   };
 
-  const handleSubmitSignupConsents = async () => {
-    if (!signFormsSignupId) return;
-    const { consents } = await signFormsForm.validateFields();
-    await createSCF.mutate({ signupId: signFormsSignupId, scfs: consents });
-  };
   // Sync form with editing signup
   useEffect(() => {
     if (editingSignup) {
@@ -148,12 +140,11 @@ export default function Signups({ event }: { event: Event }) {
       />
       {/* Sign Forms Modal */}
       <SignConsentFormsModal
-        isOpen={!!signFormsSignupId}
-        onCancel={() => setSignFormsSignupId(null)}
+        eventId={event.id}
+        onCancel={() => {
+          setSignFormsSignupId(null);
+        }}
         signupId={signFormsSignupId}
-        ecfs={event.eventConsentForms}
-        form={signFormsForm}
-        handleSubmit={handleSubmitSignupConsents}
       />
     </>
   );

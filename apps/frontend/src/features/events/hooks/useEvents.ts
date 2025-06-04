@@ -6,6 +6,7 @@ import {
   updateEvent,
   deleteEvent,
   updateEFC,
+  fetchECForms,
 } from "../event.api";
 import { useNotifications } from "../../../context/Notifications";
 
@@ -100,15 +101,24 @@ export const useDeleteEvent = () => {
   });
 };
 
+// hooks/useEventConsentForms.ts
+export function useEventConsentForms(eventId: number | null) {
+  return useQuery({
+    queryKey: ["eventConsentForms"],
+    queryFn: () => (eventId ? fetchECForms(eventId) : []),
+    enabled: !!eventId,
+  });
+}
+
 export const useUpdateECF = () => {
   const queryClient = useQueryClient();
   const openNotification = useNotifications();
   return useMutation({
     mutationFn: updateEFC,
-    onSuccess: (returnObj) => {
-      console.log("RETURN OBJ: ", returnObj);
+    onSuccess: ({ id }) => {
       queryClient.invalidateQueries({ queryKey: ["events"] });
-      // queryClient.invalidateQueries({ queryKey: ["event"] });
+      queryClient.invalidateQueries({ queryKey: ["event", id] });
+      queryClient.invalidateQueries({ queryKey: ["eventConsentForms"] });
       openNotification({
         message: "Event Consent Form updated",
         description: "The event consent form has been updated successfully.",

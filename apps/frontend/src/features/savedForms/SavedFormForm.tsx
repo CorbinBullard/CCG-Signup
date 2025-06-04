@@ -12,6 +12,8 @@ import { FieldTypeEnum } from "../fields/field.type.ts";
 import FieldForm from "../fields/FieldForm.tsx";
 import PreviewForm from "../forms/preview/PreviewForm.tsx";
 import FormNameItem from "./FormNameItem.tsx";
+import UniqueNameField from "../../components/formComponents/UniqueField.tsx";
+import { useSavedForms } from "./hooks/useSavedForms.ts";
 
 export default function SavedFormForm({
   form,
@@ -24,7 +26,11 @@ export default function SavedFormForm({
   return (
     <>
       <Flex gap={16}>
-        <FormNameItem name="name" />
+        <UniqueNameField
+          label={"Name"}
+          name={"name"}
+          getItemsQueryFn={useSavedForms}
+        />
       </Flex>
       <Splitter>
         <Splitter.Panel min={500}>

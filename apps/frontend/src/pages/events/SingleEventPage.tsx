@@ -59,6 +59,7 @@ export default function SingleEventPage() {
       key: "signups",
       label: "Signups",
       children: <EventSignups event={event} />,
+      destroyInactiveTabPane: true,
     },
     {
       key: "form",
@@ -157,6 +158,7 @@ export default function SingleEventPage() {
       title={event.title}
       actions={[
         <OptionsButton
+          key={"event-options-btn"}
           items={getMenuItems({
             name: "Event",
             handleDelete: () => deleteEvent.mutate(eventId),
