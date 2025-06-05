@@ -66,27 +66,23 @@ const EventForm = ({
           >
             <CostInput style={{ width: "100%" }} />
           </Form.Item>
-          <ConditionalFormItem
-            dependency="cost"
-            shouldRender={(cost) => cost > 0}
+
+          <Form.Item
+            name="funds"
+            label="Event Funds"
+            style={{ flex: 1 }}
+            rules={[
+              { required: true, message: "Please enter the event funds" },
+            ]}
+            initialValue={FundLocationEnum.General}
           >
-            <Form.Item
-              name="funds"
-              label="Event Funds"
-              style={{ flex: 1 }}
-              rules={[
-                { required: true, message: "Please enter the event funds" },
-              ]}
-              initialValue={FundLocationEnum.General}
-            >
-              <Select
-                options={Object.entries(FundLocationEnum).map((type) => {
-                  return { label: type[0], value: type[1] };
-                })}
-                placeholder="Select Fund Location"
-              />
-            </Form.Item>
-          </ConditionalFormItem>
+            <Select
+              options={Object.entries(FundLocationEnum).map((type) => {
+                return { label: type[0], value: type[1] };
+              })}
+              placeholder="Select Fund Location"
+            />
+          </Form.Item>
         </Flex>
       </Flex>
       <Flex vertical flex={1} gap={16}>

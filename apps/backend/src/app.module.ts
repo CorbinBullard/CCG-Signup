@@ -15,9 +15,12 @@ import { AwsS3Service } from './aws-s3/aws-s3.service';
 import { ConsentFormsModule } from './consent-forms/consent-forms.module';
 import { EventConsentFormsModule } from './event-consent-forms/event-consent-forms.module';
 import { SignupConsentFormsModule } from './signup-consent-forms/signup-consent-forms.module';
+import { ScheduleModule } from '@nestjs/schedule';
+import { EventCleanupServiceService } from './event-cleanup-service/event-cleanup-service.service';
 
 @Module({
   imports: [
+    ScheduleModule.forRoot(),
     TypeOrmModule.forRoot({
       type: 'sqlite',
       database: 'db/dev.db', // Path to your SQLite database file

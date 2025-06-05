@@ -7,6 +7,7 @@ import {
   Delete,
   Get,
   Param,
+  Patch,
   Post,
   Put,
   Query,
@@ -24,6 +25,7 @@ import { CreateFormDto } from 'src/form/dto/create-form.dto';
 import { EventQueryParamsDto } from './dto/event-queryParams.dto';
 import { CreateEventConsentFormDto } from 'src/event-consent-forms/dto/create-event-consent-form.dto';
 import { EventConsentFormsService } from 'src/event-consent-forms/event-consent-forms.service';
+import { UpdateEventStatusDto } from './dto/update-event-status.dto';
 
 @Controller('events')
 export class EventController {
@@ -98,6 +100,13 @@ export class EventController {
   @UseGuards(IsAdminGuard)
   getEventConsentForms(@Param('id') id: number) {
     return this.efcService.find(id);
+  }
+
+  @Patch(':id/status')
+  @UseGuards(IsAdminGuard)
+  setEventActive(@Param('id') id: number, @Body() dto: UpdateEventStatusDto) {
+    const { isActive } = dto;
+    this.eventService.updateEventStatus(id, isActive);
   }
 
   @Put(':id/consent-forms')

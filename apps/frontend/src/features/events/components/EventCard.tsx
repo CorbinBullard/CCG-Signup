@@ -1,12 +1,10 @@
-import { Card, Flex, Typography } from "antd";
+import { Card, Flex, Tag, Typography } from "antd";
 import { Event } from "../event.types";
 import { useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
-import { UserOutlined } from "@ant-design/icons";
-import EventSignupStatus from "./EventSignupStatus";
 
 function EventCard(event: Event) {
-  const { title, date, time, image, id } = event;
+  const { title, date, isActive, image, id } = event;
   const navigate = useNavigate();
 
   return (
@@ -24,6 +22,11 @@ function EventCard(event: Event) {
           <Flex justify="space-between">
             <Typography.Text>{dayjs(date).format("M/DD/YYYY")}</Typography.Text>
           </Flex>
+        }
+        avatar={
+          <Tag color={isActive ? "green" : "orange"}>
+            {isActive ? "Active" : "Inactive"}
+          </Tag>
         }
       />
     </Card>

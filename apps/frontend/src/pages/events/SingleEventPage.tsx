@@ -3,10 +3,20 @@ import { useParams } from "react-router-dom";
 import {
   useDeleteEvent,
   useEvent,
+  useSetEventStatus,
   useUpdateECF,
 } from "../../features/events/hooks/useEvents";
 import PageLayout from "../../components/layouts/PageLayout";
-import { Button, Flex, Form, Image, Modal, Tabs, TabsProps } from "antd";
+import {
+  Button,
+  Flex,
+  Form,
+  Image,
+  Modal,
+  Switch,
+  Tabs,
+  TabsProps,
+} from "antd";
 import FormForm from "../../features/forms/FormForm";
 import { useUpdateForm } from "../../features/forms/hooks/useForms";
 import EventSignups from "../../features/signups/EventSignups";
@@ -41,6 +51,8 @@ export default function SingleEventPage() {
 
   const { data: event, isLoading, isError } = useEvent(eventId);
 
+  const setEventStatus = useSetEventStatus();
+
   if (isNaN(eventId)) {
     return <div>Invalid event ID</div>;
   }
@@ -52,7 +64,6 @@ export default function SingleEventPage() {
   if (isError || !event) {
     return <div>Event not found</div>;
   }
-  console.log("EVENT CONSENT FORMS: ", event);
 
   const tabItems: TabsProps["items"] = [
     {
@@ -148,15 +159,23 @@ export default function SingleEventPage() {
       console.error(error);
     }
   };
-
   const handleUpdateEFC = async () => {
     const { consentForms } = consentForm.getFieldsValue();
     updateECF.mutate({ id: event.id, ecfArray: consentForms });
+  };
+  const handleUpdateEventStatus = async (isActive: boolean) => {
+    setEventStatus.mutate({ id: event.id, isActive });
   };
   return (
     <PageLayout
       title={event.title}
       actions={[
+        <Form.Item label="Event Active" valuePropName="checked">
+          <Switch
+            onClick={handleUpdateEventStatus}
+            defaultChecked={event.isActive}
+          />
+        </Form.Item>,
         <OptionsButton
           key={"event-options-btn"}
           items={getMenuItems({

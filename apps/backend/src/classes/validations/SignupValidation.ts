@@ -1,5 +1,5 @@
 import { BadRequestException, NotFoundException } from '@nestjs/common';
-import { Event } from 'src/event/event.entity';
+import { Event } from 'src/event/entities/event.entity';
 import { Field } from 'src/fields/entities/field.entity';
 import { ResponseValidation } from './ResponseValidation';
 import { SignupType } from 'src/Types/signup/SignupType';

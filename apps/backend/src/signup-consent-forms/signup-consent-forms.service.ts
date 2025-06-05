@@ -6,7 +6,7 @@ import { SignupConsentForm } from './entities/signup-consent-form.entity';
 import { Repository } from 'typeorm';
 import { Signup } from 'src/signup/signup.entity';
 import { SignupService } from 'src/signup/signup.service';
-import { Event } from 'src/event/event.entity';
+import { Event } from 'src/event/entities/event.entity';
 import { EventConsentFormsService } from 'src/event-consent-forms/event-consent-forms.service';
 import { EventConsentForm } from 'src/event-consent-forms/entities/event-consent-form.entity';
 

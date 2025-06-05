@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Event } from './event.entity';
+import { Event } from './entities/event.entity';
 import { FindOptionsWhere, ILike, Repository } from 'typeorm';
 import { CreateEventDto } from './dto/create-event.dto';
 import { UpdateEventDto } from './dto/update-event.dto';
@@ -92,6 +92,18 @@ export class EventService {
     } else {
       throw new NotFoundException(`Event with id ${id} was not found`);
     }
+  }
+
+  async updateEventStatus(id: number, isActive: boolean) {
+    const event: Event | null = await this.eventRepository.findOne({
+      where: { id },
+    });
+    if (!event)
+      throw new NotFoundException(`Event with id ${id} was not found`);
+
+    event.isActive = isActive;
+
+    return this.eventRepository.save(event);
   }
 
   async updateEventConsentForms(

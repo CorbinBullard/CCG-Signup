@@ -45,7 +45,7 @@ const PageLayout = ({
             {title}
           </Title>
           {Component && Component}
-          <Space>{actions}</Space>
+          <Space align="baseline">{actions}</Space>
         </Flex>
       </Header>
       {/* MAKE BETTER LOADING */}

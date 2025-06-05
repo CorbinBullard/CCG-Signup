@@ -4,7 +4,7 @@ import { UpdateEventConsentFormDto } from './dto/update-event-consent-form.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { EventConsentForm } from './entities/event-consent-form.entity';
 import { Repository } from 'typeorm';
-import { Event } from 'src/event/event.entity';
+import { Event } from 'src/event/entities/event.entity';
 import { ConsentFormsService } from 'src/consent-forms/consent-forms.service';
 
 @Injectable()

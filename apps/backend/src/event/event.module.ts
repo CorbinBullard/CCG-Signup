@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { EventService } from './event.service';
 import { EventController } from './event.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Event } from './event.entity';
+import { Event } from './entities/event.entity';
 import { FormModule } from '../form/form.module';
 import { Form } from 'src/form/form.entity';
 
@@ -14,6 +14,8 @@ import { DropboxService } from 'src/dropbox/dropbox.service';
 import { FormTemplateModule } from 'src/form-template/form-template.module';
 import { AwsS3Service } from 'src/aws-s3/aws-s3.service';
 import { EventConsentFormsModule } from 'src/event-consent-forms/event-consent-forms.module';
+import { EventCleanupServiceService } from 'src/event-cleanup-service/event-cleanup-service.service';
+import { FieldsModule } from 'src/fields/fields.module';
 
 @Module({
   imports: [
@@ -21,6 +23,7 @@ import { EventConsentFormsModule } from 'src/event-consent-forms/event-consent-f
     FormModule,
     FormTemplateModule,
     EventConsentFormsModule,
+    FieldsModule,
   ],
   providers: [
     EventService,
@@ -29,8 +32,9 @@ import { EventConsentFormsModule } from 'src/event-consent-forms/event-consent-f
     JwtService,
     DropboxService,
     AwsS3Service,
+    EventCleanupServiceService,
   ],
   controllers: [EventController],
-  exports: [EventService],
+  exports: [EventService, EventCleanupServiceService],
 })
 export class EventModule {}

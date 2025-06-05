@@ -24,12 +24,14 @@ const aws_s3_service_1 = require("./aws-s3/aws-s3.service");
 const consent_forms_module_1 = require("./consent-forms/consent-forms.module");
 const event_consent_forms_module_1 = require("./event-consent-forms/event-consent-forms.module");
 const signup_consent_forms_module_1 = require("./signup-consent-forms/signup-consent-forms.module");
+const schedule_1 = require("@nestjs/schedule");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
 exports.AppModule = AppModule = __decorate([
     (0, common_1.Module)({
         imports: [
+            schedule_1.ScheduleModule.forRoot(),
             typeorm_1.TypeOrmModule.forRoot({
                 type: 'sqlite',
                 database: 'db/dev.db',

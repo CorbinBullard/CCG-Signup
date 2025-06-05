@@ -7,6 +7,7 @@ import {
   deleteEvent,
   updateEFC,
   fetchECForms,
+  setEventStatus,
 } from "../event.api";
 import { useNotifications } from "../../../context/Notifications";
 
@@ -95,6 +96,30 @@ export const useDeleteEvent = () => {
       openNotification({
         message: error.message,
         description: "There was an error deleting the event.",
+        type: "error",
+      });
+    },
+  });
+};
+
+export const useSetEventStatus = () => {
+  const queryClient = useQueryClient();
+  const openNotification = useNotifications();
+  return useMutation({
+    mutationFn: setEventStatus,
+    onSuccess: ({ id, isActive }) => {
+      queryClient.invalidateQueries({ queryKey: ["events"] });
+      queryClient.invalidateQueries({ queryKey: ["event", id] });
+      openNotification({
+        message: "Event status updated",
+        description: "The event status has been updated successfully.",
+        type: "success",
+      });
+    },
+    onError: (error) => {
+      openNotification({
+        message: error.message,
+        description: "There was an error updating the event status.",
         type: "error",
       });
     },

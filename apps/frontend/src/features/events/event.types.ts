@@ -10,9 +10,10 @@ export type Event = {
   image: string;
   cost: number;
   form: Form;
+  isActive: boolean;
   funds?: FundLocationEnum;
   signups: [];
   signupLimit: number;
   id?: number;
-  consentForms?: ConsentForm[]
+  eventConsentForms?: ConsentForm[];
 };

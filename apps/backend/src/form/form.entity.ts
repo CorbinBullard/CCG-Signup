@@ -6,7 +6,7 @@ import {
   OneToOne,
 } from 'typeorm';
 import { Field } from 'src/fields/entities/field.entity';
-import { Event } from '../event/event.entity';
+import { Event } from '../event/entities/event.entity';
 
 @Entity()
 export class Form {

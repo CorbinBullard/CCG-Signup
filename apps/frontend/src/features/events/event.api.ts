@@ -43,6 +43,11 @@ export const deleteEvent = async (id: number) => {
   return response.data;
 };
 
+export const setEventStatus = async ({ id, isActive }) => {
+  const response = await api.patch(`/api/events/${id}/status`, { isActive });
+  return response.data;
+};
+
 export const fetchECForms = async (eventId: number) => {
   const response = await api.get(`/api/events/${eventId}/consent-forms`);
   return response.data;

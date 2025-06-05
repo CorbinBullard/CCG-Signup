@@ -1,5 +1,5 @@
 import { ConsentForm } from 'src/consent-forms/entities/consent-form.entity';
-import { Event } from 'src/event/event.entity';
+import { Event } from 'src/event/entities/event.entity';
 import { SignupConsentForm } from 'src/signup-consent-forms/entities/signup-consent-form.entity';
 import {
   Column,
