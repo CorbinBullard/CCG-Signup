@@ -25,6 +25,10 @@ const consent_forms_module_1 = require("./consent-forms/consent-forms.module");
 const event_consent_forms_module_1 = require("./event-consent-forms/event-consent-forms.module");
 const signup_consent_forms_module_1 = require("./signup-consent-forms/signup-consent-forms.module");
 const schedule_1 = require("@nestjs/schedule");
+const devices_module_1 = require("./devices/devices.module");
+const mobile_controller_1 = require("./mobile/mobile.controller");
+const mobile_service_1 = require("./mobile/mobile.service");
+const mobile_module_1 = require("./mobile/mobile.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -51,9 +55,11 @@ exports.AppModule = AppModule = __decorate([
             consent_forms_module_1.ConsentFormsModule,
             event_consent_forms_module_1.EventConsentFormsModule,
             signup_consent_forms_module_1.SignupConsentFormsModule,
+            devices_module_1.DevicesModule,
+            mobile_module_1.MobileModule,
         ],
-        controllers: [app_controller_1.AppController],
-        providers: [app_service_1.AppService, aws_s3_service_1.AwsS3Service],
+        controllers: [app_controller_1.AppController, mobile_controller_1.MobileController],
+        providers: [app_service_1.AppService, aws_s3_service_1.AwsS3Service, mobile_service_1.MobileService],
     })
 ], AppModule);
 //# sourceMappingURL=app.module.js.map

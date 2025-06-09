@@ -4,6 +4,7 @@ import {
   CheckSquareOutlined,
   FileTextOutlined,
   FormOutlined,
+  TabletOutlined,
 } from "@ant-design/icons";
 import type { MenuProps } from "antd";
 import { Flex, Image, Layout, Menu, theme } from "antd";
@@ -35,6 +36,7 @@ const items: MenuItem[] = [
     getItem("Saved Forms", "forms", <FileTextOutlined />),
     getItem("Consent Forms", "consent-forms", <CheckSquareOutlined />),
   ]),
+  getItem("Devices", "devices", <TabletOutlined />),
 ];
 
 const AppLayout: React.FC = () => {
@@ -75,9 +77,13 @@ const AppLayout: React.FC = () => {
             alignItems: "center",
           }}
         >
-          <Flex align="center" justify="space-between" style={{width: "100%"}}>
+          <Flex
+            align="center"
+            justify="space-between"
+            style={{ width: "100%" }}
+          >
             <BreadcrumbNav />
-            <Image src="/logos/dove.png" preview={false} width={60}/>
+            <Image src="/logos/dove.png" preview={false} width={60} />
           </Flex>
         </Header>
         <Content

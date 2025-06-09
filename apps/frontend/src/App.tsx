@@ -9,7 +9,8 @@ import SingleEventPage from "./pages/events/SingleEventPage";
 import NotFoundPage from "./pages/NotFoundPage";
 import FormsPage from "./pages/savedForms/SavedFormsPage";
 import SingleFormPage from "./pages/savedForms/SingleFormPage";
-import ConsentFormsPage from "./pages/consentForms/consentFormsPage";
+import DevicesPage from "./pages/devices/DevicesPage";
+import ConsentFormsPage from "./pages/consentForms/ConsentFormsPage";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
             <Route path="/forms/:id" element={<SingleFormPage />} />
             <Route path="/forms/create" element={<SingleFormPage />} />
             <Route path="/consent-forms" element={<ConsentFormsPage />} />
+            <Route path="/devices" element={<DevicesPage />} />
             {/* 404 */}
             <Route path="*" element={<NotFoundPage />} />
           </Route>

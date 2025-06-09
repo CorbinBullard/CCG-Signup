@@ -17,6 +17,10 @@ import { EventConsentFormsModule } from './event-consent-forms/event-consent-for
 import { SignupConsentFormsModule } from './signup-consent-forms/signup-consent-forms.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { EventCleanupServiceService } from './event-cleanup-service/event-cleanup-service.service';
+import { DevicesModule } from './devices/devices.module';
+import { MobileController } from './mobile/mobile.controller';
+import { MobileService } from './mobile/mobile.service';
+import { MobileModule } from './mobile/mobile.module';
 
 @Module({
   imports: [
@@ -40,8 +44,10 @@ import { EventCleanupServiceService } from './event-cleanup-service/event-cleanu
     ConsentFormsModule,
     EventConsentFormsModule,
     SignupConsentFormsModule,
+    DevicesModule,
+    MobileModule,
   ],
-  controllers: [AppController],
-  providers: [AppService, AwsS3Service],
+  controllers: [AppController, MobileController],
+  providers: [AppService, AwsS3Service, MobileService],
 })
 export class AppModule {}

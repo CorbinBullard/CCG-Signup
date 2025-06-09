@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Event } from './entities/event.entity';
-import { FindOptionsWhere, ILike, Repository } from 'typeorm';
+import { FindOptionsWhere, ILike, MoreThan, Repository } from 'typeorm';
 import { CreateEventDto } from './dto/create-event.dto';
 import { UpdateEventDto } from './dto/update-event.dto';
 import { EventQueryParamsDto } from './dto/event-queryParams.dto';
@@ -115,12 +115,35 @@ export class EventService {
       throw new NotFoundException(`Event with id ${eventId} was not found`);
     await this.efcService.clearEventConsentForms(event);
 
-    console.log('ecfArray: ', ecfArray);
     if (!ecfArray || !ecfArray.length) return this.findOne(eventId);
     await this.efcService.attachConsentsToEvent(event, ecfArray);
     return this.eventRepository.findOne({
       where: { id: eventId },
       relations: ['eventConsentForms', 'eventConsentForms.consentForm'],
     });
+  }
+
+  async getEventsForMobile() {
+    // Get signup count
+    const events = await this.eventRepository.find({
+      where: { isActive: true, date: MoreThan(new Date()) },
+      relations: { signups: true },
+    });
+    return events.map((event) => ({ ...event, signups: event.signups.length }));
+  }
+
+  async findOneEventForMobile(id: number) {
+    const event = await this.eventRepository.findOne({
+      where: { id },
+      relations: {
+        form: { fields: true },
+        eventConsentForms: true,
+        signups: true,
+      },
+    });
+    if (!event) {
+      throw new NotFoundException(`Event with id ${id} not found`);
+    }
+    return { ...event, signups: event.signups.length };
   }
 }

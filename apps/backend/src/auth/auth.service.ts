@@ -14,10 +14,17 @@ export class AuthService {
 
   async getToken(token: string): Promise<boolean> {
     try {
-      await this.jwtService.verifyAsync(token);
+      const payload = await this.jwtService.verifyAsync(token, {
+        secret: process.env.JWT_SECRET,
+      });
+      console.log(payload);
+      // Ensure the token is for the admin only!
+      if (payload.email !== this.adminEmail) {
+        return false;
+      }
       return true;
     } catch (error) {
-      return false;
+      throw new UnauthorizedException();
     }
   }
 
