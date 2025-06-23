@@ -3,6 +3,45 @@ import { useStepper } from "./useStepper";
 import { Button, FormInstance, Steps } from "antd";
 import { CaretLeftOutlined, CaretRightOutlined } from "@ant-design/icons";
 
+function getAllFieldPaths(obj, prefix = []) {
+  let paths = [];
+  for (let key in obj) {
+    if (
+      obj[key] !== null &&
+      typeof obj[key] === "object" &&
+      !Array.isArray(obj[key])
+    ) {
+      // Dive deeper
+      paths = paths.concat(getAllFieldPaths(obj[key], [...prefix, key]));
+    } else {
+      // End node
+      paths.push([...prefix, key]);
+    }
+  }
+  return paths;
+}
+
+// Helper to check if a value is a nested object (not array, not null)
+function isNestedField(value) {
+  return value !== null && typeof value === "object" && !Array.isArray(value);
+}
+
+// Helper to build the array of fields to validate for a step
+function buildFieldsToValidate(form, currForm) {
+  let fieldsToValidate = [];
+  for (const field of currForm.fields) {
+    console.log("Field: ", field);
+    const value = form.getFieldValue(field);
+    if (isNestedField(value)) {
+      const nestedFields = getAllFieldPaths(value, [field]);
+      fieldsToValidate.push(...nestedFields);
+    } else {
+      fieldsToValidate.push(field);
+    }
+  }
+  return fieldsToValidate;
+}
+
 export default function useFormStepper(form: FormInstance, formSteps, submit) {
   const { current, next, prev, reset } = useStepper(formSteps.length);
   const [currForm, setCurrForm] = useState(formSteps[current]);
@@ -13,7 +52,9 @@ export default function useFormStepper(form: FormInstance, formSteps, submit) {
 
   const nextForm = async () => {
     try {
-      await form.validateFields(currForm.fields);
+      const fieldsToValidate = buildFieldsToValidate(form, currForm);
+      console.log("fields to validate: ", fieldsToValidate);
+      await form.validateFields(fieldsToValidate);
       next();
     } catch (error) {
       console.error(error);
@@ -25,7 +66,8 @@ export default function useFormStepper(form: FormInstance, formSteps, submit) {
 
   const submitForm = async () => {
     try {
-      await form.validateFields(currForm.fields);
+      const fieldsToValidate = buildFieldsToValidate(form, currForm);
+      await form.validateFields(fieldsToValidate);
       submit();
     } catch (error) {
       console.error(error);
@@ -50,7 +92,8 @@ export default function useFormStepper(form: FormInstance, formSteps, submit) {
         icon={<CaretRightOutlined />}
         onClick={async () => {
           try {
-            await form.validateFields(currForm.fields);
+            const fieldsToValidate = buildFieldsToValidate(form, currForm);
+            await form.validateFields(fieldsToValidate);
             nextForm();
           } catch (error) {
             console.error(error);

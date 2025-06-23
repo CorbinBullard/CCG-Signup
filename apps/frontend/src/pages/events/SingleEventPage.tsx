@@ -170,7 +170,7 @@ export default function SingleEventPage() {
     <PageLayout
       title={event.title}
       actions={[
-        <Form.Item label="Event Active" valuePropName="checked">
+        <Form.Item label="Event Active" valuePropName="checked" key={"event-active-button"}>
           <Switch
             onClick={handleUpdateEventStatus}
             defaultChecked={event.isActive}

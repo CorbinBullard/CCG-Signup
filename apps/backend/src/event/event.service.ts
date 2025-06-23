@@ -137,7 +137,7 @@ export class EventService {
       where: { id },
       relations: {
         form: { fields: true },
-        eventConsentForms: true,
+        eventConsentForms: { consentForm: true },
         signups: true,
       },
     });

@@ -10,6 +10,7 @@ import {
 } from '@nestjs/common';
 import { IsRegisteredDeviceGuard } from 'src/guards/jwt-device.guard';
 import { MobileService } from './mobile.service';
+import { CreateSignupDto } from 'src/signup/dto/create-signup.dto';
 
 @Controller('mobile')
 export class MobileController {
@@ -17,7 +18,6 @@ export class MobileController {
 
   @Get('auth')
   async getToken(@Headers('Authorization') authHeader: string) {
-    console.log('MOBILE AUTH GET', authHeader);
     if (!authHeader) {
       throw new UnauthorizedException('Unauthorized');
     }
@@ -27,7 +27,6 @@ export class MobileController {
 
   @Post('auth')
   async loginDevice(@Body() { id, uniqueKey }) {
-    console.log('MOBILE LOGIN');
     return await this.mobileService.signIn({ id, uniqueKey });
   }
 
@@ -41,6 +40,11 @@ export class MobileController {
   @Get('events')
   async getEvents() {
     return await this.mobileService.getEvents();
+  }
+
+  @Post('events/:id/signups')
+  createSignup(@Param('id') eventId: number, @Body() signup: CreateSignupDto) {
+    console.log('SIGNUP ', signup);
   }
 
   @Get('events/:id')

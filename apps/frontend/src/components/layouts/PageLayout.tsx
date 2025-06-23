@@ -24,8 +24,6 @@ const PageLayout = ({
     <Layout
       style={{ background: "#fff", padding: 24, marginTop: 12, height: "100%" }}
     >
-      {/* SET UP FUNCTIONING BREADCRUMB */}
-      {/* <Breadcrumb items={[location]} /> */}
       <Header
         style={{
           background: "#fff",

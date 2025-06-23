@@ -16,7 +16,7 @@ export const useConsentForms = (query) => {
   });
 };
 
-export const useConsentForm = (id: number) => {
+export const useConsentForm = (id: number | null) => {
   return useQuery({
     queryKey: ["consent-form", id],
     queryFn: () => fetchConsentForm(id),

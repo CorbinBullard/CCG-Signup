@@ -53,7 +53,7 @@ const AppLayout: React.FC = () => {
   };
 
   return (
-    <Layout style={{ minHeight: "100vh", minWidth: "100vw" }}>
+    <Layout style={{ minHeight: "100vh", width: "100vw" }}>
       <Sider
         collapsible
         collapsed={collapsed}

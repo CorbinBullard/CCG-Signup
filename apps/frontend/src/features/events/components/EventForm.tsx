@@ -16,10 +16,8 @@ import { FundLocationEnum } from "../fund.type";
 import ConditionalFormItem from "../../../components/formComponents/DependentItem";
 
 const EventForm = ({
-  // form,
   ref,
 }: {
-  form: FormInstance;
   ref?: React.RefObject<any>;
 }) => {
   return (

@@ -19,13 +19,12 @@ import UniqueNameField from "../../components/formComponents/UniqueField";
 
 // FormForm.tsx
 function FormForm({
-  // form,
   preview = true,
   mode = "create",
   ...props
 }: {
-  form: FormInstance;
-  mode?: "create" | "edit";
+    mode?: "create" | "edit";
+    preview?: boolean;
 }) {
   const getName = (fieldName: string | string[]) => {
     return mode === "create"

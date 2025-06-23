@@ -4,6 +4,8 @@ import {
   IsArray,
   IsBoolean,
   IsEnum,
+  IsNumber,
+  IsOptional,
   IsString,
   ValidateIf,
   ValidateNested,
@@ -21,6 +23,10 @@ export class Subfield {
 
   @IsBoolean()
   required: boolean;
+
+  @IsOptional()
+  @IsNumber()
+  cost?: number;
 
   @ValidateIf((subField) => subField.type === SubFieldTypeEnum.select)
   @IsArray()

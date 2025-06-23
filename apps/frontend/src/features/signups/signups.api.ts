@@ -25,6 +25,7 @@ export const postSignup = async ({
   const response = await api.post(`/api/events/${eventId}/signups`, signup);
   return response.data;
 };
+
 export const updateSignup = async ({
   id,
   signup,

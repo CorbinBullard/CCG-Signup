@@ -2,7 +2,7 @@ import { useEffect, useMemo } from "react";
 import { ECFType } from "../ecf/efcType";
 import { Flex, Form, FormInstance, Modal, Typography } from "antd";
 import { CreateSignupFormSteps } from "./CreateSignupFormSteps";
-import useFormStepper from "../../components/common/useFormStepper";
+import useFormStepper from "../../components/common/hooks/useFormStepper";
 import { useEventConsentForms } from "../events/hooks/useEvents";
 import Loader from "../../components/common/Loader";
 import { useCreateSCF } from "../signups/hooks/useSignups";
