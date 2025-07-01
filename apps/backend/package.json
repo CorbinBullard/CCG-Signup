@@ -6,7 +6,7 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-    "build:client": "cd ../frontend && npm install && npm run build",
+    "build:client": "cd ../frontend && npm install && npx vite build",
     "copy:client": "cp -r ../frontend/build ./public",
     "build": "npm run build:client && npm run copy:client && nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
