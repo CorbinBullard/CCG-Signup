@@ -3,7 +3,6 @@ import { JSX } from "react";
 import { Layout, Typography, Space, Flex } from "antd";
 import Loader from "../common/Loader";
 import { ErrorBoundary } from "react-error-boundary";
-
 const { Header, Content } = Layout;
 const { Title } = Typography;
 
