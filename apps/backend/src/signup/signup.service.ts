@@ -80,6 +80,7 @@ export class SignupService {
         event: { form: { fields: true } },
       },
     });
+    console.log('FIND ONE SIGNUP ', signup);
     if (!signup) throw new NotFoundException(`Signup with id ${id} not found`);
     return signup;
   }
@@ -123,13 +124,12 @@ export class SignupService {
     });
     if (!signup) throw new NotFoundException('Signup Not Found');
     //remove all duplicates of signup consents
-    const removedSCFs = await this.scfService.removeBySignup(signup);
-
-    // await this.scfService.clear();
+    await this.scfService.removeBySignup(signup);
 
     for (const scf of scfArray) {
       await this.scfService.create(signup, scf);
     }
-    return 'successfully added Signed Consent Forms';
+    console.log('SIGN UP EVENT : \n', signup);
+    return { message: 'Success' };
   }
 }

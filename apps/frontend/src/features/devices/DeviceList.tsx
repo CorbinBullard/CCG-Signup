@@ -1,7 +1,9 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ReactNode } from "react";
 import { List } from "antd";
 import OptionsButton from "../../components/common/OptionsButton";
 import getMenuItems from "../../components/common/getMenuItems";
+import { Device } from "./device.type";
 import { UUID } from "crypto";
 
 export default function DeviceList({
@@ -9,7 +11,7 @@ export default function DeviceList({
   handleEdit,
   handleDelete,
 }: {
-  devices: any[];
+  devices: Device[];
   handleEdit: (id: UUID) => void;
   handleDelete: (id: UUID) => void;
 }) {

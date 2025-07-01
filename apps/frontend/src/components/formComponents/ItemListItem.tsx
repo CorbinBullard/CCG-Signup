@@ -1,13 +1,10 @@
 import { CloseOutlined, HolderOutlined } from "@ant-design/icons";
-import { Card, Flex, Space } from "antd";
-import React from "react";
+import { Card, Flex } from "antd";
 
 export default function ItemListItem({
   children,
   remove,
-  title = "Item",
   card = false,
-  size = "small",
   attributes,
   listeners,
   ...props
@@ -23,7 +20,7 @@ export default function ItemListItem({
             {...listeners}
           />
         }
-        extra={<CloseOutlined onClick={remove} size={size} />}
+        extra={<CloseOutlined onClick={remove} size={24} />}
       >
         {children}
       </Card>

@@ -1,8 +1,6 @@
 import {
   Flex,
   Form,
-  FormInstance,
-  Input,
   Modal,
   Select,
   Splitter,
@@ -21,7 +19,6 @@ import UniqueNameField from "../../components/formComponents/UniqueField";
 function FormForm({
   preview = true,
   mode = "create",
-  ...props
 }: {
     mode?: "create" | "edit";
     preview?: boolean;

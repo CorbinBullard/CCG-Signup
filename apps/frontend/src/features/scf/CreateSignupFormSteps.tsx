@@ -1,7 +1,7 @@
-import { ECFType } from "../ecf/efcType";
+import { ECF } from "../ecf/efcType";
 import SignupConsentFormForm from "./SignupConsentFormForm";
 
-export const CreateSignupFormSteps = (ecfs: ECFType[]) =>
+export const CreateSignupFormSteps = (ecfs: ECF[]) =>
   ecfs.map((ecf, index) => {
     console.log(ecf);
     return {

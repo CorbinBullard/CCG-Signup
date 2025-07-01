@@ -1,4 +1,4 @@
-import { Flex, Form, Input, Typography } from "antd";
+import { Flex, Form, Typography } from "antd";
 import OpenModalButton from "../../components/common/OpenModalButton";
 import PageLayout from "../../components/layouts/PageLayout";
 import DeviceList from "../../features/devices/DeviceList";
@@ -17,7 +17,6 @@ import { io, Socket } from "socket.io-client";
 import { useNotifications } from "../../context/Notifications";
 
 export default function DevicesPage() {
-  const [queryParams, setQueryParams] = useState({});
   const [deviceId, setDeviceId] = useState<UUID | null>(null);
   const [deviceForm] = Form.useForm();
   const [oneTimeToken, setOneTimeToken] = useState<number | null>(null);
@@ -55,9 +54,7 @@ export default function DevicesPage() {
       if (deviceId) {
         updateDevice.mutate({ id: deviceId, name: values.name });
       } else {
-        const { oneTimeToken, id } = await createDevice.mutateAsync(
-          values.name
-        );
+        const { oneTimeToken } = await createDevice.mutateAsync(values.name);
         setOneTimeToken(oneTimeToken);
         const apiURL = `${import.meta.env.VITE_API_URL}/device-registration`;
         console.log(apiURL);
@@ -111,9 +108,11 @@ export default function DevicesPage() {
           ref={modalRef}
           onClose={handleModalClose}
           onOk={handleSubmit}
-          footer={(_, { OkBtn }) => {
-            if (!oneTimeToken) return <OkBtn />;
-            else return null;
+          modalProps={{
+            footer: (_: never, { OkBtn }) => {
+              if (!oneTimeToken) return <OkBtn />;
+              else return null;
+            },
           }}
         >
           <>

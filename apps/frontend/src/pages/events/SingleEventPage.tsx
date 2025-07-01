@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import {
   useDeleteEvent,
@@ -7,16 +7,7 @@ import {
   useUpdateECF,
 } from "../../features/events/hooks/useEvents";
 import PageLayout from "../../components/layouts/PageLayout";
-import {
-  Button,
-  Flex,
-  Form,
-  Image,
-  Modal,
-  Switch,
-  Tabs,
-  TabsProps,
-} from "antd";
+import { Button, Form, Switch, Tabs, TabsProps } from "antd";
 import FormForm from "../../features/forms/FormForm";
 import { useUpdateForm } from "../../features/forms/hooks/useForms";
 import EventSignups from "../../features/signups/EventSignups";
@@ -42,7 +33,7 @@ export default function SingleEventPage() {
   const [signupForm] = Form.useForm();
   const [consentForm] = Form.useForm();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [tab, setTab] = useState<"signups" | "form" | "consents">("signups");
+  const [tab, setTab] = useState<string>("signups");
 
   const updateForm = useUpdateForm();
   const deleteEvent = useDeleteEvent();
@@ -119,6 +110,7 @@ export default function SingleEventPage() {
               form={signupForm}
               initialValues={signupDefaultValues(event.form.fields)}
               scrollToFirstError
+              clearOnDestroy
             >
               <SignupForm fields={event.form.fields} />
             </Form>
@@ -145,6 +137,7 @@ export default function SingleEventPage() {
     });
     signupForm.resetFields();
   };
+
   const handleCreateSignupSubmit = async () => {
     try {
       const values = await signupForm.validateFields();
@@ -170,7 +163,11 @@ export default function SingleEventPage() {
     <PageLayout
       title={event.title}
       actions={[
-        <Form.Item label="Event Active" valuePropName="checked" key={"event-active-button"}>
+        <Form.Item
+          label="Event Active"
+          valuePropName="checked"
+          key={"event-active-button"}
+        >
           <Switch
             onClick={handleUpdateEventStatus}
             defaultChecked={event.isActive}
@@ -186,18 +183,20 @@ export default function SingleEventPage() {
         />,
       ]}
     >
-      <UpdateEvent
-        event={event}
-        isModalOpen={isModalOpen}
-        setIsModalOpen={setIsModalOpen}
-      />
-      <Tabs
-        type="card"
-        items={tabItems}
-        tabBarExtraContent={tabActionItem()}
-        onChange={(key) => setTab(key)}
-        activeKey={tab}
-      />
+      <>
+        <UpdateEvent
+          event={event}
+          isModalOpen={isModalOpen}
+          setIsModalOpen={setIsModalOpen}
+        />
+        <Tabs
+          type="card"
+          items={tabItems}
+          tabBarExtraContent={tabActionItem()}
+          onChange={(key) => setTab(key)}
+          activeKey={tab}
+        />
+      </>
     </PageLayout>
   );
 }

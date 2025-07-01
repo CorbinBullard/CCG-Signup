@@ -1,5 +1,5 @@
-import { Card, Flex } from "antd";
-import React, { JSX } from "react";
+import { Flex } from "antd";
+import React from "react";
 
 function CardsContainer({
   CardComponent,
@@ -8,7 +8,6 @@ function CardsContainer({
   CardComponent: React.ComponentType<any>;
   data: any[];
 }) {
-
   return (
     <Flex wrap="wrap" gap={16}>
       {data && data.map((props, i) => <CardComponent key={i} {...props} />)}

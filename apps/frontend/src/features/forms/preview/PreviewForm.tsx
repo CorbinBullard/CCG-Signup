@@ -1,7 +1,4 @@
 import { Card, Flex, Form } from "antd";
-import React from "react";
-import SignupForm from "../../signups/SignupForm";
-import { signupDefaultValues } from "../../signups/signup.defaultValues";
 import ResponseItemForm from "../../signups/ResponseItemForm";
 
 export default function PreviewForm({ mode = "create", form, ...props }) {

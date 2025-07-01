@@ -1,8 +1,8 @@
-import { Button, Form, Input } from "antd";
+import { Form, Input } from "antd";
 import PageLayout from "../../components/layouts/PageLayout";
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import OpenModalButton from "../../components/common/OpenModalButton";
-import ConsentFormForm from "../../features/consentForms/components/consentFormForm";
+import ConsentFormForm from "../../features/consentForms/components/ConsentFormForm";
 import {
   useConsentForm,
   useConsentForms,
@@ -11,7 +11,6 @@ import {
   useUpdateConsentForm,
 } from "../../features/consentForms/hooks/useConsentForms";
 import ConsentFormList from "../../features/consentForms/components/ConsentFormList";
-import Loader from "../../components/common/Loader";
 
 export default function ConsentFormsPage() {
   const [queryParams, setQueryParams] = useState({});

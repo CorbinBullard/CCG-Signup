@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import PageLayout from "../../components/layouts/PageLayout";
 import { Button, Input } from "antd";
 import { useNavigate } from "react-router-dom";

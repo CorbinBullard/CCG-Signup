@@ -4,7 +4,6 @@ import {
   deleteSignup,
   fetchEventSignups,
   fetchSignup,
-  fetchSignups,
   postSignup,
   updateSignup,
 } from "../signups.api";
@@ -104,9 +103,9 @@ export const useCreateSCF = () => {
   const openNotification = useNotifications();
   return useMutation({
     mutationFn: createSCF,
-    onSuccess: (params) => {
-      console.log("PARAMS: ", params);
-      queryClient.invalidateQueries(["event", params.id]);
+    onSuccess: ({ eventId }) => {
+      queryClient.invalidateQueries({ queryKey: ["event", eventId] });
+      queryClient.invalidateQueries({ queryKey: ["signups"] });
       openNotification({
         message: "Signup Consent Created",
         description: "The consent has been deleted successfully.",

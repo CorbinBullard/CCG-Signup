@@ -17,6 +17,7 @@ export class CreateSignupConsentFormDto {
   @IsDate()
   agreedAt?: Date;
 
+  @IsOptional()
   @IsString()
-  deviceName: string;
+  deviceName?: string;
 }

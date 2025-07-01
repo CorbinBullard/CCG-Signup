@@ -1,6 +1,7 @@
 import { ConsentForm } from "../consentForms/consentForm.type";
 
-export type ECF = ConsentForm & {
-  required: boolean;
+export type SCF = {
   consentForm: ConsentForm;
+  agreed: boolean;
+  agreedAt?: Date;
 };

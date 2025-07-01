@@ -1,15 +1,12 @@
-import { Form, FormInstance, Input, Typography } from "antd";
+import { Form, Input } from "antd";
 import ResponseItemForm from "./ResponseItemForm";
 import { Field } from "../fields/field.type";
 
 export default function SignupForm({
   fields, // this is the form definition
-  ...props
 }: {
-  form: FormInstance;
   fields: Field[];
 }) {
-  const form: FormInstance = Form.useFormInstance();
   return (
     <>
       <Form.List name="responses">

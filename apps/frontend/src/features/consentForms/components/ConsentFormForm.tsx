@@ -2,7 +2,7 @@ import { Form, Input } from "antd";
 import { useConsentForms } from "../hooks/useConsentForms";
 import UniqueNameField from "../../../components/formComponents/UniqueField";
 
-export default function ConsentFormForm({ ...props }) {
+export default function ConsentFormForm() {
   return (
     <>
       <UniqueNameField

@@ -30,6 +30,7 @@
     "@nestjs/platform-express": "^11.1.1",
     "@nestjs/platform-socket.io": "^11.1.2",
     "@nestjs/schedule": "^6.0.0",
+    "@nestjs/serve-static": "^5.0.3",
     "@nestjs/typeorm": "^11.0.0",
     "@nestjs/websockets": "^11.1.2",
     "axios": "^1.8.4",
@@ -43,6 +44,7 @@
     "rxjs": "^7.8.1",
     "socket.io": "^4.8.1",
     "sqlite3": "^5.1.7",
+    "square": "^43.0.0",
     "typeorm": "^0.3.20"
   },
   "devDependencies": {

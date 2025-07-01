@@ -8,8 +8,7 @@ import {
 } from "@ant-design/icons";
 import type { MenuProps } from "antd";
 import { Flex, Image, Layout, Menu, theme } from "antd";
-import { Outlet, useLocation, useNavigate, useParams } from "react-router-dom";
-import PageLayout from "./PageLayout";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import BreadcrumbNav from "../BreadcrumbNav";
 
 const { Header, Content, Footer, Sider } = Layout;
@@ -45,7 +44,7 @@ const AppLayout: React.FC = () => {
   const { pathname } = useLocation();
 
   const {
-    token: { colorBgContainer, borderRadiusLG },
+    token: { colorBgContainer },
   } = theme.useToken();
 
   const handleMenuClick: MenuProps["onClick"] = (e) => {

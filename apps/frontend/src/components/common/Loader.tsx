@@ -1,7 +1,6 @@
-import React from "react";
 import { Spin } from "antd";
 
-const loaderStyle = {
+const loaderStyle: object = {
   position: "fixed",
   top: 0,
   left: 0,
@@ -15,8 +14,7 @@ const loaderStyle = {
   justifyContent: "center",
 };
 
-export default function Loader({ spinning = true }: { spinning?: boolean }) {
-  if (!spinning) return null;
+export default function Loader() {
   return (
     <div style={{ ...loaderStyle }}>
       <Spin size="large" />

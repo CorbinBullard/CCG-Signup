@@ -1,4 +1,10 @@
-import React, { createContext, useContext, useState, ReactNode, ReactElement } from "react";
+import {
+  createContext,
+  useContext,
+  useState,
+  ReactNode,
+  ReactElement,
+} from "react";
 import { Modal } from "antd";
 
 type ModalContextType = {
@@ -33,12 +39,7 @@ export const ModalProvider = ({ children }: { children: ReactNode }) => {
   return (
     <ModalContext.Provider value={{ openModal, closeModal }}>
       {children}
-      <Modal
-        open={isOpen}
-        onCancel={closeModal}
-        footer={null}
-        destroyOnClose
-      >
+      <Modal open={isOpen} onCancel={closeModal} footer={null} destroyOnClose>
         {modalContent}
       </Modal>
     </ModalContext.Provider>

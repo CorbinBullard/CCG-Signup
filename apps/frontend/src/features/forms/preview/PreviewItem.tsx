@@ -8,12 +8,9 @@ import {
   Input,
   InputNumber,
   Select,
-  Space,
-  Splitter,
   Tag,
   Typography,
 } from "antd";
-import React from "react";
 import { FieldTypeEnum } from "../../fields/field.type";
 import CreateList from "../../../components/formComponents/CreateList";
 

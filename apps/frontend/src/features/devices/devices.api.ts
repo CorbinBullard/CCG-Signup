@@ -1,3 +1,4 @@
+import { UUID } from "crypto";
 import api from "../../utils/axiosApi";
 
 export const fetchDevices = async () => {
@@ -14,14 +15,14 @@ export const updateDevice = async ({
   id,
   name,
 }: {
-  id: number;
+  id: UUID;
   name: string;
 }) => {
   const response = await api.put(`/api/devices/${id}`, { name });
   return response.data;
 };
 
-export const deleteDevice = async (id: number) => {
+export const deleteDevice = async (id: UUID) => {
   const response = await api.delete(`/api/devices/${id}`);
   return response.data;
 };

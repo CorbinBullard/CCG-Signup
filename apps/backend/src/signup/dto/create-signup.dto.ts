@@ -13,4 +13,8 @@ export class CreateSignupDto {
   @ValidateNested({ each: true })
   @Type(() => CreateResponseDto)
   responses: CreateResponseDto[];
+
+  @IsOptional()
+  @IsArray()
+  signupConsentForms?: CreateSignupConsentFormDto[];
 }

@@ -1,17 +1,18 @@
 import { Card, Flex, Form, FormItemProps, Tag, Typography } from "antd";
 import { SubField } from "../../fields/field.type";
 import CompositeField from "./CompositeField";
-import FormList from "antd/es/form/FormList";
 
 export default function MultiResponseField({
   subfields,
   label,
   name,
   cost,
-  ...rest
+  required,
 }: {
-  subfields: SubField[];
+  subfields?: SubField[];
   label: string;
+  cost?: number;
+  required?: boolean;
   name: FormItemProps["name"];
 }) {
   return (
@@ -20,10 +21,10 @@ export default function MultiResponseField({
       rules={[
         {
           validator: async (_, responses) => {
-            if (rest.required && responses === null) {
+            if (required && responses === null) {
               return Promise.reject(new Error(`${label} is required`));
             }
-            if (rest.required && responses.length < 1) {
+            if (required && responses.length < 1) {
               return Promise.reject(
                 new Error(`At least 1 ${label} is required`)
               );
@@ -37,7 +38,7 @@ export default function MultiResponseField({
           title={
             <Flex align="center" gap={12}>
               <Typography.Text>{label}</Typography.Text>
-              {cost > 0 && <Tag>+ ${cost}</Tag>}
+              {cost && cost > 0 && <Tag>+ ${cost}</Tag>}
               <Form.ErrorList
                 errors={[
                   <Typography.Text type="danger">{errors}</Typography.Text>,
@@ -54,6 +55,7 @@ export default function MultiResponseField({
                 subfields={subfields}
                 name={[field.name]} // passes name to CompositeField (becomes [responses, fieldIndex, 'value', index])
                 wrapWithValue={true} // wraps the value in a single object
+                label={""}
               />
 
               <a onClick={() => remove(index)} style={{ color: "red" }}>

@@ -1,10 +1,10 @@
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
 import { Event } from "../event.types";
 import { Flex, Form, Image, Modal } from "antd";
-import EventDetails from "../components/eventDetails";
 import EventForm from "../components/EventForm";
 import { useUpdateEventSubmission } from "../hooks/useUpdateEventSubmission";
 import Format from "../../../utils/Format";
+import EventDetails from "../components/EventDetails";
 
 export default function UpdateEvent({
   event,
@@ -25,8 +25,6 @@ export default function UpdateEvent({
     submit();
     setIsModalOpen(false);
   };
-
-  
 
   return (
     <>

@@ -1,5 +1,5 @@
-import { Flex, Typography } from "antd";
-import React, { useMemo } from "react";
+import { Typography } from "antd";
+import { useMemo } from "react";
 import { Event } from "../event.types";
 import { UserOutlined } from "@ant-design/icons";
 

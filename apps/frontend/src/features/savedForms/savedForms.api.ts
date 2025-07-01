@@ -8,7 +8,7 @@ export const fetchSavedForms = async (query: object) => {
   return response.data;
 };
 
-export const fetchSavedForm = async (id: number) => {
+export const fetchSavedForm = async (id?: number) => {
   const response = await api.get(`/api/form-templates/${id}`);
   return response.data;
 };

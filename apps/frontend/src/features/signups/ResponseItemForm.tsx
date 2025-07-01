@@ -1,6 +1,5 @@
-import { Form, Input } from "antd";
-
-import { FieldTypeEnum } from "../fields/field.type";
+import { Input } from "antd";
+import { FieldTypeEnum, SubFieldTypeEnum } from "../fields/field.type";
 import TextField from "./FieldTypes/TextField";
 import NumberField from "./FieldTypes/NumberField";
 import SelectField from "./FieldTypes/SelectField";
@@ -14,13 +13,14 @@ import MultiResponseField from "./FieldTypes/MultiResponseField";
 
 export default function ResponseItemForm(props: {
   label: string;
-  type: FieldTypeEnum;
+  type: FieldTypeEnum | SubFieldTypeEnum;
   options?: Options;
   required?: boolean;
   subfields?: SubField[];
   [key: string]: any;
   index: number;
-  id: number;
+  id?: number;
+  name: (string | number)[];
 }) {
   return (
     <>

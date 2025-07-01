@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Form, FormItemProps, InputNumber } from "antd";
 
-export default function NumberField(props: FormItemProps) {
+export default function NumberField(props: FormItemProps | any) {
   return (
     <Form.Item
       {...props}

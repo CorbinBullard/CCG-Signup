@@ -1,6 +1,5 @@
 import { MoreOutlined } from "@ant-design/icons";
 import { Dropdown, MenuProps } from "antd";
-import React from "react";
 
 export default function OptionsButton({
   items,

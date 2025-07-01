@@ -7,7 +7,7 @@ export default function LoginLayout() {
   const [loginForm] = Form.useForm();
   const navigate = useNavigate();
 
-  const login = async (values) => {
+  const login = async (values: { email: string; password: string }) => {
     try {
       const response = await axios.post("/api/auth/login", { ...values });
       const token = response.data.access_token;

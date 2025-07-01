@@ -1,6 +1,7 @@
-import dayjs from "dayjs";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import dayjs, { Dayjs } from "dayjs";
 import { Event } from "../features/events/event.types";
-import { Field, FieldTypeEnum } from "../features/fields/field.type";
+import { Field, FieldTypeEnum, SubField } from "../features/fields/field.type";
 import { Response } from "../features/signups/types/response.type";
 import { Signup } from "../features/signups/types/signup.type";
 export default class Format {
@@ -27,15 +28,17 @@ export default class Format {
 
   static Signup(signup: Signup): object {
     const fields = signup.event.form.fields;
-    const responseLookup = signup.responses.reduce((acc, curr) => {
+    const responseLookup = signup.responses.reduce((acc: any, curr) => {
       acc[curr.fieldId] = curr;
       return acc;
     }, {});
+
     return {
       ...signup,
-      responses: fields.map((field) =>
-        Format.Response(responseLookup[field.id], field)
-      ),
+      responses: fields.map((field: Field) => {
+        if (!field.id) return;
+        return Format.Response(responseLookup[field?.id], field);
+      }),
     };
   }
 
@@ -54,10 +57,10 @@ export default class Format {
       }
       case FieldTypeEnum.Date: {
         const dateTest = dayjs(value);
-        if (!dayjs.isDayjs(dateTest)) {
-          value = null;
-        } else {
+        if (dateTest.isValid()) {
           value = Format.Date(value);
+        } else {
+          value = null;
         }
         break;
       }
@@ -97,14 +100,16 @@ export default class Format {
         }
         const compositeValues = response?.value;
         const compositeField = response?.field.subfields;
-        const formattedValues = compositeValues.map((compositeValue) => {
-          return {
-            value: formatCompositeFieldValues(
-              compositeField,
-              compositeValue.value
-            ),
-          };
-        });
+        const formattedValues = compositeValues.map(
+          (compositeValue: { value: any[] }) => {
+            return {
+              value: formatCompositeFieldValues(
+                compositeField,
+                compositeValue.value
+              ),
+            };
+          }
+        );
 
         value = formattedValues;
         break;
@@ -115,7 +120,7 @@ export default class Format {
     return { fieldId, value };
   }
 
-  static isResponseValid(field: Field, response: Response): boolean {
+  static isResponseValid(field: Field | SubField, response: Response): boolean {
     const { value } = response;
 
     switch (field.type) {
@@ -135,14 +140,19 @@ export default class Format {
         return typeof value === "number";
 
       case FieldTypeEnum.Select:
-        return field.options?.some((option) => option.label === value);
+        return field.options?.some((option) => option.label === value) || false;
 
       case FieldTypeEnum.Composite:
         return (
-          Array.isArray(value) &&
-          field.subfields.every((subfield, index) =>
-            Format.isResponseValid(subfield, { value: value[index]?.value })
-          )
+          (Array.isArray(value) &&
+            field?.subfields?.every((subfield, index) =>
+              Format.isResponseValid(subfield, {
+                value: value[index]?.value,
+                fieldId: "",
+                field: undefined,
+              })
+            )) ||
+          false
         );
 
       case FieldTypeEnum.MultiResponse:
@@ -151,9 +161,11 @@ export default class Format {
           value.every(
             (item) =>
               Array.isArray(item.value) &&
-              field.subfields.every((subfield, index) =>
+              field?.subfields?.every((subfield, index) =>
                 Format.isResponseValid(subfield, {
                   value: item.value[index]?.value,
+                  fieldId: "",
+                  field: undefined,
                 })
               )
           )
@@ -165,9 +177,16 @@ export default class Format {
   }
 }
 
-function formatCompositeFieldValues(fields, values) {
+function formatCompositeFieldValues(fields: Field[], values: any[]) {
   return values.map((value, index) => {
-    return Format.Response({ value: value.value }, fields[index]);
+    return Format.Response(
+      {
+        value: value.value,
+        fieldId: "",
+        field: undefined,
+      },
+      fields[index]
+    );
   });
 }
 

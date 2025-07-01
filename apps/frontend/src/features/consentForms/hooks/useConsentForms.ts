@@ -7,7 +7,6 @@ import {
   updateConsentForm,
 } from "../consentForms.api";
 import { useNotifications } from "../../../context/Notifications";
-import { useNavigate } from "react-router-dom";
 
 export const useConsentForms = (query) => {
   return useQuery({

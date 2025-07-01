@@ -6,12 +6,12 @@ import {
   OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
-  Unique,
 } from 'typeorm';
 import { Form } from 'src/form/form.entity';
 import { Signup } from 'src/signup/signup.entity';
 import { FundLocationEnum } from '../FundLocationEnum';
 import { EventConsentForm } from 'src/event-consent-forms/entities/event-consent-form.entity';
+import { EnumColumnType } from 'src/typeorm.config/ColumnConfig';
 
 @Entity()
 @Index(['title', 'date'], { unique: true })
@@ -39,7 +39,10 @@ export class Event {
 
   //Fix this when using POSTGRES
   @Column({
-    nullable: true,
+    ...EnumColumnType({
+      nullable: true,
+      enumType: FundLocationEnum,
+    }),
   })
   funds?: FundLocationEnum;
 

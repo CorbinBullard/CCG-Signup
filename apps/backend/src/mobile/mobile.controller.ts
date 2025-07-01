@@ -37,16 +37,31 @@ export class MobileController {
   }
 
   @UseGuards(IsRegisteredDeviceGuard)
+  @Post('events/:id/signups/getPayment')
+  async getPayment(
+    @Param('id') eventId: number,
+    @Body() signup: CreateSignupDto,
+  ) {
+    console.log(eventId, signup);
+    return await this.mobileService.getPayment(eventId, signup);
+  }
+
+  @UseGuards(IsRegisteredDeviceGuard)
   @Get('events')
   async getEvents() {
     return await this.mobileService.getEvents();
   }
 
+  @UseGuards(IsRegisteredDeviceGuard)
   @Post('events/:id/signups')
-  createSignup(@Param('id') eventId: number, @Body() signup: CreateSignupDto) {
-    console.log('SIGNUP ', signup);
+  async createSignup(
+    @Param('id') eventId: number,
+    @Body() signup: CreateSignupDto,
+  ) {
+    return await this.mobileService.createSignup(eventId, signup);
   }
 
+  @UseGuards(IsRegisteredDeviceGuard)
   @Get('events/:id')
   async getEvent(@Param('id') id: number) {
     return await this.mobileService.getEvent(id);

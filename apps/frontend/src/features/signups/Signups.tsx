@@ -1,8 +1,8 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Flex, Form, Modal, Table, Typography } from "antd";
 import { useEffect, useMemo, useState } from "react";
 import { TableData } from "./signupTable/TableData";
 import {
-  useCreateSCF,
   useDeleteSignup,
   useSignup,
   useSignups,
@@ -13,6 +13,7 @@ import SignupForm from "./SignupForm";
 import { Event } from "../events/event.types";
 import Format from "../../utils/Format";
 import SignConsentFormsModal from "../scf/SignupConsentFormsModal";
+import Loader from "../../components/common/Loader";
 
 // Extracted Edit Modal
 function EditSignupModal({ open, onCancel, onOk, form, fields }) {
@@ -36,7 +37,7 @@ function EditSignupModal({ open, onCancel, onOk, form, fields }) {
 
 export default function Signups({ event }: { event: Event }) {
   // State hooks
-  const signups = useSignups(event.id).data || [];
+  const { data: signups = [], isLoading } = useSignups(event.id);
   const deleteSignup = useDeleteSignup();
   const updateSignup = useUpdateSignup();
 
@@ -115,7 +116,10 @@ export default function Signups({ event }: { event: Event }) {
       </Flex>
     );
   };
+
   // Render
+  if (isLoading) return <Loader />;
+
   return (
     <>
       <Table

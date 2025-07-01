@@ -8,7 +8,6 @@ import { Form as FormType } from "../../features/forms/form.types";
 import {
   useCreateSavedForm,
   useSavedForm,
-  useSavedForms,
   useUpdateSavedForm,
 } from "../../features/savedForms/hooks/useSavedForms";
 
@@ -20,7 +19,7 @@ export enum ModeEnum {
 export default function SingleFormPage() {
   const { id } = useParams<{ id: string }>();
   const mode: ModeEnum = id ? ModeEnum.update : ModeEnum.create;
-  const { data: form, isLoading } = useSavedForm(id);
+  const { data: form, isLoading } = useSavedForm(id ? +id : undefined);
   const createForm = useCreateSavedForm();
   const updateForm = useUpdateSavedForm();
   const [savedFormForm] = Form.useForm();
@@ -32,9 +31,10 @@ export default function SingleFormPage() {
         ...values,
         isSaved: true,
       };
-      await createForm.mutate(dto);
+      createForm.mutate(dto);
     } else {
-      await updateForm.mutate({ id, form: values });
+      if (!id) return;
+      updateForm.mutate({ id: +id, form: values });
     }
   };
 
@@ -54,7 +54,7 @@ export default function SingleFormPage() {
       ]}
     >
       <Form layout="vertical" form={savedFormForm} initialValues={form}>
-        <SavedFormForm form={savedFormForm} mode={mode} />
+        <SavedFormForm form={savedFormForm} />
       </Form>
     </PageLayout>
   );

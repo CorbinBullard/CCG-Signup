@@ -1,9 +1,9 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   Button,
   DatePicker,
   Flex,
   Form,
-  FormInstance,
   Input,
   InputNumber,
   Select,
@@ -13,13 +13,8 @@ import {
 import CostInput from "../../../components/formComponents/CostInput";
 import { UploadOutlined } from "@ant-design/icons";
 import { FundLocationEnum } from "../fund.type";
-import ConditionalFormItem from "../../../components/formComponents/DependentItem";
 
-const EventForm = ({
-  ref,
-}: {
-  ref?: React.RefObject<any>;
-}) => {
+const EventForm = ({ ref }: { ref?: React.RefObject<any> }) => {
   return (
     <Flex gap={16} style={{ width: "100%" }}>
       <Flex vertical gap={16} flex={1}>
@@ -51,6 +46,7 @@ const EventForm = ({
               format="h:mm a"
               minuteStep={15}
               style={{ width: "100%" }}
+              needConfirm={false}
             />
           </Form.Item>
         </Flex>

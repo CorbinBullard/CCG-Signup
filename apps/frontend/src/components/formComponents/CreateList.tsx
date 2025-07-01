@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from "react";
 import { CSS } from "@dnd-kit/utilities";
 import {
@@ -15,9 +16,10 @@ import {
   verticalListSortingStrategy,
   useSortable,
 } from "@dnd-kit/sortable";
-import { Typography } from "antd";
 import { Flex, Button, Form } from "antd";
 import ItemListItem from "./ItemListItem";
+import { ListItemProps } from "antd/es/list";
+import { BaseButtonProps } from "antd/es/button/button";
 
 export default function CreateFormList({
   children,
@@ -25,22 +27,22 @@ export default function CreateFormList({
   buttonLabel,
   title,
   card,
-  type = "dashed",
+  btnType = "dashed",
   initialValue = {},
   required = false,
   rules,
   ...props
 }: {
   children: React.ReactNode;
-  name: string;
+  name: string | (string | number)[];
   buttonLabel: string;
   title?: string;
   card?: boolean;
   initialValue?: any;
   required?: boolean;
   rules?: any;
-  props?: any;
-  type: "default" | "dashed" | "link" | "text" | "primary";
+  props?: ListItemProps;
+  btnType?: BaseButtonProps["type"];
 }) {
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -51,7 +53,7 @@ export default function CreateFormList({
 
   return (
     <Form.List name={name} {...props} rules={rules}>
-      {(fields, { add, remove, move }, { errors }) => {
+      {(fields, { add, remove, move }) => {
         function handleDragEnd(event) {
           const { active, over } = event;
           if (active.id !== over.id) {
@@ -70,25 +72,25 @@ export default function CreateFormList({
               strategy={verticalListSortingStrategy}
             >
               <Flex vertical gap={4}>
-                {fields.map((field, index) => (
+                {fields.map((field) => (
                   <SortableItem
                     id={field.name}
                     key={field.key}
                     field={field}
-                    index={index}
+                    // index={index}
                     remove={remove}
                     title={title}
                     card={card}
                     fields={fields}
                     required={required}
-                    errors={errors}
+                    // errors={errors}
                   >
                     {React.isValidElement(children)
                       ? React.cloneElement(children, { ...field })
                       : children}
                   </SortableItem>
                 ))}
-                <Button type={type} onClick={() => add(initialValue)}>
+                <Button type={btnType} onClick={() => add(initialValue)}>
                   {buttonLabel}
                 </Button>
               </Flex>
@@ -109,7 +111,6 @@ function SortableItem({
   card,
   field,
   fields,
-  errors,
 }) {
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id });

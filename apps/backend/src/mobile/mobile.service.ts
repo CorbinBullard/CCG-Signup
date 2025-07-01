@@ -1,16 +1,24 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { DevicesService } from 'src/devices/devices.service';
 import * as bcrypt from 'bcrypt';
 import { EventService } from 'src/event/event.service';
+import { CreateSignupDto } from 'src/signup/dto/create-signup.dto';
+import { getEventCost } from 'utils/Checkout/CostCalculator';
+import { SignupService } from 'src/signup/signup.service';
 @Injectable()
 export class MobileService {
   constructor(
     private jwtService: JwtService,
     private deviceService: DevicesService,
     private eventsService: EventService,
+    private signupService: SignupService,
   ) {}
 
   async getToken(token: string): Promise<boolean> {
@@ -65,5 +73,17 @@ export class MobileService {
 
   async getEvent(id: number) {
     return await this.eventsService.findOneEventForMobile(id);
+  }
+
+  async getPayment(eventId: number, signup: CreateSignupDto) {
+    const event = await this.getEvent(eventId);
+    if (!event) throw new NotFoundException('Event not found');
+    const cost: number = getEventCost(event, signup);
+    return cost;
+  }
+
+  async createSignup(eventId: number, signup: CreateSignupDto) {
+    console.log(signup);
+    return await this.signupService.create(signup, eventId);
   }
 }

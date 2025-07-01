@@ -1,14 +1,5 @@
-import React, { useRef, useMemo, useState } from "react";
-import {
-  Anchor,
-  Button,
-  Card,
-  Flex,
-  Form,
-  Layout,
-  Steps,
-  Typography,
-} from "antd";
+import { useRef, useState } from "react";
+import { Anchor, Button, Card, Flex, Form, Layout } from "antd";
 import PageLayout from "../../components/layouts/PageLayout";
 import { useEventSubmission } from "../../features/events/hooks/useEventSubmission";
 import { createEventInitialValues } from "../../features/events/event.initialValues";

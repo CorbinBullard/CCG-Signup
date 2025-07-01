@@ -1,4 +1,4 @@
-import { data } from "react-router-dom";
+import ConsentFormForm from "../consentForms/components/ConsentFormForm";
 import {
   useConsentForms,
   useCreateConsentForm,
@@ -12,16 +12,14 @@ import {
   Select,
   SelectProps,
   Switch,
-  Typography,
 } from "antd";
 
 import { useMemo, useRef } from "react";
 import { CloseOutlined, PlusOutlined } from "@ant-design/icons";
 import Loader from "../../components/common/Loader";
 import OpenModalButton from "../../components/common/OpenModalButton";
-import ConsentFormForm from "../consentForms/components/consentFormForm";
 
-export default function AttachCFToEventForm({ ...props }) {
+export default function AttachCFToEventForm() {
   const { data: consentForms, isLoading } = useConsentForms({});
   const [newConsentForm] = Form.useForm();
   const modalRef = useRef<{ closeModal: () => void; openModal: () => void }>(
@@ -68,7 +66,7 @@ export default function AttachCFToEventForm({ ...props }) {
   return (
     <>
       <Form.List name={"consentForms"}>
-        {(fields, { add, remove }, { errors }) => {
+        {(fields, { add, remove }) => {
           const addedIds = fields.map((field) =>
             formInstance.getFieldValue([
               "consentForms",
@@ -108,7 +106,7 @@ export default function AttachCFToEventForm({ ...props }) {
                   value={null}
                   options={filteredOptions}
                   style={{ width: "100%" }}
-                  onSelect={(value, { data }) => {
+                  onSelect={(value) => {
                     add({ consentFormId: value, required: false });
                   }}
                   placeholder="Add Consent Form to this Event"

@@ -1,7 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { DatePicker, Form, FormItemProps } from "antd";
-import dayjs from "dayjs";
 
-export default function DateField(props: FormItemProps) {
+export default function DateField(props: FormItemProps | any) {
   return (
     <Form.Item
       {...props}

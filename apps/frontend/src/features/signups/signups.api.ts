@@ -1,9 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import api from "../../utils/axiosApi";
-
-// export const fetchSignups = async () => {
-//   const response = await api.get(`/api/signups`);
-//   return response.data;
-// };
 
 export const fetchEventSignups = async (eventId: number) => {
   const response = await api.get(`/api/events/${eventId}/signups`);

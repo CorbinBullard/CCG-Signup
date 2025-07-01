@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Options } from "../../fields/options/option.type";
 import {
   Empty,
@@ -11,10 +12,14 @@ import {
 
 export default function SelectField({
   options,
+  required,
+  label,
   ...props
 }: {
-  options: Options;
-  props: FormItemProps;
+  options?: Options | undefined;
+  required?: boolean;
+  label: string;
+  props?: FormItemProps | any;
 }) {
   const optionobj = options
     ? options.map((option) => {
@@ -31,14 +36,12 @@ export default function SelectField({
   return (
     <Form.Item
       {...props}
-      rules={[
-        { required: props.required, message: `${props.label} is required` },
-      ]}
+      rules={[{ required: required, message: `${label} is required` }]}
       initialValue={null}
     >
       <Select
         options={optionobj}
-        placeholder={`Select ${props.label}`}
+        placeholder={`Select ${label}`}
         optionRender={(option) => {
           return option ? (
             <Flex gap={8}>

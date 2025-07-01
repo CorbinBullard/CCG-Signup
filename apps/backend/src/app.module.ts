@@ -8,7 +8,7 @@ import { SignupModule } from './signup/signup.module';
 import { FieldsModule } from './fields/fields.module';
 import { ResponseModule } from './response/response.module';
 import { AuthModule } from './auth/auth.module';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { DropboxModule } from './dropbox/dropbox.module';
 import { FormTemplateModule } from './form-template/form-template.module';
 import { AwsS3Service } from './aws-s3/aws-s3.service';
@@ -16,22 +16,32 @@ import { ConsentFormsModule } from './consent-forms/consent-forms.module';
 import { EventConsentFormsModule } from './event-consent-forms/event-consent-forms.module';
 import { SignupConsentFormsModule } from './signup-consent-forms/signup-consent-forms.module';
 import { ScheduleModule } from '@nestjs/schedule';
-import { EventCleanupServiceService } from './event-cleanup-service/event-cleanup-service.service';
 import { DevicesModule } from './devices/devices.module';
-import { MobileController } from './mobile/mobile.controller';
 import { MobileService } from './mobile/mobile.service';
 import { MobileModule } from './mobile/mobile.module';
+import config from './config';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 @Module({
   imports: [
-    ScheduleModule.forRoot(),
-    TypeOrmModule.forRoot({
-      type: 'sqlite',
-      database: 'db/dev.db', // Path to your SQLite database file
-      entities: [__dirname + '/**/*.entity{.ts,.js}'], // Auto-load entity files
-      synchronize: true, // Auto-sync schema (disable in production)
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', '..', '..', 'frontend', 'dist'),
     }),
-    ConfigModule.forRoot({ isGlobal: true }),
+    ScheduleModule.forRoot(),
+    ConfigModule.forRoot({
+      isGlobal: true,
+      load: [config],
+    }),
+    TypeOrmModule.forRootAsync({
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => {
+        return {
+          ...config.get('app.database'),
+          entities: [__dirname + '/**/*.entity.{ts,js}'],
+        };
+      },
+    }),
     EventModule,
     FormModule,
     SignupModule,
@@ -47,7 +57,7 @@ import { MobileModule } from './mobile/mobile.module';
     DevicesModule,
     MobileModule,
   ],
-  controllers: [AppController, MobileController],
+  controllers: [AppController],
   providers: [AppService, AwsS3Service, MobileService],
 })
 export class AppModule {}

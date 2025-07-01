@@ -11,6 +11,10 @@ import FormsPage from "./pages/savedForms/SavedFormsPage";
 import SingleFormPage from "./pages/savedForms/SingleFormPage";
 import DevicesPage from "./pages/devices/DevicesPage";
 import ConsentFormsPage from "./pages/consentForms/ConsentFormsPage";
+import dayjs from "dayjs";
+import customParseFormat from "dayjs/plugin/customParseFormat"; // For strict parsing
+
+dayjs.extend(customParseFormat);
 
 function App() {
   return (

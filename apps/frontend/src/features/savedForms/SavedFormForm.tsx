@@ -1,24 +1,14 @@
-import {
-  Flex,
-  Form,
-  FormInstance,
-  Input,
-  Select,
-  Splitter,
-  Typography,
-} from "antd";
-import CreateList from "../../components/formComponents/CreateList.tsx";
-import { FieldTypeEnum } from "../fields/field.type.ts";
-import FieldForm from "../fields/FieldForm.tsx";
-import PreviewForm from "../forms/preview/PreviewForm.tsx";
-import FormNameItem from "./FormNameItem.tsx";
-import UniqueNameField from "../../components/formComponents/UniqueField.tsx";
-import { useSavedForms } from "./hooks/useSavedForms.ts";
+import { Flex, Form, FormInstance, Splitter, Typography } from 'antd';
+import CreateList from '../../components/formComponents/CreateList.js';
+import { Field, FieldTypeEnum } from '../fields/field.type.js';
+import FieldForm from '../fields/FieldForm.js';
+import PreviewForm from '../forms/preview/PreviewForm.js';
+import UniqueNameField from '../../components/formComponents/UniqueField.js';
+import { useSavedForms } from './hooks/useSavedForms.js';
 
 export default function SavedFormForm({
   form,
   preview = true,
-  ...props
 }: {
   form: FormInstance;
   preview?: boolean;
@@ -27,48 +17,51 @@ export default function SavedFormForm({
     <>
       <Flex gap={16}>
         <UniqueNameField
-          label={"Name"}
-          name={"name"}
+          label={'Name'}
+          name={'name'}
           getItemsQueryFn={useSavedForms}
         />
       </Flex>
       <Splitter>
         <Splitter.Panel min={500}>
           <CreateList
-            name={"fields"}
+            name={'fields'}
             buttonLabel="Add Field"
-            title={"Field"}
+            title={'Field'}
             card={true}
             initialValue={{
-              label: "",
+              label: '',
               type: FieldTypeEnum.Text,
               required: true,
             }}
             rules={[
               {
-                validator: async (_, value) => {
+                validator: async (_: never, value: Field[]) => {
                   // 1. Minimum 1 field
                   if (!Array.isArray(value) || value.length < 1) {
-                    throw new Error("You must add at least one field.");
+                    throw new Error('You must add at least one field.');
                   }
                   // 2. At least one field is required
-                  const hasRequired = value.some((field) => field.required);
+                  const hasRequired: boolean = value.some(
+                    (field: Field) => field?.required,
+                  );
                   if (!hasRequired) {
                     throw new Error(
-                      "At least one field must be marked as required."
+                      'At least one field must be marked as required.',
                     );
                   }
                 },
               },
             ]}
             required
+            btnType={'link'}
           >
-            <FieldForm mode={"edit"} />
+            <FieldForm mode={'edit'} />
           </CreateList>
         </Splitter.Panel>
         <Splitter.Panel collapsible>
           <Form.Item noStyle>
-            {preview && <PreviewForm form={form} mode={"edit"} />}
+            {preview && <PreviewForm form={form} mode={'edit'} />}
           </Form.Item>
         </Splitter.Panel>
       </Splitter>

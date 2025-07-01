@@ -7,7 +7,6 @@ import {
 } from "antd";
 import { Event } from "../event.types";
 import dayjs from "dayjs";
-import { useMemo, useState } from "react";
 import EventSignupStatus from "./EventSignupStatus";
 
 export default function EventDetails({ event }: { event: Event }) {

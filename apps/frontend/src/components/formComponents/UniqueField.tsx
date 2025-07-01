@@ -1,8 +1,10 @@
 import { Form, Input } from "antd";
-import React from "react";
-import { useSavedForms } from "./hooks/useSavedForms";
-
-export default function UniqueNameField({ label, name, getItemsQueryFn, ...props }) {
+export default function UniqueNameField({
+  label,
+  name,
+  getItemsQueryFn,
+  ...props
+}) {
   const { data } = getItemsQueryFn({});
   const currentName = Form.useFormInstance().getFieldValue(name);
   const formFieldLookupObj = data?.reduce((acc, curr) => {
@@ -20,7 +22,8 @@ export default function UniqueNameField({ label, name, getItemsQueryFn, ...props
       rules={[
         {
           validator: (_, value) => {
-            if (!value) return Promise.reject(new Error(`${label} is required`));
+            if (!value)
+              return Promise.reject(new Error(`${label} is required`));
             if (formFieldLookupObj[value]) {
               return Promise.reject(
                 new Error(`${label} with name ${value} already exsists`)

@@ -10,13 +10,12 @@ export default function CompositeField({
   ...props
 }: {
   label: string;
-  subfields: SubField[];
+  subfields?: SubField[];
   name: FormItemProps["name"];
   wrapWithValue?: boolean;
-  props: FormItemProps;
+  props?: FormItemProps | any;
 }) {
   const listName = wrapWithValue ? [...name, "value"] : name;
-  console.log(props);
   return (
     <Form.List {...props} name={listName}>
       {(formListFields) => (

@@ -1,11 +1,8 @@
 // PageLayout.jsx
-import React, { JSX, Suspense } from "react";
-import { Layout, Typography, Button, Space, Flex, Breadcrumb } from "antd";
-import { CaretLeftOutlined } from "@ant-design/icons";
-import { useLocation, useNavigate } from "react-router-dom";
+import { JSX } from "react";
+import { Layout, Typography, Space, Flex } from "antd";
 import Loader from "../common/Loader";
 import { ErrorBoundary } from "react-error-boundary";
-import ErrorPage from "../common/ErrorPage";
 
 const { Header, Content } = Layout;
 const { Title } = Typography;
@@ -15,10 +12,11 @@ const PageLayout = ({
   actions,
   children,
   Component,
-  isLoading,
 }: {
   title: string;
-  actions: JSX.Element[];
+  actions?: JSX.Element[];
+  children: JSX.Element;
+  Component?: JSX.Element;
 }) => {
   return (
     <Layout
@@ -47,7 +45,7 @@ const PageLayout = ({
         </Flex>
       </Header>
       {/* MAKE BETTER LOADING */}
-      <ErrorBoundary FallbackComponent={ErrorPage} fallbackRender={Loader}>
+      <ErrorBoundary fallbackRender={Loader}>
         <Content>{children}</Content>
       </ErrorBoundary>
     </Layout>

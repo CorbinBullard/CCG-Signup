@@ -1,12 +1,19 @@
-import { Field, FieldTypeEnum } from "../fields/field.type";
+import { Field, FieldTypeEnum, SubField } from "../fields/field.type";
 
-export const signupDefaultValues = (fields: Field[]) => {
+export const signupDefaultValues = (fields: Field[] | SubField[]) => {
+  console.log(fields);
   return {
     note: "",
     responses: fields.map((field) => {
-      // let value = null;
-      // if (field.type === FieldTypeEnum.Switch) value = false;
-      return { fieldId: field.id, value: field.value };
+      let value = null;
+      switch (field.type) {
+        case FieldTypeEnum.Switch: {
+          value = false;
+          break;
+        }
+        
+      }
+      return { fieldId: field.id, value };
     }),
   };
 };

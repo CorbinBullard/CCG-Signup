@@ -1,5 +1,5 @@
 import { Button, Card, Form, Image, Input } from "antd";
-import React, { JSX } from "react";
+import { JSX } from "react";
 
 export default function LoginCard({ login, form }): JSX.Element {
   return (

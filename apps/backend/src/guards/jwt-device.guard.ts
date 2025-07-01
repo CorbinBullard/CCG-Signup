@@ -17,7 +17,6 @@ export class IsRegisteredDeviceGuard implements CanActivate {
     private deviceService: DevicesService,
   ) {}
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    console.log('MOBILE REQUEST MADE');
     const request = context.switchToHttp().getRequest<Request>();
     const token = this.extractTokenFromHeader(request);
     if (!token) {

@@ -1,5 +1,4 @@
-import { Flex, Form, Input, InputNumber, Space } from "antd";
-import React from "react";
+import { Flex, Form, Input } from "antd";
 import CostInput from "../../../components/formComponents/CostInput";
 
 export default function OptionForm(option) {

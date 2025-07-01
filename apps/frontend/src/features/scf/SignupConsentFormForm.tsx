@@ -1,10 +1,12 @@
 import { Card, Checkbox, Form, Input, Typography } from "antd";
+import { ECF } from "../ecf/efcType";
 
 export default function SignupConsentFormForm({
   ecf,
   fieldName = "agreed", // Default for old use
-  index,
-  ...props
+}: {
+  ecf: ECF;
+  fieldName: string | (string | number)[];
 }) {
   const formInstance = Form.useFormInstance();
   const handleAgreed = (e) => {

@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useStepper } from "./useStepper";
 import { Button, FormInstance, Steps } from "antd";
 import { CaretLeftOutlined, CaretRightOutlined } from "@ant-design/icons";
 
 function getAllFieldPaths(obj, prefix = []) {
   let paths = [];
-  for (let key in obj) {
+  for (const key in obj) {
     if (
       obj[key] !== null &&
       typeof obj[key] === "object" &&
@@ -28,7 +28,7 @@ function isNestedField(value) {
 
 // Helper to build the array of fields to validate for a step
 function buildFieldsToValidate(form, currForm) {
-  let fieldsToValidate = [];
+  const fieldsToValidate = [];
   for (const field of currForm.fields) {
     console.log("Field: ", field);
     const value = form.getFieldValue(field);

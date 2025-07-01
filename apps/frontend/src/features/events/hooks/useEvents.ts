@@ -107,7 +107,7 @@ export const useSetEventStatus = () => {
   const openNotification = useNotifications();
   return useMutation({
     mutationFn: setEventStatus,
-    onSuccess: ({ id, isActive }) => {
+    onSuccess: ({ id }) => {
       queryClient.invalidateQueries({ queryKey: ["events"] });
       queryClient.invalidateQueries({ queryKey: ["event", id] });
       openNotification({

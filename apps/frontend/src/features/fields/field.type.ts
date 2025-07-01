@@ -1,4 +1,12 @@
 import { Options } from "./options/option.type";
+export enum SubFieldTypeEnum {
+  Text = "string",
+  Number = "number",
+  Switch = "boolean",
+  Date = "date",
+  Email = "email",
+  Select = "select",
+}
 
 export enum FieldTypeEnum {
   Text = "string",
@@ -18,17 +26,10 @@ export type Field = {
   required: boolean;
   cost?: number;
   options?: Options;
-  subfields?: Field[];
+  subfields?: SubField[];
 };
 
-export enum SubFieldTypeEnum {
-  Text = "string",
-  Number = "number",
-  Switch = "boolean",
-  Date = "date",
-  Email = "email",
-  Select = "select",
-}
+
 export type SubField = {
   label: string;
   type: SubFieldTypeEnum;

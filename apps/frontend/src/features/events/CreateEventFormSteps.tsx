@@ -1,4 +1,3 @@
-import { FormInstance } from "antd";
 import FormForm from "../forms/FormForm";
 import EventForm from "./components/EventForm";
 import AttachCFToEventForm from "../ecf/AttachCFToEventForm";

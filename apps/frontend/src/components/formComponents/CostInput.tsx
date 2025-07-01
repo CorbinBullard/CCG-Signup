@@ -1,5 +1,4 @@
 import { InputNumber } from "antd";
-import React from "react";
 
 export default function CostInput(props) {
   return (

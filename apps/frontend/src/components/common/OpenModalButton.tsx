@@ -1,15 +1,20 @@
-import React, { useState, forwardRef, useImperativeHandle } from "react";
-import { Button, Modal } from "antd";
+import React, {
+  useState,
+  forwardRef,
+  useImperativeHandle,
+} from "react";
+import { Button, Modal, ModalProps } from "antd";
+import { BaseButtonProps } from "antd/es/button/button";
 
 interface OpenModalButtonProps {
-  children: React.ReactNode;
-  btnType?: "link" | "text" | "ghost" | "default" | "primary" | "dashed";
+  children?: React.ReactNode;
+  btnType?: BaseButtonProps["type"];
   label: string;
   icon?: React.ReactNode;
   modalTitle: string;
   onOk: () => void;
-  onClose: () => void;
-  modalProps: any;
+  onClose?: () => void;
+  modalProps?: ModalProps;
 }
 
 const OpenModalButton = forwardRef(
@@ -22,7 +27,7 @@ const OpenModalButton = forwardRef(
       modalTitle,
       onOk,
       onClose,
-      ...modalProps
+      modalProps
     }: OpenModalButtonProps,
     ref
   ) => {

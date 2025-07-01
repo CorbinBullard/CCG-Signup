@@ -1,6 +1,6 @@
 import { useEffect, useMemo } from "react";
-import { ECFType } from "../ecf/efcType";
-import { Flex, Form, FormInstance, Modal, Typography } from "antd";
+import { ECF } from "../ecf/efcType";
+import { Flex, Form, Modal } from "antd";
 import { CreateSignupFormSteps } from "./CreateSignupFormSteps";
 import useFormStepper from "../../components/common/hooks/useFormStepper";
 import { useEventConsentForms } from "../events/hooks/useEvents";
@@ -12,7 +12,6 @@ export default function SignupConsentFormsModal({
   signupId,
   eventId,
 }: {
-  isOpen: boolean;
   signupId: number | null;
   onCancel: () => void;
   eventId?: number;
@@ -33,8 +32,8 @@ export default function SignupConsentFormsModal({
     }
   };
 
-  const formattedECFArray: ECFType[] =
-    ecfs?.map((ecf: ECFType) => {
+  const formattedECFArray: ECF[] =
+    ecfs?.map((ecf: ECF) => {
       return { ...ecf.consentForm, ...ecf };
     }) || [];
 

@@ -16,7 +16,7 @@ export const useSavedForms = (query) => {
   });
 };
 
-export const useSavedForm = (id: number) => {
+export const useSavedForm = (id?: number) => {
   return useQuery({
     queryKey: ["savedForms", id],
     queryFn: () => fetchSavedForm(id),

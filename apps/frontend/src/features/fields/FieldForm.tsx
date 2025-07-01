@@ -1,6 +1,5 @@
 // GenericFieldForm.tsx
-
-import { Checkbox, Collapse, Flex, Form, Input, Select, Switch } from "antd";
+import { Collapse, Flex, Form, Input, Select, Switch } from "antd";
 import { FieldTypeEnum, SubFieldTypeEnum } from "./field.type";
 import CostInput from "../../components/formComponents/CostInput";
 import CreateList from "../../components/formComponents/CreateList";
@@ -8,7 +7,7 @@ import OptionForm from "./options/OptionForm";
 import ConditionalFormItem from "../../components/formComponents/DependentItem";
 
 interface GenericFieldFormProps {
-  name: (string | number)[];
+  name?: number;
   mode?: "create" | "edit";
   isSubfield?: boolean;
   parentName?: (string | number)[];
@@ -28,14 +27,15 @@ export default function FieldForm({
 
   const typeEnum = isSubfield ? SubFieldTypeEnum : FieldTypeEnum;
 
-  const handleTypeChange = (value: FieldTypeEnum | SubFieldTypeEnum) => {
-    const fieldsPath = mode === "create" ? ["form", "fields", name] : ["fields", name];
+  const handleTypeChange = () => {
+    const fieldsPath =
+      mode === "create" ? ["form", "fields", name] : ["fields", name];
     form.setFields([
       { name: [...fieldsPath, "subfields"], value: undefined },
       { name: [...fieldsPath, "options"], value: undefined },
     ]);
   };
-
+  console.log("NAME: ", name)
   return (
     <>
       <Flex gap={16}>
@@ -118,7 +118,7 @@ export default function FieldForm({
                   required
                   rules={[
                     {
-                      validator: async (_, options) => {
+                      validator: async (_: never, options) => {
                         if (!options || options.length < 2) {
                           return Promise.reject(
                             new Error(
@@ -206,7 +206,6 @@ export default function FieldForm({
                     <FieldForm
                       isSubfield={true}
                       parentName={getName(["fields", name, "subfields"])}
-                      name={[]}
                     />
                   </CreateList>
                 ),

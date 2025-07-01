@@ -13,6 +13,7 @@ import { BadRequestException } from '@nestjs/common';
 import { Options } from '../Options';
 import { Response } from 'src/response/entities/response.entity';
 import { Subfield } from '../Subfield';
+import { EnumColumnType } from 'src/typeorm.config/ColumnConfig';
 
 @Entity()
 export class Field {
@@ -22,7 +23,7 @@ export class Field {
   @Column()
   label: string;
 
-  @Column()
+  @Column(EnumColumnType({ enumType: FieldTypeEnum }))
   type: FieldTypeEnum;
 
   @Column({ default: true })

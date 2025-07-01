@@ -14,7 +14,7 @@ export const fetchEvent = async (id: number) => {
   return response.data;
 };
 
-export const postEvent = async (event: Event) => {
+export const postEvent = async (event: Event | FormData) => {
   const response = await api.post("/api/events", event, {
     headers: {
       "Content-Type": "multipart/form-data",
@@ -28,7 +28,7 @@ export const updateEvent = async ({
   event,
 }: {
   id: number;
-  event: Partial<Event>;
+  event: Partial<Event> | FormData;
 }) => {
   const response = await api.put(`/api/events/${id}`, event, {
     headers: {

@@ -48,6 +48,6 @@ export class SignupController {
     @Param('id') id: number,
     @Body() createSCFDtos: CreateSignupConsentFormDto[],
   ) {
-    this.signupService.attachSignupConsentForms(id, createSCFDtos);
+    return this.signupService.attachSignupConsentForms(id, createSCFDtos);
   }
 }

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   Alert,
   Descriptions,
@@ -11,7 +12,12 @@ import {
 } from "antd";
 import { Event } from "../../events/event.types";
 import { Response } from "../types/response.type";
-import { Field, FieldTypeEnum } from "../../fields/field.type";
+import {
+  Field,
+  FieldTypeEnum,
+  SubField,
+  SubFieldTypeEnum,
+} from "../../fields/field.type";
 import { Form } from "../../forms/form.types";
 import { Signup } from "../types/signup.type";
 import dayjs from "dayjs";
@@ -19,14 +25,12 @@ import { JSX } from "react";
 import {
   CheckSquareOutlined,
   CloseSquareOutlined,
-  EditOutlined,
   FileDoneOutlined,
   IssuesCloseOutlined,
   QuestionCircleOutlined,
 } from "@ant-design/icons";
 import OptionsButton from "../../../components/common/OptionsButton";
 import getMenuItems from "../../../components/common/getMenuItems";
-import { deleteSignup } from "../signups.api";
 import Format from "../../../utils/Format";
 
 export class TableData {
@@ -41,8 +45,10 @@ export class TableData {
   public fieldLookupObj: Record<string, Field>;
   public signupLookupObj: Record<string, Signup>;
   public columns: TableColumnsType<unknown>;
-  public data: TableProps;
+  public data: TableProps["dataSource"];
   public expandedTables: JSX.Element[];
+  public expandedData: any[];
+  expandedColumns: TableColumnsType<unknown>[];
 
   constructor(
     private event: Event,
@@ -68,7 +74,7 @@ export class TableData {
     this.signForms = signForms;
   }
   buildSignupLookupObject(): Record<string, Signup> {
-    return this.signups.reduce((acc, signup) => {
+    return this.signups?.reduce((acc, signup) => {
       acc[signup.id] = signup;
       return acc;
     }, {} as Record<string, Signup>);
@@ -82,7 +88,7 @@ export class TableData {
   }
 
   buildColumns(): TableColumnsType<any> {
-    const columns = this.fields.map((field) => {
+    const columns: TableColumnsType = this.fields.map((field) => {
       return {
         title: field.label,
         dataIndex: field.id,
@@ -97,7 +103,7 @@ export class TableData {
       columns.push({
         title: "Consents",
         dataIndex: undefined,
-        key: "consents",
+        key: columns.length,
         width: 10,
         render: ({ id }) => {
           const { signupConsentForms } = this.signupLookupObj[id];
@@ -111,13 +117,15 @@ export class TableData {
           else {
             return (
               <Flex>
-                {signupConsentForms.map((consent) =>
+                {signupConsentForms.map((consent, index) =>
                   consent.agreed ? (
                     <CheckSquareOutlined
+                      key={index}
                       style={{ color: "lime", fontSize: "large" }}
                     />
                   ) : (
                     <CloseSquareOutlined
+                      key={index}
                       style={{ color: "red", fontSize: "large" }}
                     />
                   )
@@ -131,8 +139,8 @@ export class TableData {
     columns.push({
       title: "Note",
       dataIndex: undefined,
-      key: undefined,
-      width: 10,
+      key: columns.length,
+      width: 5,
       render: ({ id }) => {
         const note = this.signupLookupObj[id].note;
         if (!note) return;
@@ -151,7 +159,7 @@ export class TableData {
 
     // Make into dropdown with edit and delete
     columns.push({
-      width: 10,
+      width: 5,
       render: (record) => {
         return (
           <OptionsButton
@@ -199,8 +207,8 @@ export class TableData {
       const row: Record<string, any> = { key: signupIndex, id: signup.id };
 
       const multiResponses: {
-        label: string;
-        data: any[];
+        label: React.ReactNode;
+        data?: any[];
         columns: TableColumnsType<any>;
       }[] = [];
 
@@ -285,9 +293,9 @@ export class TableData {
               field.subfields[index],
               (validatedValue) => {
                 switch (field.subfields[index].type) {
-                  case FieldTypeEnum.Date:
+                  case SubFieldTypeEnum.Date:
                     return dayjs(validatedValue).format("MM/DD/YYYY");
-                  case FieldTypeEnum.Switch:
+                  case SubFieldTypeEnum.Switch:
                     return validatedValue ? (
                       <Tag color="success">YES</Tag>
                     ) : (
@@ -337,9 +345,9 @@ export class TableData {
         )
           ? (() => {
               switch (subfield.type) {
-                case FieldTypeEnum.Date:
+                case SubFieldTypeEnum.Date:
                   return dayjs(responseItem.value).format("MM/DD/YYYY");
-                case FieldTypeEnum.Switch:
+                case SubFieldTypeEnum.Switch:
                   return responseItem.value ? (
                     <Tag color="success">YES</Tag>
                   ) : (
@@ -368,7 +376,7 @@ export class TableData {
 
   private withValidation<T>(
     response: Response,
-    field: Field,
+    field: Field | SubField,
     render: (validatedValue: T) => JSX.Element | string
   ): JSX.Element | string {
     if (!Format.isResponseValid(field, response)) {
