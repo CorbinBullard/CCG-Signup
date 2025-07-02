@@ -129,7 +129,7 @@ export class SignupService {
     for (const scf of scfArray) {
       await this.scfService.create(signup, scf);
     }
-    console.log('SIGN UP EVENT : \n', signup);
+
     return { message: 'Success' };
   }
 }

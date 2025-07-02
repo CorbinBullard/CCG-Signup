@@ -5,8 +5,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { SignupConsentForm } from './entities/signup-consent-form.entity';
 import { Repository } from 'typeorm';
 import { Signup } from 'src/signup/signup.entity';
-import { SignupService } from 'src/signup/signup.service';
-import { Event } from 'src/event/entities/event.entity';
 import { EventConsentFormsService } from 'src/event-consent-forms/event-consent-forms.service';
 import { EventConsentForm } from 'src/event-consent-forms/entities/event-consent-form.entity';
 
@@ -21,6 +19,13 @@ export class SignupConsentFormsService {
     signup: Signup,
     createSignupConsentFormDto: CreateSignupConsentFormDto,
   ) {
+    console.log(
+      'SIGNUP : ',
+      signup,
+      '\n',
+      'SCF : ',
+      createSignupConsentFormDto,
+    );
     // console.log(createSignupConsentFormDto);
     const { eventConsentFormId } = createSignupConsentFormDto;
 
@@ -39,7 +44,6 @@ export class SignupConsentFormsService {
     });
 
     const newSCF = await this.scfRespository.save(scf);
-    console.log('new SCF: ', newSCF);
     return newSCF;
   }
 
@@ -56,7 +60,10 @@ export class SignupConsentFormsService {
   }
 
   async removeBySignup(signup: Signup) {
-    await this.scfRespository.delete({ signupId: signup.id });
+    const deletedSCF = await this.scfRespository.delete({
+      signupId: signup.id,
+    });
+    console.log(deletedSCF);
     const leftovers = await this.scfRespository.find({
       where: { signupId: signup.id },
     });

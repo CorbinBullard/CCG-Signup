@@ -26,7 +26,6 @@ export class MobileService {
       const payload = await this.jwtService.verifyAsync(token, {
         secret: process.env.JWT_SECRET,
       });
-      console.log('Payload: ', payload);
       // Extract deviceId from payload
       const { deviceId } = payload;
       if (!deviceId) {
@@ -46,7 +45,6 @@ export class MobileService {
   }
 
   async signIn({ id, uniqueKey }) {
-    console.log('ID + KEY', id, uniqueKey);
     if (!id || !uniqueKey) {
       throw new UnauthorizedException();
     }
@@ -82,8 +80,21 @@ export class MobileService {
     return cost;
   }
 
-  async createSignup(eventId: number, signup: CreateSignupDto) {
-    console.log(signup);
-    return await this.signupService.create(signup, eventId);
+  async createSignup(
+    eventId: number,
+    signup: CreateSignupDto,
+    deviceName: string,
+  ) {
+    const newSignup = await this.signupService.create(signup, eventId);
+    const { signupConsentForms } = signup;
+    console.log('SCForms: ', signupConsentForms);
+
+    if (signupConsentForms && signupConsentForms.length) {
+      await this.signupService.attachSignupConsentForms(
+        newSignup.id,
+        signupConsentForms.map((scf) => ({ ...scf, deviceName })),
+      );
+    }
+    return newSignup;
   }
 }

@@ -11,7 +11,9 @@ export const signupDefaultValues = (fields: Field[] | SubField[]) => {
           value = false;
           break;
         }
-        
+        default: {
+          value = null;
+        }
       }
       return { fieldId: field.id, value };
     }),

@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import {
   Body,
   Controller,
@@ -5,6 +7,7 @@ import {
   Headers,
   Param,
   Post,
+  Req,
   UnauthorizedException,
   UseGuards,
 } from '@nestjs/common';
@@ -55,10 +58,15 @@ export class MobileController {
   @UseGuards(IsRegisteredDeviceGuard)
   @Post('events/:id/signups')
   async createSignup(
+    @Req() req: Request,
     @Param('id') eventId: number,
     @Body() signup: CreateSignupDto,
   ) {
-    return await this.mobileService.createSignup(eventId, signup);
+    const { deviceName }: { deviceName: string } = (req as any).user;
+    if (!deviceName) {
+      throw new UnauthorizedException('Device Not recognized');
+    }
+    return await this.mobileService.createSignup(eventId, signup, deviceName);
   }
 
   @UseGuards(IsRegisteredDeviceGuard)

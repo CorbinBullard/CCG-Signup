@@ -1,8 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: process.env.VITE_API_URL, // NestJS backend URL
-  
+  baseURL: import.meta.env.VITE_API_URL, 
 });
 
 // Interceptor to automatically attach token in headers

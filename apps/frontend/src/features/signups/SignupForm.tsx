@@ -6,7 +6,7 @@ export default function SignupForm({
   fields, // this is the form definition
 }: {
   fields: Field[];
-}) {
+  }) {
   return (
     <>
       <Form.List name="responses">

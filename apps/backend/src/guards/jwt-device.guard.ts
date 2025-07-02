@@ -39,7 +39,7 @@ export class IsRegisteredDeviceGuard implements CanActivate {
         throw new UnauthorizedException('Device not registered or inactive');
       }
 
-      request['user'] = payload;
+      request['user'] = { deviceId: device.id, deviceName: device.name };
     } catch {
       throw new UnauthorizedException();
     }

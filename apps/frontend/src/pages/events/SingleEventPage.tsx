@@ -110,7 +110,6 @@ export default function SingleEventPage() {
               form={signupForm}
               initialValues={signupDefaultValues(event.form.fields)}
               scrollToFirstError
-              clearOnDestroy
             >
               <SignupForm fields={event.form.fields} />
             </Form>
