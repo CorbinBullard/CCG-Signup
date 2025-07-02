@@ -45,3 +45,13 @@ export function ArrayColumnType({ nullable = false }: { nullable?: boolean }) {
     ? { type: 'text', array: true, nullable }
     : { type: 'text', nullable };
 }
+
+export function DateTimeColumnType({
+  nullable = false,
+}: {
+  nullable: boolean;
+}): ColumnOptions {
+  return process.env.NODE_ENV === 'production'
+    ? { type: 'timestamp', nullable }
+    : { type: 'datetime', nullable };
+}

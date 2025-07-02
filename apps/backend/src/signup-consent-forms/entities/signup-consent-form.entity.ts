@@ -1,5 +1,6 @@
 import { EventConsentForm } from 'src/event-consent-forms/entities/event-consent-form.entity';
 import { Signup } from 'src/signup/signup.entity';
+import { DateTimeColumnType } from 'src/typeorm.config/ColumnConfig';
 import {
   Column,
   CreateDateColumn,
@@ -36,7 +37,7 @@ export class SignupConsentForm {
   @Column({ type: 'boolean', default: false })
   agreed: boolean;
 
-  @Column({ type: 'datetime', nullable: true })
+  @Column({ ...DateTimeColumnType({ nullable: true }) })
   agreedAt?: Date;
 
   @Column({ type: 'text', nullable: true })
