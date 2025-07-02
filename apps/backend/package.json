@@ -6,9 +6,9 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-    "build:client": "cd ../frontend && npm install -D && npm run build",
-    "copy:client": "cp -r ../frontend/dist ./public",
     "build": "npm run build:client && npm run copy:client && nest build",
+    "build:client": "cd ../frontend && npm install --include=dev && npm run build",
+    "copy:client": "cp -r ../frontend/dist ./public",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
     "start:dev": "nest start --watch",
