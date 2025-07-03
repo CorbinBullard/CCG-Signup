@@ -35,7 +35,6 @@ export default function FieldForm({
       { name: [...fieldsPath, "options"], value: undefined },
     ]);
   };
-  console.log("NAME: ", name)
   return (
     <>
       <Flex gap={16}>
@@ -62,7 +61,6 @@ export default function FieldForm({
               label: key,
               value: value,
             }))}
-            onChange={handleTypeChange}
           />
         </Form.Item>
 

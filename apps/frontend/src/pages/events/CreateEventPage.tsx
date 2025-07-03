@@ -1,5 +1,5 @@
-import { useRef, useState } from "react";
-import { Anchor, Button, Card, Flex, Form, Layout } from "antd";
+import { useEffect, useRef, useState } from "react";
+import { Alert, Anchor, Button, Card, Flex, Form, Layout } from "antd";
 import PageLayout from "../../components/layouts/PageLayout";
 import { useEventSubmission } from "../../features/events/hooks/useEventSubmission";
 import { createEventInitialValues } from "../../features/events/event.initialValues";
@@ -15,6 +15,7 @@ export default function CreateEventPage() {
   const navigate = useNavigate();
   const [form] = Form.useForm();
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [errors, setErrors] = useState<boolean>(false);
   const fileRef = useRef<File | null>(null);
   const { submit } = useEventSubmission(form, fileRef);
 
@@ -25,6 +26,7 @@ export default function CreateEventPage() {
       await submit();
       navigate("/events");
     } catch (error) {
+      setErrors(true);
       console.error(error);
     } finally {
       setIsLoading(false);
@@ -34,6 +36,11 @@ export default function CreateEventPage() {
   return (
     <PageLayout
       title="Create Event"
+      Component={
+        errors && (
+          <Alert message="Invalid Event Submission" type="error" showIcon/>
+        )
+      }
       actions={[
         <Anchor
           direction="horizontal"
@@ -72,6 +79,7 @@ export default function CreateEventPage() {
             form={form}
             initialValues={{ ...createEventInitialValues }}
             preserve
+            scrollToFirstError
           >
             <Flex vertical gap={16}>
               <Card title="Event Details" id="details">
