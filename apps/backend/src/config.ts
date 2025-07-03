@@ -1,5 +1,4 @@
 import { registerAs } from '@nestjs/config';
-import { DataSource } from 'typeorm';
 
 const isProd = process.env.NODE_ENV === 'production';
 
