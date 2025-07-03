@@ -11,9 +11,10 @@ export function getEventCost(event, signup): number {
   const responses = signup?.responses;
   if (!fields || !responses) return 0;
 
-  const cost = +event?.cost || 0;
+  const eventCost = +event?.cost || 0;
 
-  return (cost + +Sum(fields, responses)) * 100;
+  const total: number = Math.ceil((eventCost + +Sum(fields, responses)) * 100);
+  return total;
 }
 
 export function Sum(fields: Field[], responses: { value: any }[]): number {
