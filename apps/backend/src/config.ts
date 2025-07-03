@@ -12,7 +12,7 @@ export default registerAs('app', () => ({
   },
   database: isProd
     ? {
-        type: 'postgres',
+        type: 'postgres' as const,
         host: process.env.DB_HOST,
         port: parseInt(process.env.DB_PORT || '5432', 10),
         username: process.env.DB_USER,
@@ -23,7 +23,7 @@ export default registerAs('app', () => ({
         migrationsTableName: 'migrations',
       }
     : {
-        type: 'sqlite',
+        type: 'sqlite' as const,
         database: 'db/dev.db',
         synchronize: true,
       },
