@@ -6,7 +6,7 @@ import { FieldTypeEnum } from 'src/fields/fieldTypeEnums';
 import { Subfield } from 'src/fields/Subfield';
 import { Signup } from 'src/signup/signup.entity';
 
-export function getEventCost(event: Event, signup: Signup): number {
+export function getEventCost(event, signup): number {
   const fields = event?.form?.fields;
   const responses = signup?.responses;
   if (!fields || !responses) return 0;
@@ -77,12 +77,13 @@ function getCompositeCost(field: Field, response): number {
     acc += getResponseCost(subfield, subResponse);
     return acc;
   }, 0);
+  if (!subCost) return 0;
   return subCost;
 }
 
 // MultiResponse ^^
 function getMultiResponseCost(field: Field, response): number {
-  let totalCost = 0;
+  let totalCost: number = 0;
   if (field?.cost) totalCost = response?.value?.length * field?.cost;
 
   totalCost +=
