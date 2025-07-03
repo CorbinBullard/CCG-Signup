@@ -1,17 +1,19 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
+import { Event } from 'src/event/entities/event.entity';
 import { Field } from 'src/fields/entities/field.entity';
 import { FieldTypeEnum } from 'src/fields/fieldTypeEnums';
 import { Subfield } from 'src/fields/Subfield';
+import { Signup } from 'src/signup/signup.entity';
 
-export function getEventCost(event, signup) {
+export function getEventCost(event: Event, signup: Signup): number {
   const fields = event?.form?.fields;
   const responses = signup?.responses;
   if (!fields || !responses) return 0;
 
-  let cost = event?.cost || 0;
+  const cost = +event?.cost || 0;
 
-  return (cost + Sum(fields, responses)) * 100;
+  return (cost + +Sum(fields, responses)) * 100;
 }
 
 export function Sum(fields: Field[], responses: { value: any }[]): number {
@@ -69,7 +71,7 @@ export const getSelectCost = (field: Field, response): number => {
 };
 
 // Composite ^^
-function getCompositeCost(field: Field, response) {
+function getCompositeCost(field: Field, response): number {
   const subCost = field.subfields?.reduce((acc, subfield, index) => {
     const subResponse = response?.value[index];
     acc += getResponseCost(subfield, subResponse);
@@ -79,13 +81,14 @@ function getCompositeCost(field: Field, response) {
 }
 
 // MultiResponse ^^
-function getMultiResponseCost(field: Field, response) {
+function getMultiResponseCost(field: Field, response): number {
   let totalCost = 0;
   if (field?.cost) totalCost = response?.value?.length * field?.cost;
 
-  totalCost += response?.value?.reduce((acc, response, index) => {
-    acc += getCompositeCost(field, response);
-    return acc;
-  }, 0);
+  totalCost +=
+    response?.value?.reduce((acc, response, index) => {
+      acc += getCompositeCost(field, response);
+      return acc;
+    }, 0) || 0;
   return totalCost;
 }
