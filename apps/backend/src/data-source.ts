@@ -12,7 +12,8 @@ const dbConfig: PostgresConnectionOptions | SqliteConnectionOptions =
 
 export const AppDataSource = new DataSource({
   ...dbConfig,
-  entities: ['**/*.entity.js'],
+  entities: [__dirname + '/**/*.entity{.ts,.js}'], // explicitly set the path
+  migrations: [__dirname + '/migrations/*{.ts,.js}'],
 });
 
 console.log(AppDataSource);

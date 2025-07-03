@@ -21,9 +21,9 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "typeorm": "typeorm-ts-node-esm -d ./data-source.ts",
-    "migration:generate": "npm run build && typeorm-ts-node-esm -d ./dist/src/data-source.js migration:generate src/migrations/InitialSchema -p",
+    "migration:generate": "npm run build && typeorm-ts-node-esm migration:generate -d ./dist/src/data-source.js ./src/migrations/InitialSchema",
     "migration:run": "npm run build && typeorm-ts-node-esm -d ./dist/src/data-source.js migration:run",
-    "migration:revert": "npm run build && typeorm-ts-node-esm -d ./dist/src/data-source.js migration:revert"
+    "migration:revert": "npm run build && typeorm-ts-node-esm migration:revert -d ./dist/src/data-source.js"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.816.0",
